@@ -1,8 +1,8 @@
 import pandas as pd
 import os
 
-input_path = "C:/Users/ilios/Desktop/mimic-3/mimic_labs_sample.csv"
-output_path = "C:/Users/ilios/Desktop/mimic-3/mimic_labs_for_generation.csv"
+input_path = os.getenv("LABS_SAMPLE")
+output_path = os.getenv("LABS_GENERATION")
 
 
 if not os.path.exists(input_path):
