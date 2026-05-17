@@ -1,0 +1,221 @@
+SUBJECT_ID,HADM_ID,ITEMID,lab_name,fluid,category,loinc_code,CHARTTIME,VALUE,VALUENUM,VALUEUOM,FLAG,GENDER,ADMISSION_TYPE,DIAGNOSIS,input_text,target_text,medgemma_output
+585,123154,50820,pH,Blood,Blood Gas,11558-4,2142-11-10 17:41:00,7.32,7.32,units,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: pH
+Fluid: Blood
+Category: Blood Gas
+Measured value: 7.32 units
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",,"The patient's blood pH is 7.32, which is within the normal range (7.35-7.45). This result should be interpreted in the context of the patient's clinical presentation and other laboratory findings."
+585,123154,50821,pO2,Blood,Blood Gas,11556-8,2142-11-10 17:41:00,236.0,236.0,mm Hg,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: pO2
+Fluid: Blood
+Category: Blood Gas
+Measured value: 236.0 mm Hg
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",,"The patient's pO2 is 236.0 mm Hg. This value is elevated, suggesting possible hyperoxia. The result should be interpreted in the clinical context of the patient's presentation."
+585,123154,50867,Amylase,Blood,Chemistry,1798-8,2142-11-10 19:58:00,64.0,64.0,IU/L,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Amylase
+Fluid: Blood
+Category: Chemistry
+Measured value: 64.0 IU/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,The amylase level is 64.0 IU/L. This result should be interpreted in the clinical context of the patient's admission for a motor vehicle accident.
+585,123154,50868,Anion Gap,Blood,Chemistry,1863-0,2142-11-10 19:58:00,10.0,10.0,mEq/L,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Anion Gap
+Fluid: Blood
+Category: Chemistry
+Measured value: 10.0 mEq/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,The anion gap is elevated at 10.0 mEq/L. This finding should be interpreted in the clinical context of the patient's presentation.
+585,123154,50882,Bicarbonate,Blood,Chemistry,1963-8,2142-11-10 19:58:00,18.0,18.0,mEq/L,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Bicarbonate
+Fluid: Blood
+Category: Chemistry
+Measured value: 18.0 mEq/L
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",,The bicarbonate level is 18.0 mEq/L. This is slightly low. Bicarbonate is a base that helps regulate blood pH. The result should be interpreted in clinical context.
+585,123154,50893,"Calcium, Total",Blood,Chemistry,2000-8,2142-11-10 19:58:00,6.6,6.6,mg/dL,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Calcium, Total
+Fluid: Blood
+Category: Chemistry
+Measured value: 6.6 mg/dL
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",,The total calcium level is 6.6 mg/dL. This is below the normal range. The result should be interpreted in the clinical context of the patient's admission for a motor vehicle accident.
+585,123154,50902,Chloride,Blood,Chemistry,2075-0,2142-11-10 19:58:00,119.0,119.0,mEq/L,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Chloride
+Fluid: Blood
+Category: Chemistry
+Measured value: 119.0 mEq/L
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",,"The patient's chloride level is elevated at 119.0 mEq/L. This finding should be interpreted in the context of the patient's clinical presentation, including the recent motor vehicle accident."
+585,123154,50912,Creatinine,Blood,Chemistry,2160-0,2142-11-10 19:58:00,0.5,0.5,mg/dL,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Creatinine
+Fluid: Blood
+Category: Chemistry
+Measured value: 0.5 mg/dL
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,"The patient's creatinine level is 0.5 mg/dL. This is within the normal range. Creatinine is a waste product in the blood, and its level can be affected by various factors, including kidney function. The result should be interpreted in the context of the patient's clinical presentation and other relevant laboratory findings."
+585,123154,50931,Glucose,Blood,Chemistry,2345-7,2142-11-10 19:58:00,114.0,114.0,mg/dL,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Glucose
+Fluid: Blood
+Category: Chemistry
+Measured value: 114.0 mg/dL
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",,The patient's glucose level is 114 mg/dL. This is slightly elevated above the normal range. Glucose levels should be interpreted in the context of the patient's clinical presentation and other laboratory findings.
+585,123154,50954,Lactate Dehydrogenase (LD),Blood,Chemistry,2532-0,2142-11-10 19:58:00,185.0,185.0,IU/L,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Lactate Dehydrogenase (LD)
+Fluid: Blood
+Category: Chemistry
+Measured value: 185.0 IU/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,"The lactate dehydrogenase (LD) level is elevated at 185.0 IU/L. Elevated LDH can be seen in various conditions, including tissue damage. This result should be interpreted in the context of the patient's clinical presentation and other laboratory findings."
+585,123154,50960,Magnesium,Blood,Chemistry,2601-3,2142-11-10 19:58:00,1.3,1.3,mg/dL,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Magnesium
+Fluid: Blood
+Category: Chemistry
+Measured value: 1.3 mg/dL
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",,"The patient's magnesium level is 1.3 mg/dL, which is below the normal range. This finding should be interpreted in the context of the patient's clinical presentation and other laboratory results."
+585,123154,50970,Phosphate,Blood,Chemistry,2777-1,2142-11-10 19:58:00,2.8,2.8,mg/dL,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Phosphate
+Fluid: Blood
+Category: Chemistry
+Measured value: 2.8 mg/dL
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,"The patient's phosphate level is 2.8 mg/dL. This is within the normal range. Phosphate is an important electrolyte, and its level should be interpreted in the context of the patient's overall clinical condition."
+585,123154,50971,Potassium,Blood,Chemistry,2823-3,2142-11-10 19:58:00,3.4,3.4,mEq/L,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Potassium
+Fluid: Blood
+Category: Chemistry
+Measured value: 3.4 mEq/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,The potassium level is 3.4 mEq/L. This is within the normal range. The result should be interpreted in the clinical context of the patient's admission for a motor vehicle accident.
+585,123154,50983,Sodium,Blood,Chemistry,2951-2,2142-11-10 19:58:00,144.0,144.0,mEq/L,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Sodium
+Fluid: Blood
+Category: Chemistry
+Measured value: 144.0 mEq/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,The patient's sodium level is 144.0 mEq/L. This result is within the normal range. Sodium levels should be interpreted in the context of the patient's overall clinical presentation and other laboratory findings.
+585,123154,51006,Urea Nitrogen,Blood,Chemistry,3094-0,2142-11-10 19:58:00,10.0,10.0,mg/dL,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Urea Nitrogen
+Fluid: Blood
+Category: Chemistry
+Measured value: 10.0 mg/dL
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,The urea nitrogen level is 10.0 mg/dL. This value is elevated. The result should be interpreted in the clinical context of the patient's admission for a motor vehicle accident.
+585,123154,51214,"Fibrinogen, Functional",Blood,Hematology,3255-7,2142-11-10 19:58:00,160.0,160.0,mg/dL,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Fibrinogen, Functional
+Fluid: Blood
+Category: Hematology
+Measured value: 160.0 mg/dL
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,The patient's fibrinogen level is 160.0 mg/dL. This value is within the normal range. Fibrinogen is a protein important for blood clotting. The result should be interpreted in the clinical context of the patient's admission.
+585,123154,51221,Hematocrit,Blood,Hematology,4544-3,2142-11-10 19:58:00,22.9,22.9,%,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Hematocrit
+Fluid: Blood
+Category: Hematology
+Measured value: 22.9 %
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",,The hematocrit is 22.9%. This is below the normal range. The hematocrit should be interpreted in the clinical context of the patient's admission for a motor vehicle accident.
+585,123154,51222,Hemoglobin,Blood,Hematology,718-7,2142-11-10 19:58:00,7.8,7.8,g/dL,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Hemoglobin
+Fluid: Blood
+Category: Hematology
+Measured value: 7.8 g/dL
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",,"The patient's hemoglobin level is 7.8 g/dL, which is below the normal range for females. This finding may warrant further investigation to determine the underlying cause, such as blood loss or anemia. The result should be interpreted in the context of the patient's clinical presentation and other laboratory findings."
+585,123154,51248,MCH,Blood,Hematology,785-6,2142-11-10 19:58:00,31.5,31.5,pg,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: MCH
+Fluid: Blood
+Category: Hematology
+Measured value: 31.5 pg
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,The mean corpuscular hemoglobin (MCH) is 31.5 pg. This value is below the normal range. The MCH indicates the average amount of hemoglobin in each red blood cell. This result should be interpreted in the clinical context of the patient's admission for a motor vehicle accident.
+585,123154,51249,MCHC,Blood,Hematology,786-4,2142-11-10 19:58:00,33.9,33.9,%,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: MCHC
+Fluid: Blood
+Category: Hematology
+Measured value: 33.9 %
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",,The Mean Corpuscular Hemoglobin Concentration (MCHC) is 33.9%. This value is within the normal range. The MCHC reflects the average concentration of hemoglobin in red blood cells. The MCHC result should be interpreted in the context of the patient's clinical presentation and other laboratory findings.
