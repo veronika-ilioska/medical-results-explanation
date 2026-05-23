@@ -26,26 +26,28 @@ def create_tables(cursor):
             subject_id     INT NOT NULL,
             hadm_id        INT,
             charttime      TIMESTAMP NOT NULL,
+            gender         CHAR(1),
             generated_text TEXT,
             prompt         TEXT,
             model_used     VARCHAR(100),
             created_at     TIMESTAMP DEFAULT NOW(),
-            UNIQUE (subject_id, charttime)
+            UNIQUE (subject_id, charttime, model_used)
         )
     """)
     print(f"Table {DB_SCHEMA}.lab_summaries created")
 
     cursor.execute(f"""
         CREATE TABLE IF NOT EXISTS {DB_SCHEMA}.lab_summary_items (
-            item_id    SERIAL PRIMARY KEY,
-            summary_id INT NOT NULL
+            item_id        SERIAL PRIMARY KEY,
+            summary_id     INT NOT NULL
                 REFERENCES {DB_SCHEMA}.lab_summaries(summary_id),
-            label      VARCHAR(200),
-            category   VARCHAR(100),
-            loinc_code VARCHAR(50),
-            valuenum   DOUBLE PRECISION,
-            valueuom   VARCHAR(20),
-            flag_clean VARCHAR(20)
+            label          VARCHAR(200),
+            category       VARCHAR(100),
+            loinc_code     VARCHAR(50),
+            valuenum       DOUBLE PRECISION,
+            valueuom       VARCHAR(20),
+            flag_clean     VARCHAR(20),
+            generated_text TEXT
         )
     """)
     print(f"Table {DB_SCHEMA}.lab_summary_items created")
