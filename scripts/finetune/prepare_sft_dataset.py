@@ -1,24 +1,19 @@
 import argparse
 import json
+import sys
 from pathlib import Path
 
 import pandas as pd
 
 
-SYSTEM_PROMPT = (
-    "You produce concise, patient-friendly explanations of laboratory results. "
-    "Use cautious wording, avoid diagnosis and do not recommend treatment."
-)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.common.lab_prompt import build_messages
 
 
 def build_record(input_text, target_text):
-    return {
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": str(input_text).strip()},
-            {"role": "assistant", "content": str(target_text).strip()},
-        ]
-    }
+    return {"messages": build_messages(input_text, target_text)}
 
 
 def write_jsonl(path, records):

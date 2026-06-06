@@ -198,6 +198,29 @@ Test a different validation example:
 python scripts\testing\test_llama_lora.py --compare-base --example-index 3
 ```
 
+Test directly on a tabular CSV row:
+
+```powershell
+python scripts\testing\test_llama_lora.py `
+  --input-csv data\mimic_labs_20_for_testing.csv `
+  --row-index 0 `
+  --show-prompt
+```
+
+For CSV input, the test script uses `input_text` or `prompt` if either column exists.
+If neither exists, it builds a lab-result prompt from tabular columns such as
+`GENDER`, `ADMISSION_TYPE`, `DIAGNOSIS`, `lab_name`, `fluid`, `category`,
+`VALUE`, `VALUEUOM`, and `FLAG`.
+
+You can also force specific CSV columns:
+
+```powershell
+python scripts\testing\test_llama_lora.py `
+  --input-csv data\lab_summaries_export.csv `
+  --prompt-column prompt `
+  --target-column generated_text
+```
+
 Good signs:
 
 - The output keeps the exact bullet format.

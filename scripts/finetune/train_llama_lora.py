@@ -58,7 +58,7 @@ def main():
     parser.add_argument("--eval-steps", type=int, default=100)
     args = parser.parse_args()
 
-    token = os.getenv("HF_TOKEN")
+    token = os.getenv("HF_TOKEN").strip()
     if not token:
         raise EnvironmentError(
             "Set HF_TOKEN before loading Llama weights from Hugging Face."
