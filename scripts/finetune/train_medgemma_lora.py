@@ -96,7 +96,7 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(
         args.model_id,
         token=token,
-        torch_dtype=compute_dtype if torch.cuda.is_available() else torch.float32,
+        dtype=compute_dtype if torch.cuda.is_available() else torch.float32,
         quantization_config=quantization_config,
         device_map={"": 0} if use_4bit else "auto",
     )
