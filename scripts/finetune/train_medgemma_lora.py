@@ -27,8 +27,8 @@ def _read_text_utf8(self, encoding=None, errors=None, newline=None):
 
 Path.read_text = _read_text_utf8
 
-from peft import LoraConfig
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import LoraConfig, prepare_model_for_kbit_training
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from trl import SFTConfig, SFTTrainer
 
 
@@ -55,9 +55,15 @@ def main():
     parser.add_argument("--grad-accum", type=int, default=8)
     parser.add_argument("--save-steps", type=int, default=100)
     parser.add_argument("--eval-steps", type=int, default=100)
+    parser.add_argument(
+        "--no-4bit",
+        action="store_true",
+        help="Disable 4-bit QLoRA. This usually requires a much larger GPU.",
+    )
     args = parser.parse_args()
 
-    if not os.getenv("HF_TOKEN"):
+    token = (os.getenv("HF_TOKEN") or "").strip()
+    if not token:
         raise EnvironmentError("Set HF_TOKEN before loading gated MedGemma weights.")
 
     dataset = load_dataset(
@@ -68,16 +74,37 @@ def main():
         },
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model_id, token=os.getenv("HF_TOKEN"))
+    tokenizer = AutoTokenizer.from_pretrained(args.model_id, token=token)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
+    use_4bit = not args.no_4bit
+    supports_bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+    compute_dtype = torch.bfloat16 if supports_bf16 else torch.float16
+    quantization_config = None
+
+    if use_4bit:
+        if not torch.cuda.is_available():
+            raise RuntimeError("4-bit QLoRA training requires a CUDA GPU.")
+        quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=compute_dtype,
+        )
+
     model = AutoModelForCausalLM.from_pretrained(
         args.model_id,
-        token=os.getenv("HF_TOKEN"),
-        torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
-        device_map="auto",
+        token=token,
+        torch_dtype=compute_dtype if torch.cuda.is_available() else torch.float32,
+        quantization_config=quantization_config,
+        device_map={"": 0} if use_4bit else "auto",
     )
+    if use_4bit:
+        model = prepare_model_for_kbit_training(
+            model,
+            use_gradient_checkpointing=True,
+        )
     model.config.use_cache = False
 
     peft_config = LoraConfig(
@@ -112,8 +139,8 @@ def main():
         eval_steps=args.eval_steps,
         eval_strategy="steps",
         save_total_limit=2,
-        bf16=torch.cuda.is_available(),
-        fp16=False,
+        bf16=supports_bf16,
+        fp16=torch.cuda.is_available() and not supports_bf16,
         report_to="none",
     )
 

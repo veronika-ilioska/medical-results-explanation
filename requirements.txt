@@ -5,6 +5,8 @@ numexpr
 
 # Hugging Face / model training and inference
 torch
+torchao>=0.17.0
+bitsandbytes==0.49.2
 transformers==4.56.2
 accelerate==1.13.0
 datasets
