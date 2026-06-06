@@ -16,7 +16,7 @@ transformers_import_utils.is_torchvision_available = lambda: False
 transformers_utils.is_torchvision_available = lambda: False
 
 from peft import PeftModel
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
@@ -137,6 +137,11 @@ def main():
     parser.add_argument("--show-prompt", action="store_true")
     parser.add_argument("--max-new-tokens", type=int, default=900)
     parser.add_argument("--compare-base", action="store_true")
+    parser.add_argument(
+        "--no-4bit",
+        action="store_true",
+        help="Disable 4-bit model loading. This usually requires a much larger GPU.",
+    )
     args = parser.parse_args()
 
     token = os.getenv("HF_TOKEN")
@@ -157,11 +162,27 @@ def main():
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
+    use_4bit = not args.no_4bit
+    supports_bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+    compute_dtype = torch.bfloat16 if supports_bf16 else torch.float16
+    quantization_config = None
+
+    if use_4bit:
+        if not torch.cuda.is_available():
+            raise RuntimeError("4-bit adapter testing requires a CUDA GPU.")
+        quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=compute_dtype,
+        )
+
     base_model = AutoModelForCausalLM.from_pretrained(
         args.model_id,
         token=token,
-        torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
-        device_map="auto",
+        dtype=compute_dtype if torch.cuda.is_available() else torch.float32,
+        quantization_config=quantization_config,
+        device_map={"": 0} if use_4bit else "auto",
     )
     base_model.eval()
 
