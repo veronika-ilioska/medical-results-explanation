@@ -22,7 +22,6 @@ def _read_text_utf8(self, encoding=None, errors=None, newline=None):
         self,
         encoding=encoding or "utf-8",
         errors=errors,
-        newline=newline,
     )
 
 
