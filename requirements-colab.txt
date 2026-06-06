@@ -1,0 +1,6 @@
+# Colab-compatible CUDA 12 stack.
+# Install this file after uninstalling Colab's optional torchao package.
+-r requirements.txt
+
+torch==2.6.0
+bitsandbytes==0.46.1

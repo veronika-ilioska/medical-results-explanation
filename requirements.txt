@@ -1,0 +1,28 @@
+# Core data processing
+pandas
+numpy
+numexpr
+
+# Hugging Face / model training and inference
+torch
+bitsandbytes==0.46.1
+transformers==4.56.2
+accelerate==1.13.0
+datasets
+peft
+trl
+huggingface_hub
+sentencepiece
+protobuf
+
+# Database and environment configuration
+psycopg2-binary
+python-dotenv
+
+# OpenAI-compatible API client and retries for generation scripts
+openai
+tenacity
+
+# Notebook support
+jupyter
+ipykernel
