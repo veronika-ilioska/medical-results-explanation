@@ -50,6 +50,32 @@ def has_value(value):
     return not pd.isna(value) and str(value).strip()
 
 
+def build_csv_messages(row, columns, prompt_column, target_column):
+    if prompt_column:
+        if prompt_column not in columns:
+            raise ValueError(f"Missing --prompt-column '{prompt_column}'")
+        input_text = row[prompt_column]
+    elif "input_text" in columns:
+        input_text = row["input_text"]
+    elif "prompt" in columns:
+        input_text = row["prompt"]
+    else:
+        input_text = build_lab_result_prompt(row)
+
+    expected = None
+    if target_column:
+        if target_column not in columns:
+            raise ValueError(f"Missing --target-column '{target_column}'")
+        expected = row[target_column]
+    else:
+        for candidate in ("generated_text", "medgemma_output", "target_text"):
+            if candidate in columns and has_value(row[candidate]):
+                expected = row[candidate]
+                break
+
+    return build_messages(input_text), None if not has_value(expected) else str(expected).strip()
+
+
 def load_csv_record(path, row_index, prompt_column, target_column):
     df = pd.read_csv(path)
     if df.empty:
@@ -57,30 +83,12 @@ def load_csv_record(path, row_index, prompt_column, target_column):
     if row_index < 0 or row_index >= len(df):
         raise IndexError(f"--row-index {row_index} is out of range for {len(df)} CSV rows.")
 
-    row = df.iloc[row_index]
-    if prompt_column:
-        if prompt_column not in df.columns:
-            raise ValueError(f"Missing --prompt-column '{prompt_column}' in {path}")
-        input_text = row[prompt_column]
-    elif "input_text" in df.columns:
-        input_text = row["input_text"]
-    elif "prompt" in df.columns:
-        input_text = row["prompt"]
-    else:
-        input_text = build_lab_result_prompt(row)
-
-    expected = None
-    if target_column:
-        if target_column not in df.columns:
-            raise ValueError(f"Missing --target-column '{target_column}' in {path}")
-        expected = row[target_column]
-    else:
-        for candidate in ("generated_text", "medgemma_output", "target_text"):
-            if candidate in df.columns and has_value(row[candidate]):
-                expected = row[candidate]
-                break
-
-    return build_messages(input_text), None if not has_value(expected) else str(expected).strip()
+    return build_csv_messages(
+        df.iloc[row_index],
+        df.columns,
+        prompt_column,
+        target_column,
+    )
 
 
 def build_prompt(messages, tokenizer):
@@ -121,6 +129,18 @@ def main():
     )
     parser.add_argument("--row-index", type=int, default=0)
     parser.add_argument(
+        "--output-csv",
+        help=(
+            "Save generated results to a CSV. When provided with --input-csv, "
+            "rows are processed in batch starting at --row-index."
+        ),
+    )
+    parser.add_argument(
+        "--max-rows",
+        type=int,
+        help="Maximum number of CSV rows to process. By default all remaining rows are used.",
+    )
+    parser.add_argument(
         "--prompt-column",
         help=(
             "CSV column containing ready-made prompt text. If omitted, input_text or prompt "
@@ -148,7 +168,24 @@ def main():
     if not token:
         raise EnvironmentError("Set HF_TOKEN before loading Llama weights.")
 
-    if args.input_csv:
+    if args.output_csv and not args.input_csv:
+        parser.error("--output-csv requires --input-csv")
+    if args.max_rows is not None and args.max_rows < 1:
+        parser.error("--max-rows must be at least 1")
+
+    batch_df = None
+    if args.input_csv and args.output_csv:
+        batch_df = pd.read_csv(args.input_csv)
+        if batch_df.empty:
+            raise ValueError(f"No rows found in {args.input_csv}")
+        if args.row_index < 0 or args.row_index >= len(batch_df):
+            raise IndexError(
+                f"--row-index {args.row_index} is out of range for "
+                f"{len(batch_df)} CSV rows."
+            )
+        messages = None
+        expected = None
+    elif args.input_csv:
         messages, expected = load_csv_record(
             args.input_csv,
             args.row_index,
@@ -186,6 +223,57 @@ def main():
     )
     base_model.eval()
 
+    tuned_model = PeftModel.from_pretrained(base_model, args.adapter_dir)
+    tuned_model.eval()
+
+    if batch_df is not None:
+        stop_index = len(batch_df)
+        if args.max_rows is not None:
+            stop_index = min(stop_index, args.row_index + args.max_rows)
+
+        output_path = Path(args.output_csv)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_rows = []
+
+        for row_index in range(args.row_index, stop_index):
+            row = batch_df.iloc[row_index]
+            row_messages, row_expected = build_csv_messages(
+                row,
+                batch_df.columns,
+                args.prompt_column,
+                args.target_column,
+            )
+            prompt = build_prompt(row_messages, tokenizer)
+
+            result = row.to_dict()
+            result["source_row_index"] = row_index
+            result["model_prompt"] = prompt
+            if args.compare_base:
+                result["base_model_output"] = generate(
+                    base_model,
+                    tokenizer,
+                    prompt,
+                    args.max_new_tokens,
+                )
+            result["fine_tuned_output"] = generate(
+                tuned_model,
+                tokenizer,
+                prompt,
+                args.max_new_tokens,
+            )
+            if row_expected is not None:
+                result["expected_target"] = row_expected
+
+            output_rows.append(result)
+            pd.DataFrame(output_rows).to_csv(output_path, index=False)
+            print(
+                f"Processed row {row_index} "
+                f"({len(output_rows)}/{stop_index - args.row_index})"
+            )
+
+        print(f"\nSaved {len(output_rows)} generated rows to: {output_path}")
+        return
+
     prompt = build_prompt(messages, tokenizer)
 
     if args.show_prompt:
@@ -195,9 +283,6 @@ def main():
     if args.compare_base:
         print("\n=== BASE MODEL OUTPUT ===\n")
         print(generate(base_model, tokenizer, prompt, args.max_new_tokens))
-
-    tuned_model = PeftModel.from_pretrained(base_model, args.adapter_dir)
-    tuned_model.eval()
 
     print("\n=== FINE-TUNED OUTPUT ===\n")
     print(generate(tuned_model, tokenizer, prompt, args.max_new_tokens))

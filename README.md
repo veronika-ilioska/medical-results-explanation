@@ -221,6 +221,23 @@ python scripts\testing\test_llama_lora.py `
   --target-column generated_text
 ```
 
+Generate outputs for 10 tabular rows and save them to a CSV:
+
+```powershell
+python scripts\testing\test_llama_lora.py `
+  --adapter-dir outputs\llama-lab-lora-10 `
+  --input-csv data\mimic_labs_20_for_testing.csv `
+  --output-csv data\llama_tabular_outputs.csv `
+  --max-rows 10 `
+  --max-new-tokens 200
+```
+
+Remove `--max-rows 10` to process every row. The output file keeps the original
+input columns and adds `source_row_index`, `model_prompt`, and
+`fine_tuned_output`. Add `--compare-base` to also save `base_model_output`.
+The output CSV is updated after every processed row so partial progress is kept
+if a long Colab run stops early.
+
 Good signs:
 
 - The output keeps the exact bullet format.
