@@ -366,6 +366,46 @@ It can also print the base model output for comparison:
 python scripts\testing\test_llama_lora.py --compare-base
 ```
 
+### `evaluate_tablellm_cv.py`
+
+Evaluates TABLELLM-style tabular lab explanations with k-fold cross-validation,
+TABLELLM prompt templates, text-similarity metrics, format checks, and charts.
+
+Score saved model outputs:
+
+```powershell
+python scripts\testing\evaluate_tablellm_cv.py `
+  --input data\lab_summaries_export.csv `
+  --prompt-column prompt `
+  --target-column generated_text `
+  --prediction-column generated_text `
+  --folds 5 `
+  --output-dir outputs\tablellm_cv
+```
+
+Run the TableLLM checkpoint directly on held-out folds:
+
+```powershell
+python scripts\testing\evaluate_tablellm_cv.py `
+  --run-model `
+  --model-id RUCKBReasoning/TableLLM-8b `
+  --load-4bit `
+  --folds 5 `
+  --output-dir outputs\tablellm_cv
+```
+
+The script writes detailed row scores, fold summaries, metadata, and PNG charts.
+
+For Colab, open:
+
+```text
+scripts/testing/evaluate_tablellm_cv_colab.ipynb
+```
+
+In the first notebook cell, set `PROJECT_DIR` to the uploaded, cloned, or
+Google Drive copy of this repository. Use a GPU runtime only when running the
+optional direct `RUCKBReasoning/TableLLM-8b` inference cells.
+
 ## Generate More Llama Training Data
 
 The current Llama fine-tuning file has only 100 examples. That is enough to test the pipeline, but too small for a strong final model.
