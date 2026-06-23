@@ -1,144 +1,129 @@
-# NLP medical results explanation
+# NLP Medical Results Explanation
 
-Utilities for generating and fine-tuning patient-friendly explanations of medical laboratory results.
+Utilities for creating patient-friendly explanations of medical laboratory results, preparing supervised fine-tuning data, training LoRA adapters, and evaluating generated explanations.
 
-The repo supports two related workflows:
+The project currently has three practical lanes:
 
-1. Generate explanation data from lab-result inputs.
-2. Fine-tune an instruct model with LoRA using the generated explanations.
+- Generate explanation data from lab-result inputs.
+- Fine-tune Llama or MedGemma adapters with supervised JSONL data.
+- Evaluate generated explanations with TableLLM-style metrics and format checks.
 
-The current fine-tuning scripts support both:
+## Contents
 
-- MedGemma, using `input_text -> medgemma_output`
-- Llama, using `prompt -> generated_text`
+- [Quick Start](#quick-start)
+- [Project Map](#project-map)
+- [Data Guide](#data-guide)
+- [Common Workflows](#common-workflows)
+- [Script Reference](#script-reference)
+- [Environment Variables](#environment-variables)
+- [Validation Checks](#validation-checks)
+- [Troubleshooting](#troubleshooting)
 
-## Repository Layout
-
-```text
-data/
-  lab_summaries_export.csv          Llama-generated panel explanations
-  lab_summaries_export_10.csv       Small panel-explanation sample
-  llama_tabular_outputs.csv         Row-level Llama adapter test outputs
-  medgemma_1000_outputs.csv         MedGemma row-level outputs
-  medgemma_20_outputs.csv           Small MedGemma test output
-  mimic_labs_20_for_testing.csv     Small lab input sample
-  mimic_labs_for_generation.csv     Larger lab input file
-  finetune/                         MedGemma JSONL fine-tuning data
-  finetune_llama/                   Llama JSONL fine-tuning data
-  finetune_llama_10/                Small Llama JSONL fine-tuning sample
-
-scripts/
-  common/
-    lab_prompt.py                   Shared lab prompt/message helpers
-  db/
-    create_tables.py
-    export_lab_summaries_csv.py
-  finetune/
-    prepare_sft_dataset.py
-    train_medgemma_lora.py
-    train_llama_lora.py
-  generate_input_csv/
-    generate_input.py
-  silver_standard/
-    fill_row_target_text.py         Fill row-level target_text silver references
-    generate_silver_standard.py
-    generate_silver_standard_llama.py
-    NLP_medgemma_base.ipynb
-  testing/
-    check_dataset.py
-    create_20_sample.py
-    evaluate_tablellm_cv.py         Cross-validation metrics and charts
-    generate_tablellm_output_text.py Generate output_text with TableLLM
-    patient_info_from_csv
-    test_medgemma_one.py
-    test_llama_lora.py
-
-outputs/
-  llama/                            Local/generated Llama outputs
-  trainllm_cv/                      Local/generated TableLLM evaluation outputs
-```
-
-## Data Files
-
-### MedGemma data
-
-`data/medgemma_1000_outputs.csv` contains row-level lab examples.
-
-Important columns:
-
-- `input_text`: the prompt describing one patient/lab result
-- `medgemma_output`: the generated explanation used as the fine-tuning target
-- `target_text`: currently empty in this file
-
-For MedGemma fine-tuning, use:
-
-```text
-input_text -> medgemma_output
-```
-
-### Llama data
-
-`data/lab_summaries_export.csv` contains full lab-panel examples generated with Llama.
-
-Important columns:
-
-- `prompt`: the full instruction prompt with many lab results
-- `generated_text`: the Llama answer
-- `model_used`: the source model, currently `meta/llama-3.1-70b-instruct`
-
-For Llama fine-tuning, use:
-
-```text
-prompt -> generated_text
-```
-
-## Setup
+## Quick Start
 
 From the repo root:
 
 ```powershell
 cd C:\Users\ilios\NLP_medical_results_explanation
-```
-
-Create and activate a virtual environment:
-
-```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -U pip
+pip install -r requirements.txt
 ```
 
-Install dependencies:
+For Colab:
 
-```powershell
-pip install -U pandas datasets torch peft trl numexpr
-pip install -U "transformers==4.56.2" "accelerate==1.13.0"
+```python
+!pip uninstall -y torchvision torchao
+!pip install -q -r requirements-colab.txt
 ```
 
-For this text-only project, `torchvision` is not needed. If it causes an import error such as `operator torchvision::nms does not exist`, remove it:
-
-```powershell
-python -m pip uninstall -y torchvision
-```
-
-Set your Hugging Face token:
+Set your Hugging Face token before loading gated models:
 
 ```powershell
 $env:HF_TOKEN = "hf_your_token_here"
 ```
 
-You need access to the gated model pages before training:
+You need model access on Hugging Face before training or testing:
 
 - MedGemma: https://huggingface.co/google/medgemma-4b-it
 - Llama: https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct
 
-GPU is strongly recommended. CPU fine-tuning will be very slow.
+GPU is strongly recommended. The default training and inference paths use 4-bit loading and require CUDA.
 
-## Fine-Tune Llama
+## Project Map
 
-Use this workflow when you want to fine-tune a Llama model using the better Llama-generated results in `data/lab_summaries_export.csv`.
+```text
+data/
+  lab_summaries_export.csv          100 panel-level Llama explanations
+  lab_summaries_export_10.csv       Small panel-level sample
+  llama_tabular_outputs.csv         10 row-level Llama adapter outputs
+  medgemma_1000_outputs.csv         1000 row-level MedGemma examples
+  medgemma_20_outputs.csv           Small MedGemma output sample
+  mimic_labs_20_for_testing.csv     20 row-level lab inputs for testing
+  mimic_labs_for_generation.csv     Larger row-level lab input file
+  finetune/                         MedGemma JSONL split
+  finetune_llama/                   Llama JSONL split
+  finetune_llama_10/                Small Llama JSONL split
 
-### 1. Prepare the Llama SFT dataset
+scripts/
+  common/                           Shared prompt/message helpers
+  db/                               PostgreSQL table setup and CSV export
+  finetune/                         SFT dataset prep and LoRA training
+  generate_input_csv/               Environment-driven CSV generation
+  silver_standard/                  Silver-standard generation helpers
+  testing/                          Smoke tests, batch generation, evaluation
+
+outputs/
+  trainllm_cv/                      Existing TableLLM evaluation notebooks/results
+```
+
+## Data Guide
+
+### Llama Panel Dataset
+
+Use `data/lab_summaries_export.csv` to fine-tune Llama on full lab-panel explanations.
+
+- Rows: 100
+- Prompt column: `prompt`
+- Target column: `generated_text`
+- Source model column: `model_used`
+- Fine-tuning mapping: `prompt -> generated_text`
+
+Prepared JSONL split:
+
+```text
+data/finetune_llama/train.jsonl       90 records
+data/finetune_llama/validation.jsonl  10 records
+```
+
+### MedGemma Row Dataset
+
+Use `data/medgemma_1000_outputs.csv` to fine-tune MedGemma on row-level lab explanations.
+
+- Rows: 1000
+- Prompt column: `input_text`
+- Target column: `medgemma_output`
+- `target_text` exists but is empty in this file
+- Fine-tuning mapping: `input_text -> medgemma_output`
+
+Prepared JSONL split:
+
+```text
+data/finetune/train.jsonl       900 records
+data/finetune/validation.jsonl  100 records
+```
+
+### Row-Level Test Data
+
+- `data/mimic_labs_20_for_testing.csv`: 20 row-level lab inputs with `input_text`
+- `data/llama_tabular_outputs.csv`: 10 generated rows with `fine_tuned_output`
+
+When a CSV has no ready prompt column, testing scripts can build a lab prompt from columns such as `GENDER`, `ADMISSION_TYPE`, `DIAGNOSIS`, `lab_name`, `fluid`, `category`, `VALUE`, `VALUEUOM`, and `FLAG`.
+
+## Common Workflows
+
+### 1. Prepare Llama SFT Data
 
 ```powershell
 python scripts\finetune\prepare_sft_dataset.py `
@@ -148,41 +133,22 @@ python scripts\finetune\prepare_sft_dataset.py `
   --target-column generated_text
 ```
 
-This creates:
+This writes `train.jsonl` and `validation.jsonl` under `data\finetune_llama`.
 
-```text
-data/finetune_llama/train.jsonl
-data/finetune_llama/validation.jsonl
-```
-
-The current export creates 90 training examples and 10 validation examples.
-
-### 2. Train the Llama LoRA adapter
+### 2. Train Llama LoRA
 
 ```powershell
 python scripts\finetune\train_llama_lora.py
 ```
 
-By default this trains:
+Defaults:
 
-```text
-meta-llama/Llama-3.1-8B-Instruct
-```
+- Model: `meta-llama/Llama-3.1-8B-Instruct`
+- Train file: `data/finetune_llama/train.jsonl`
+- Validation file: `data/finetune_llama/validation.jsonl`
+- Output adapter: `outputs/llama-lab-lora`
 
-and saves the adapter to:
-
-```text
-outputs/llama-lab-lora
-```
-
-To use a different Llama checkpoint:
-
-```powershell
-python scripts\finetune\train_llama_lora.py `
-  --model-id meta-llama/Llama-3.1-8B-Instruct
-```
-
-Useful lower-memory options:
+Lower-memory example:
 
 ```powershell
 python scripts\finetune\train_llama_lora.py `
@@ -191,7 +157,7 @@ python scripts\finetune\train_llama_lora.py `
   --max-seq-length 2048
 ```
 
-### 3. Test the Llama adapter
+### 3. Test Llama LoRA
 
 Run one validation example:
 
@@ -199,19 +165,13 @@ Run one validation example:
 python scripts\testing\test_llama_lora.py
 ```
 
-Compare base Llama against the fine-tuned adapter:
+Compare base Llama against the adapter:
 
 ```powershell
 python scripts\testing\test_llama_lora.py --compare-base
 ```
 
-Test a different validation example:
-
-```powershell
-python scripts\testing\test_llama_lora.py --compare-base --example-index 3
-```
-
-Test directly on a tabular CSV row:
+Test a CSV row:
 
 ```powershell
 python scripts\testing\test_llama_lora.py `
@@ -220,50 +180,20 @@ python scripts\testing\test_llama_lora.py `
   --show-prompt
 ```
 
-For CSV input, the test script uses `input_text` or `prompt` if either column exists.
-If neither exists, it builds a lab-result prompt from tabular columns such as
-`GENDER`, `ADMISSION_TYPE`, `DIAGNOSIS`, `lab_name`, `fluid`, `category`,
-`VALUE`, `VALUEUOM`, and `FLAG`.
-
-You can also force specific CSV columns:
+Generate outputs for multiple CSV rows:
 
 ```powershell
 python scripts\testing\test_llama_lora.py `
-  --input-csv data\lab_summaries_export.csv `
-  --prompt-column prompt `
-  --target-column generated_text
-```
-
-Generate outputs for 10 tabular rows and save them to a CSV:
-
-```powershell
-python scripts\testing\test_llama_lora.py `
-  --adapter-dir outputs\llama-lab-lora-10 `
+  --adapter-dir outputs\llama-lab-lora `
   --input-csv data\mimic_labs_20_for_testing.csv `
   --output-csv data\llama_tabular_outputs.csv `
   --max-rows 10 `
   --max-new-tokens 200
 ```
 
-Remove `--max-rows 10` to process every row. The output file keeps the original
-input columns and adds `source_row_index`, `model_prompt`, and
-`fine_tuned_output`. Add `--compare-base` to also save `base_model_output`.
-The output CSV is updated after every processed row so partial progress is kept
-if a long Colab run stops early.
+The output CSV keeps original input columns and adds `source_row_index`, `model_prompt`, and `fine_tuned_output`. Add `--compare-base` to include `base_model_output`.
 
-Good signs:
-
-- The output keeps the exact bullet format.
-- Tests stay in the same order as the input.
-- Each bullet is short and patient-friendly.
-- The answer ends with `General Overview:`.
-- The fine-tuned output is closer to the validation target than the base model output.
-
-## Fine-Tune MedGemma
-
-Use this workflow when you want to fine-tune MedGemma using `data/medgemma_1000_outputs.csv`.
-
-### 1. Prepare the MedGemma SFT dataset
+### 4. Prepare MedGemma SFT Data
 
 ```powershell
 python scripts\finetune\prepare_sft_dataset.py `
@@ -273,34 +203,22 @@ python scripts\finetune\prepare_sft_dataset.py `
   --target-column medgemma_output
 ```
 
-This creates:
+This writes `train.jsonl` and `validation.jsonl` under `data\finetune`.
 
-```text
-data/finetune/train.jsonl
-data/finetune/validation.jsonl
-```
-
-The current file creates 900 training examples and 100 validation examples.
-
-### 2. Train the MedGemma LoRA adapter
+### 5. Train MedGemma LoRA
 
 ```powershell
 python scripts\finetune\train_medgemma_lora.py
 ```
 
-By default this trains:
+Defaults:
 
-```text
-google/medgemma-4b-it
-```
+- Model: `google/medgemma-4b-it`
+- Train file: `data/finetune/train.jsonl`
+- Validation file: `data/finetune/validation.jsonl`
+- Output adapter: `outputs/medgemma-lab-lora`
 
-and saves the adapter to:
-
-```text
-outputs/medgemma-lab-lora
-```
-
-Useful lower-memory options:
+Lower-memory example:
 
 ```powershell
 python scripts\finetune\train_medgemma_lora.py `
@@ -309,82 +227,9 @@ python scripts\finetune\train_medgemma_lora.py `
   --max-seq-length 768
 ```
 
-## What the Fine-Tuning Scripts Do
+### 6. Evaluate TableLLM-Style Outputs
 
-### `prepare_sft_dataset.py`
-
-Converts a CSV into chat-style JSONL for supervised fine-tuning.
-
-Each output row looks like:
-
-```json
-{
-  "messages": [
-    {"role": "system", "content": "You produce concise, patient-friendly explanations..."},
-    {"role": "user", "content": "The prompt goes here"},
-    {"role": "assistant", "content": "The target answer goes here"}
-  ]
-}
-```
-
-The script:
-
-1. Reads the CSV.
-2. Filters rows with missing prompts or targets.
-3. Shuffles the rows.
-4. Splits them into train and validation sets.
-5. Writes `train.jsonl` and `validation.jsonl`.
-
-### `train_llama_lora.py`
-
-Loads a Llama instruct model and trains a LoRA adapter on `data/finetune_llama`.
-
-Default input:
-
-```text
-data/finetune_llama/train.jsonl
-data/finetune_llama/validation.jsonl
-```
-
-Default output:
-
-```text
-outputs/llama-lab-lora
-```
-
-### `train_medgemma_lora.py`
-
-Loads MedGemma and trains a LoRA adapter on `data/finetune`.
-
-Default input:
-
-```text
-data/finetune/train.jsonl
-data/finetune/validation.jsonl
-```
-
-Default output:
-
-```text
-outputs/medgemma-lab-lora
-```
-
-### `test_llama_lora.py`
-
-Loads the base Llama model plus the trained adapter and generates an answer for one validation prompt.
-
-It can also print the base model output for comparison:
-
-```powershell
-python scripts\testing\test_llama_lora.py --compare-base
-```
-
-### `evaluate_tablellm_cv.py`
-
-Evaluates TABLELLM-style tabular lab explanations with k-fold cross-validation,
-TABLELLM prompt templates, text-similarity metrics, format checks, and charts.
-
-Score saved model outputs:
+Score an existing prediction column against a reference column:
 
 ```powershell
 python scripts\testing\evaluate_tablellm_cv.py `
@@ -396,22 +241,7 @@ python scripts\testing\evaluate_tablellm_cv.py `
   --output-dir outputs\tablellm_cv
 ```
 
-Run the TableLLM checkpoint directly on held-out folds:
-
-```powershell
-python scripts\testing\evaluate_tablellm_cv.py `
-  --run-model `
-  --model-id RUCKBReasoning/TableLLM-8b `
-  --load-4bit `
-  --folds 5 `
-  --output-dir outputs\tablellm_cv
-```
-
-The script writes detailed row scores, fold summaries, metadata, and PNG charts.
-
-When a CSV has predictions but no reference answers, use format-only mode. This
-is useful for `data/llama_tabular_outputs.csv`, where `target_text` can be
-empty:
+Evaluate only format/safety checks when reference targets are missing:
 
 ```powershell
 python scripts\testing\evaluate_tablellm_cv.py `
@@ -423,8 +253,7 @@ python scripts\testing\evaluate_tablellm_cv.py `
   --output-dir outputs\tablellm_format_eval
 ```
 
-To create row-level silver reference targets first, fill `target_text` into a
-new CSV and then run reference-based evaluation:
+Fill row-level silver references before reference-based evaluation:
 
 ```powershell
 python scripts\silver_standard\fill_row_target_text.py `
@@ -440,8 +269,7 @@ python scripts\testing\evaluate_tablellm_cv.py `
   --output-dir outputs\tablellm_cv_real
 ```
 
-To generate a separate `output_text` column with TableLLM before evaluating,
-run this on a GPU machine or Colab GPU runtime:
+Generate a TableLLM `output_text` column before evaluating:
 
 ```powershell
 python scripts\testing\generate_tablellm_output_text.py `
@@ -462,46 +290,43 @@ python scripts\testing\evaluate_tablellm_cv.py `
   --output-dir outputs\tablellm_output_text_eval
 ```
 
-For Colab, clone or pull the repository, install `requirements-colab.txt`, and
-run the same commands with shell cells. Use a GPU runtime only for direct
-`RUCKBReasoning/TableLLM-8b` inference:
+## Script Reference
 
-```python
-%cd /content/NLP_medical_results_explanation
-!pip uninstall -y torchvision torchao
-!pip install -q -r requirements-colab.txt
-!python scripts/testing/evaluate_tablellm_cv.py \
-  --input data/lab_summaries_export.csv \
-  --prompt-column prompt \
-  --target-column generated_text \
-  --prediction-column generated_text \
-  --folds 5 \
-  --output-dir outputs/tablellm_cv
-```
+| Task | Script | Main inputs | Main outputs |
+| --- | --- | --- | --- |
+| Build chat JSONL for SFT | `scripts\finetune\prepare_sft_dataset.py` | CSV prompt/target columns | `train.jsonl`, `validation.jsonl` |
+| Train Llama adapter | `scripts\finetune\train_llama_lora.py` | `data\finetune_llama\*.jsonl` | `outputs\llama-lab-lora` |
+| Train MedGemma adapter | `scripts\finetune\train_medgemma_lora.py` | `data\finetune\*.jsonl` | `outputs\medgemma-lab-lora` |
+| Test/generate with Llama adapter | `scripts\testing\test_llama_lora.py` | JSONL validation or CSV rows | Console output or CSV |
+| Fill row-level silver targets | `scripts\silver_standard\fill_row_target_text.py` | Row-level CSV | CSV with `target_text` |
+| Generate TableLLM outputs | `scripts\testing\generate_tablellm_output_text.py` | CSV prompts | CSV with `output_text` |
+| Evaluate TableLLM-style outputs | `scripts\testing\evaluate_tablellm_cv.py` | CSV predictions and optional targets | Results CSV, summary CSV, metadata JSON, charts |
+| Generate Llama panel summaries | `scripts\silver_standard\generate_silver_standard_llama.py` | PostgreSQL data and NVIDIA endpoint | Database rows for export |
+| Export summaries from database | `scripts\db\export_lab_summaries_csv.py` | PostgreSQL `lab_summaries` table | `data\lab_summaries_export.csv` |
 
 ## Generate More Llama Training Data
 
-The current Llama fine-tuning file has only 100 examples. That is enough to test the pipeline, but too small for a strong final model.
+The current Llama training export has 100 examples. That is enough to test the pipeline, but too small for a strong final model.
 
-To generate more Llama outputs, use:
+Generate more panel summaries:
 
 ```powershell
 python scripts\silver_standard\generate_silver_standard_llama.py 1000
 ```
 
-The optional number limits how many patients/panels are processed. If omitted, the script processes all available panels:
+The optional number limits how many patients or panels are processed. Without it, the script processes all available panels:
 
 ```powershell
 python scripts\silver_standard\generate_silver_standard_llama.py
 ```
 
-After generating more rows in the database, export them:
+After generating more database rows, export them:
 
 ```powershell
 python scripts\db\export_lab_summaries_csv.py
 ```
 
-Then rebuild the fine-tuning JSONL:
+Then rebuild the JSONL split:
 
 ```powershell
 python scripts\finetune\prepare_sft_dataset.py `
@@ -511,11 +336,17 @@ python scripts\finetune\prepare_sft_dataset.py `
   --target-column generated_text
 ```
 
-## Environment Variables for Generation Scripts
+## Environment Variables
 
-Some generation and database scripts use environment variables from `.env` or PowerShell.
+### Hugging Face
 
-Database variables:
+```powershell
+$env:HF_TOKEN = "hf_your_token_here"
+```
+
+### Database
+
+Used by database export and silver-standard generation scripts:
 
 ```powershell
 $env:DB_NAME = "your_db"
@@ -526,7 +357,9 @@ $env:DB_PORT = "5432"
 $env:DB_SCHEMA = "your_schema"
 ```
 
-NVIDIA/OpenAI-compatible Llama endpoint variables:
+### NVIDIA/OpenAI-Compatible Endpoint
+
+Used by `scripts\silver_standard\generate_silver_standard_llama.py`:
 
 ```powershell
 $env:NVIDIA_API_KEY = "your_key"
@@ -534,7 +367,9 @@ $env:NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 $env:NVIDIA_MODEL = "meta/llama-3.1-70b-instruct"
 ```
 
-Older CSV-prep variables:
+### Older CSV Preparation Scripts
+
+Used by `scripts\generate_input_csv\generate_input.py`, `scripts\testing\create_20_sample.py`, and `scripts\silver_standard\generate_silver_standard.py`:
 
 ```powershell
 $env:LABS_SAMPLE = "data\mimic_labs_20_for_testing.csv"
@@ -543,33 +378,47 @@ $env:SILVER_RULE = "data\silver_rule_outputs.csv"
 $env:LABS_TESTING = "data\mimic_labs_20_for_testing.csv"
 ```
 
-## Quick Checks
+## Validation Checks
 
-Check that the Python scripts compile:
+Compile the Python scripts:
 
 ```powershell
 python -m py_compile `
+  scripts\common\lab_prompt.py `
+  scripts\db\create_tables.py `
+  scripts\db\export_lab_summaries_csv.py `
   scripts\finetune\prepare_sft_dataset.py `
   scripts\finetune\train_llama_lora.py `
+  scripts\finetune\train_medgemma_lora.py `
+  scripts\generate_input_csv\generate_input.py `
+  scripts\silver_standard\fill_row_target_text.py `
+  scripts\silver_standard\generate_silver_standard.py `
+  scripts\silver_standard\generate_silver_standard_llama.py `
+  scripts\testing\check_dataset.py `
+  scripts\testing\create_20_sample.py `
+  scripts\testing\evaluate_tablellm_cv.py `
+  scripts\testing\generate_tablellm_output_text.py `
   scripts\testing\test_llama_lora.py `
-  scripts\finetune\train_medgemma_lora.py
+  scripts\testing\test_medgemma_one.py
 ```
 
-Inspect the Llama dataset:
+Inspect prepared records:
 
 ```powershell
 Get-Content data\finetune_llama\train.jsonl -TotalCount 1
+Get-Content data\finetune\train.jsonl -TotalCount 1
 ```
 
-Inspect the MedGemma dataset:
+Check key CSV columns:
 
 ```powershell
-Get-Content data\finetune\train.jsonl -TotalCount 1
+Import-Csv data\lab_summaries_export.csv | Select-Object -First 1
+Import-Csv data\medgemma_1000_outputs.csv | Select-Object -First 1
 ```
 
 ## Troubleshooting
 
-### Hugging Face access error
+### Hugging Face Access Error
 
 Make sure:
 
@@ -577,30 +426,33 @@ Make sure:
 2. `$env:HF_TOKEN` is set.
 3. Your token has access to the model.
 
-### CUDA out of memory
+### CUDA Out Of Memory
 
-Try a shorter context:
-
-```powershell
-python scripts\finetune\train_llama_lora.py --max-seq-length 2048
-```
-
-or for MedGemma:
+Use a shorter context and keep batch size at 1:
 
 ```powershell
-python scripts\finetune\train_medgemma_lora.py --max-seq-length 768
+python scripts\finetune\train_llama_lora.py --max-seq-length 2048 --batch-size 1
+python scripts\finetune\train_medgemma_lora.py --max-seq-length 768 --batch-size 1
 ```
 
-Also keep:
+### `torchvision` Import Errors
+
+This is a text-only project, so `torchvision` is not required. If you see an error such as `operator torchvision::nms does not exist`, remove it:
 
 ```powershell
---batch-size 1
+python -m pip uninstall -y torchvision
 ```
 
-### Fine-tuned model is not better
+### `target_text` Is Empty
 
-The most likely reason is not enough training data. The current Llama set has only 100 examples. Generate more Llama outputs, review quality, export again, and rebuild `data/finetune_llama`.
+That is expected for `data\medgemma_1000_outputs.csv`; use `medgemma_output` as the target column.
 
-### `target_text` is empty
+For row-level Llama outputs, create silver references with:
 
-That is expected for `data/medgemma_1000_outputs.csv`. Use `medgemma_output` as the target column unless you manually create reviewed `target_text` values.
+```powershell
+python scripts\silver_standard\fill_row_target_text.py
+```
+
+### Fine-Tuned Model Is Not Better
+
+The Llama dataset currently has only 100 examples. Generate more Llama outputs, review their quality, export them again, and rebuild `data\finetune_llama`.
