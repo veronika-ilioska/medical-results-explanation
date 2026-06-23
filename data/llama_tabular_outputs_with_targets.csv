@@ -1,0 +1,301 @@
+SUBJECT_ID,HADM_ID,ITEMID,lab_name,fluid,category,loinc_code,CHARTTIME,VALUE,VALUENUM,VALUEUOM,FLAG,GENDER,ADMISSION_TYPE,DIAGNOSIS,input_text,target_text,source_row_index,model_prompt,fine_tuned_output
+585,123154,50820,pH,Blood,Blood Gas,11558-4,2142-11-10 17:41:00,7.32,7.32,units,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: pH
+Fluid: Blood
+Category: Blood Gas
+Measured value: 7.32 units
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",- pH: 7.32 units - May reflect a change in the body's acid-base balance.,0,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: pH
+Fluid: Blood
+Category: Blood Gas
+Measured value: 7.32 units
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+","The blood pH level is lower than the normal range, which may indicate that the body is producing too much acid. This can be a sign of a serious condition, such as severe injury or illness, that may require immediate medical attention."
+585,123154,50821,pO2,Blood,Blood Gas,11556-8,2142-11-10 17:41:00,236.0,236.0,mm Hg,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: pO2
+Fluid: Blood
+Category: Blood Gas
+Measured value: 236.0 mm Hg
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",- pO2: 236.0 mm Hg - May reflect a change in oxygen levels in the blood.,1,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: pO2
+Fluid: Blood
+Category: Blood Gas
+Measured value: 236.0 mm Hg
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+","The blood oxygen level, also known as pO2, is higher than the normal range. This suggests that there is an excess of oxygen in the blood. This may be due to various factors, such as supplemental oxygen therapy or a medical condition that affects gas exchange in the lungs. Further evaluation is needed to determine the cause of this abnormality."
+585,123154,50867,Amylase,Blood,Chemistry,1798-8,2142-11-10 19:58:00,64.0,64.0,IU/L,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Amylase
+Fluid: Blood
+Category: Chemistry
+Measured value: 64.0 IU/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",- Amylase: 64.0 IU/L - Appears generally within the expected range for body chemistry balance.,2,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Amylase
+Fluid: Blood
+Category: Chemistry
+Measured value: 64.0 IU/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+",The blood amylase level is within the normal range. Amylase is an enzyme produced by the pancreas and salivary glands. This result suggests that the pancreas and salivary glands are functioning normally.
+585,123154,50868,Anion Gap,Blood,Chemistry,1863-0,2142-11-10 19:58:00,10.0,10.0,mEq/L,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Anion Gap
+Fluid: Blood
+Category: Chemistry
+Measured value: 10.0 mEq/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",- Anion Gap: 10.0 mEq/L - Appears generally within the expected range for body chemistry balance.,3,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Anion Gap
+Fluid: Blood
+Category: Chemistry
+Measured value: 10.0 mEq/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+",The anion gap is a calculation that helps assess the balance of certain chemicals in the blood. A normal anion gap is typically between 3 and 12 milliequivalents per liter (mEq/L). The measured value of 10.0 mEq/L is within the normal range. This suggests that the balance of these chemicals in the blood appears to be within expected limits.
+585,123154,50882,Bicarbonate,Blood,Chemistry,1963-8,2142-11-10 19:58:00,18.0,18.0,mEq/L,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Bicarbonate
+Fluid: Blood
+Category: Chemistry
+Measured value: 18.0 mEq/L
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",- Bicarbonate: 18.0 mEq/L - May reflect a change in the body's acid-base balance.,4,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Bicarbonate
+Fluid: Blood
+Category: Chemistry
+Measured value: 18.0 mEq/L
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+","The blood bicarbonate level is lower than the normal range. This may suggest that the body is not properly balancing its acid-base levels, which can be seen in conditions such as severe illness, severe injury, or severe breathing problems. Further testing and medical evaluation are needed to determine the cause."
+585,123154,50893,"Calcium, Total",Blood,Chemistry,2000-8,2142-11-10 19:58:00,6.6,6.6,mg/dL,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Calcium, Total
+Fluid: Blood
+Category: Chemistry
+Measured value: 6.6 mg/dL
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.","- Calcium, Total: 6.6 mg/dL - May suggest a change in calcium balance in the blood.",5,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Calcium, Total
+Fluid: Blood
+Category: Chemistry
+Measured value: 6.6 mg/dL
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+",The calcium level in the blood is lower than the normal range. This may be related to the body's response to injury or other factors associated with the motor vehicle accident. Further evaluation is needed to determine the cause of this finding.
+585,123154,50902,Chloride,Blood,Chemistry,2075-0,2142-11-10 19:58:00,119.0,119.0,mEq/L,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Chloride
+Fluid: Blood
+Category: Chemistry
+Measured value: 119.0 mEq/L
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",- Chloride: 119.0 mEq/L - May reflect a change in fluid or acid-base balance.,6,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Chloride
+Fluid: Blood
+Category: Chemistry
+Measured value: 119.0 mEq/L
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+","The blood chloride level is higher than the normal range. Chloride helps regulate the balance of fluids in the body. Elevated chloride levels can be seen in conditions such as dehydration, kidney problems, or as a result of certain medications. Further evaluation by a healthcare provider is needed to determine the cause of this result."
+585,123154,50912,Creatinine,Blood,Chemistry,2160-0,2142-11-10 19:58:00,0.5,0.5,mg/dL,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Creatinine
+Fluid: Blood
+Category: Chemistry
+Measured value: 0.5 mg/dL
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",- Creatinine: 0.5 mg/dL - Appears generally within the expected range for body chemistry balance.,7,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Creatinine
+Fluid: Blood
+Category: Chemistry
+Measured value: 0.5 mg/dL
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+",The blood creatinine level is within the normal range. This suggests that the kidneys are functioning properly and are able to clear waste products from the blood effectively.
+585,123154,50931,Glucose,Blood,Chemistry,2345-7,2142-11-10 19:58:00,114.0,114.0,mg/dL,abnormal,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Glucose
+Fluid: Blood
+Category: Chemistry
+Measured value: 114.0 mg/dL
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.",- Glucose: 114.0 mg/dL - May suggest a change in blood sugar balance.,8,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Glucose
+Fluid: Blood
+Category: Chemistry
+Measured value: 114.0 mg/dL
+Abnormal flag: abnormal
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+","The blood glucose level is higher than the normal range, which may indicate that the body is producing too much glucose or not using it effectively. This can be seen in conditions such as diabetes. However, more information is needed to understand the cause of this result."
+585,123154,50954,Lactate Dehydrogenase (LD),Blood,Chemistry,2532-0,2142-11-10 19:58:00,185.0,185.0,IU/L,,F,EMERGENCY,STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES,"Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Lactate Dehydrogenase (LD)
+Fluid: Blood
+Category: Chemistry
+Measured value: 185.0 IU/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.",- Lactate Dehydrogenase (LD): 185.0 IU/L - Appears generally within the expected range for body chemistry balance.,9,"<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You produce concise, patient-friendly explanations of laboratory results. Use cautious wording, avoid diagnosis and do not recommend treatment.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Patient sex: F
+Admission type: EMERGENCY
+Admission diagnosis: STATUS POST MOTOR VEHICLE ACCIDENT WITH INJURIES
+
+Laboratory test: Lactate Dehydrogenase (LD)
+Fluid: Blood
+Category: Chemistry
+Measured value: 185.0 IU/L
+Abnormal flag: nan
+
+Task: Generate a short medical explanation of this laboratory result.<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+","The lactate dehydrogenase (LD) level in the blood is higher than the typical range. This enzyme is found in many body tissues, including the heart, liver, kidneys, and muscles. Elevated LD levels can be seen in various conditions, such as tissue damage or disease affecting these organs. Further testing and medical evaluation are needed to determine the cause of the elevated LD level."
