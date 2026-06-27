@@ -15,7 +15,7 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from scripts.common.lab_prompt import build_lab_result_prompt
+from shared.lab_prompt import build_lab_result_prompt
 
 
 TABLELLM_MODEL_ID = "RUCKBReasoning/TableLLM-8b"
@@ -413,7 +413,7 @@ def main():
             "and visualization outputs."
         )
     )
-    parser.add_argument("--input", default="data/lab_summaries_export.csv")
+    parser.add_argument("--input", default="llama/data/lab_summaries_export.csv")
     parser.add_argument("--prompt-column", default="prompt")
     parser.add_argument("--target-column", default="generated_text")
     parser.add_argument(
@@ -428,7 +428,7 @@ def main():
             "target column. Reference metrics are left empty."
         ),
     )
-    parser.add_argument("--output-dir", default="outputs/tablellm_cv")
+    parser.add_argument("--output-dir", default="tablellm/outputs/tablellm_cv")
     parser.add_argument("--folds", type=int, default=5)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-rows", type=int, help="Optional quick-run row limit.")

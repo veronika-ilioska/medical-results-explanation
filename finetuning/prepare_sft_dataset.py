@@ -6,10 +6,10 @@ from pathlib import Path
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from scripts.common.lab_prompt import build_messages
+from shared.lab_prompt import build_messages
 
 
 def build_record(input_text, target_text):
@@ -27,8 +27,8 @@ def main():
     parser = argparse.ArgumentParser(
         description="Convert lab explanation CSV rows into chat SFT JSONL files."
     )
-    parser.add_argument("--input", default="data/medgemma_1000_outputs.csv")
-    parser.add_argument("--output-dir", default="data/finetune")
+    parser.add_argument("--input", default="medgemma/data/medgemma_1000_outputs.csv")
+    parser.add_argument("--output-dir", default="medgemma/data/finetune")
     parser.add_argument("--prompt-column", default="input_text")
     parser.add_argument("--target-column", default="medgemma_output")
     parser.add_argument("--val-ratio", type=float, default=0.1)

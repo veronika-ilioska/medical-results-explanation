@@ -21,7 +21,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from scripts.common.lab_prompt import build_lab_result_prompt, build_messages
+from shared.lab_prompt import build_lab_result_prompt, build_messages
 
 
 def load_jsonl(path):
@@ -120,8 +120,8 @@ def main():
         description="Test a fine-tuned Llama LoRA adapter on validation prompts."
     )
     parser.add_argument("--model-id", default="meta-llama/Llama-3.1-8B-Instruct")
-    parser.add_argument("--adapter-dir", default="outputs/llama-lab-lora")
-    parser.add_argument("--validation-file", default="data/finetune_llama/validation.jsonl")
+    parser.add_argument("--adapter-dir", default="llama/outputs/llama-lab-lora")
+    parser.add_argument("--validation-file", default="llama/data/finetune_llama/validation.jsonl")
     parser.add_argument("--example-index", type=int, default=0)
     parser.add_argument(
         "--input-csv",

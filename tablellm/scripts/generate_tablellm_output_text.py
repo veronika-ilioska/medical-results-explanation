@@ -8,7 +8,7 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from scripts.testing.evaluate_tablellm_cv import (
+from tablellm.scripts.evaluate_tablellm_cv import (
     TABLELLM_MODEL_ID,
     build_prompt_from_row,
     generate_text,
@@ -21,8 +21,8 @@ def main():
     parser = argparse.ArgumentParser(
         description="Generate a TableLLM output_text column for lab-result CSV rows."
     )
-    parser.add_argument("--input", default="data/llama_tabular_outputs_with_targets.csv")
-    parser.add_argument("--output", default="data/llama_tabular_outputs_with_tablellm.csv")
+    parser.add_argument("--input", default="llama/outputs/llama_tabular_outputs_with_targets.csv")
+    parser.add_argument("--output", default="tablellm/outputs/llama_tabular_outputs_with_tablellm.csv")
     parser.add_argument("--prompt-column", default="input_text")
     parser.add_argument("--output-column", default="output_text")
     parser.add_argument("--model-id", default=TABLELLM_MODEL_ID)

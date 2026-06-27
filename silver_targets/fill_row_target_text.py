@@ -90,8 +90,8 @@ def main():
     parser = argparse.ArgumentParser(
         description="Fill empty row-level target_text values with cautious silver-standard lab explanations."
     )
-    parser.add_argument("--input", default="data/llama_tabular_outputs.csv")
-    parser.add_argument("--output", default="data/llama_tabular_outputs_with_targets.csv")
+    parser.add_argument("--input", default="llama/outputs/llama_tabular_outputs.csv")
+    parser.add_argument("--output", default="llama/outputs/llama_tabular_outputs_with_targets.csv")
     parser.add_argument("--target-column", default="target_text")
     parser.add_argument(
         "--overwrite",

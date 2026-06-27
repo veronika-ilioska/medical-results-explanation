@@ -16,7 +16,7 @@ DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 DB_SCHEMA = os.getenv("DB_SCHEMA")
 
-DEFAULT_OUTPUT_PATH = Path("data/lab_summaries_export.csv")
+DEFAULT_OUTPUT_PATH = Path("llama/data/lab_summaries_export.csv")
 
 
 def get_connection():

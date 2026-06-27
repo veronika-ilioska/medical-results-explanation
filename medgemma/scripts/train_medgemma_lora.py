@@ -45,9 +45,9 @@ def main():
         description="Fine-tune MedGemma with LoRA on lab explanation JSONL data."
     )
     parser.add_argument("--model-id", default="google/medgemma-4b-it")
-    parser.add_argument("--train-file", default="data/finetune/train.jsonl")
-    parser.add_argument("--validation-file", default="data/finetune/validation.jsonl")
-    parser.add_argument("--output-dir", default="outputs/medgemma-lab-lora")
+    parser.add_argument("--train-file", default="medgemma/data/finetune/train.jsonl")
+    parser.add_argument("--validation-file", default="medgemma/data/finetune/validation.jsonl")
+    parser.add_argument("--output-dir", default="medgemma/outputs/medgemma-lab-lora")
     parser.add_argument("--max-seq-length", type=int, default=1024)
     parser.add_argument("--epochs", type=float, default=2)
     parser.add_argument("--learning-rate", type=float, default=2e-4)

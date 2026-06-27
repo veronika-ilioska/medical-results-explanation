@@ -45,9 +45,9 @@ def main():
         description="Fine-tune a Llama instruct model with LoRA on lab explanations."
     )
     parser.add_argument("--model-id", default="meta-llama/Llama-3.1-8B-Instruct")
-    parser.add_argument("--train-file", default="data/finetune_llama/train.jsonl")
-    parser.add_argument("--validation-file", default="data/finetune_llama/validation.jsonl")
-    parser.add_argument("--output-dir", default="outputs/llama-lab-lora")
+    parser.add_argument("--train-file", default="llama/data/finetune_llama/train.jsonl")
+    parser.add_argument("--validation-file", default="llama/data/finetune_llama/validation.jsonl")
+    parser.add_argument("--output-dir", default="llama/outputs/llama-lab-lora")
     parser.add_argument("--max-seq-length", type=int, default=4096)
     parser.add_argument("--epochs", type=float, default=2)
     parser.add_argument("--learning-rate", type=float, default=2e-4)

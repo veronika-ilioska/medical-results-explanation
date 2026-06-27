@@ -4,10 +4,10 @@ from pathlib import Path
 
 import pandas as pd
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from scripts.common.lab_prompt import build_lab_result_prompt
+from shared.lab_prompt import build_lab_result_prompt
 
 input_path = os.getenv("LABS_SAMPLE")
 output_path = os.getenv("LABS_GENERATION")

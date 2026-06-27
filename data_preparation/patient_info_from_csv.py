@@ -13,7 +13,7 @@ df = pd.read_csv('data/mimic_labs_for_generation.csv', header=None, names=[
     'flag', 'gender', 'admission_type', 'diagnosis', 'prompt'
 ])
 
-patient = df[df['SUBJECT_ID'] == subject_id]
+patient = df[df["subject_id"] == subject_id]
 
 if patient.empty:
     print(f"No data found for subject_id {subject_id}")
