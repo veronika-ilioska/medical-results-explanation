@@ -1,0 +1,36 @@
+{
+  "input": "data/full_silver-standard_dataset.csv",
+  "prompt_column": "prompt",
+  "target_column": "generated_text",
+  "examples": 10,
+  "train_records": 8,
+  "validation_records": 2,
+  "heldout_rows": 90,
+  "seed": 42,
+  "val_ratio": 0.2,
+  "selected_source_row_indices": [
+    0,
+    10,
+    22,
+    39,
+    44,
+    45,
+    53,
+    70,
+    80,
+    83
+  ],
+  "selected_summary_ids": [
+    "84",
+    "54",
+    "71",
+    "46",
+    "45",
+    "40",
+    "23",
+    "81",
+    "11",
+    "1"
+  ],
+  "leakage_note": "Use heldout_rows.csv for later base/fine-tuned generation comparisons, not the selected train/validation rows."
+}

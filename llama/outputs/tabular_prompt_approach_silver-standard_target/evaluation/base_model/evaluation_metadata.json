@@ -1,0 +1,18 @@
+{
+  "input": "llama/outputs/tabular_prompt_approach/llama_full_silver_base_outputs.csv",
+  "target_column": "generated_text",
+  "prediction_column": "base_llama_tabular_output",
+  "prompt_column": "prompt",
+  "folds": 5,
+  "seed": 42,
+  "rows_evaluated": 10,
+  "bertscore": true,
+  "bertscore_model": "roberta-large",
+  "outputs": {
+    "results": "llama/outputs/tabular_prompt_approach_test/base_eval_bertscore/evaluation_results.csv",
+    "summary": "llama/outputs/tabular_prompt_approach_test/base_eval_bertscore/evaluation_summary.csv",
+    "charts": [
+      "llama/outputs/tabular_prompt_approach_test/base_eval_bertscore/evaluation_fold_scores.png"
+    ]
+  }
+}

@@ -3,6 +3,7 @@ pandas
 numpy
 numexpr
 matplotlib
+bert-score
 
 # Hugging Face / model training and inference
 torch
