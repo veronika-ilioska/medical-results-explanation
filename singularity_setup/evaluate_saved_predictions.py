@@ -30,6 +30,20 @@ The same evaluator is used for MedGemma by changing the input and prediction:
     #   --prediction-column fine_tuned_medgemma_tabular_output \
     #   --output-dir results/medgemma/evaluation/finetuned --bertscore-device cuda:0
 
+TableLLM uses it in the same way:
+
+    # python singularity_setup/evaluate_saved_predictions.py \
+    #   --input results/tablellm/base_outputs.csv \
+    #   --target-column generated_text \
+    #   --prediction-column base_tablellm_output \
+    #   --output-dir results/tablellm/evaluation/base --bertscore-device cuda:0
+
+    # python singularity_setup/evaluate_saved_predictions.py \
+    #   --input results/tablellm/finetuned_outputs.csv \
+    #   --target-column generated_text \
+    #   --prediction-column fine_tuned_tablellm_output \
+    #   --output-dir results/tablellm/evaluation/finetuned --bertscore-device cuda:0
+
 BERTScore defaults to roberta-large. Use --skip-bertscore for a quick CPU-only
 check, or --bertscore-device cpu when no GPU is available.
 """
