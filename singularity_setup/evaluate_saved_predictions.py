@@ -16,6 +16,20 @@ Fine-tuned model:
     #   --prediction-column fine_tuned_llama_tabular_output \
     #   --output-dir results/llama/evaluation/finetuned --bertscore-device cuda:0
 
+The same evaluator is used for MedGemma by changing the input and prediction:
+
+    # python singularity_setup/evaluate_saved_predictions.py \
+    #   --input results/medgemma/base_outputs.csv \
+    #   --target-column generated_text \
+    #   --prediction-column base_medgemma_tabular_output \
+    #   --output-dir results/medgemma/evaluation/base --bertscore-device cuda:0
+
+    # python singularity_setup/evaluate_saved_predictions.py \
+    #   --input results/medgemma/finetuned_outputs.csv \
+    #   --target-column generated_text \
+    #   --prediction-column fine_tuned_medgemma_tabular_output \
+    #   --output-dir results/medgemma/evaluation/finetuned --bertscore-device cuda:0
+
 BERTScore defaults to roberta-large. Use --skip-bertscore for a quick CPU-only
 check, or --bertscore-device cpu when no GPU is available.
 """
