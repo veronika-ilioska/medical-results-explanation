@@ -1,282 +1,171 @@
-# NLP Medical Results Explanation
+# NLP Medical Results Explanation: Singularity Setup
 
-Utilities for creating patient-friendly explanations of MIMIC-III lab results, preparing supervised fine-tuning data, training LoRA adapters, and evaluating generated explanations.
+This branch keeps the runnable project code in `singularity_setup/`. Older
+duplicate script copies outside that folder have been removed so the
+Singularity workflow is the canonical one.
 
-The repo is organized by model/tool lane:
+The retained `data/`, `llama/`, `medgemma/`, and `tablellm/` folders are kept
+for datasets, prepared JSONL files, notebooks, and saved outputs/evaluation
+artifacts.
 
-- `medgemma/`: MedGemma scripts, datasets, notebook, and adapter outputs.
-- `llama/`: Llama scripts, datasets, and adapter outputs.
-- `tablellm/`: TableLLM generation/evaluation scripts and results.
-- `shared/`: prompt/message helpers used across lanes.
-- `finetuning/`: model-agnostic SFT JSONL preparation.
-- `silver_targets/`: rule/model-assisted target creation helpers.
-- `data_preparation/`: raw CSV preparation and inspection helpers.
-- `database/`: PostgreSQL table setup and export helpers.
-- `data/`: raw/shared MIMIC lab CSV inputs.
-
-## Setup
-
-From the repo root:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -U pip
-pip install -r requirements.txt
-```
-
-Notebook support is optional. On Windows, especially inside OneDrive paths,
-Jupyter can hit long path limits while installing lab extensions. Install it
-only if you need to run notebooks locally:
-
-```powershell
-pip install -r requirements-notebook.txt
-```
-
-For gated Hugging Face models:
-
-```powershell
-$env:HF_TOKEN = "hf_your_token_here"
-```
-
-GPU is strongly recommended. The training and testing scripts default to 4-bit loading when applicable.
-
-## Core Data
+## Repository Layout
 
 ```text
+singularity_setup/
+  Singularity.def
+  evaluate_saved_predictions.py
+  generate_silver_standard_duckdb.py
+  common/
+    prepare_tabular_sft_dataset.py
+    prompt_utils.py
+  llama/
+    finetune_llama_lora.py
+    generate_llama_outputs.py
+    prepare_tabular_sft_dataset.py
+    prompt_utils.py
+  medgemma/
+    finetune_medgemma_lora.py
+    generate_medgemma_outputs.py
+  tablellm/
+    finetune_tablellm_lora.py
+    generate_tablellm_outputs.py
+    tablellm_prompt.py
+
 data/
-  mimic_labs_20_for_testing.csv
-  mimic_labs_for_generation.csv
+  Source and silver-standard CSV files.
 
-medgemma/data/
-  medgemma_20_outputs.csv
-  medgemma_1000_outputs.csv
-  finetune/train.jsonl
-  finetune/validation.jsonl
+llama/
+  Prepared Llama data and saved Llama outputs/evaluations.
 
-llama/data/
-  lab_summaries_export.csv
-  lab_summaries_export_10.csv
-  finetune_llama/train.jsonl
-  finetune_llama/validation.jsonl
-  finetune_llama_10/train.jsonl
-  finetune_llama_10/validation.jsonl
+medgemma/
+  Prepared MedGemma data, notebooks, and saved outputs.
 
-llama/outputs/
-  llama_tabular_outputs.csv
-  llama_tabular_outputs_with_targets.csv
+tablellm/
+  Saved TableLLM outputs/evaluations and notebooks.
 
-tablellm/outputs/trainllm_cv/
-  existing TableLLM evaluation notebooks, CSVs, charts, and metadata
+requirements*.txt
+  Local/Colab dependency references. The Singularity image pins its own runtime
+  dependencies in `singularity_setup/Singularity.def`.
 ```
 
-## Prepare SFT Data
+## Build The Singularity Image
 
-Default MedGemma preparation:
+From the repository root:
 
-```powershell
-python finetuning\prepare_sft_dataset.py
+```bash
+sudo singularity build medical-results.sif singularity_setup/Singularity.def
 ```
 
-This reads `medgemma\data\medgemma_1000_outputs.csv` and writes:
+The image installs the Python runtime and model/evaluation dependencies. Project
+data, model adapters, generated outputs, and Hugging Face caches are not baked
+into the image; bind them at runtime.
+
+## Run A Script
+
+```bash
+singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
+  python /workspace/singularity_setup/evaluate_saved_predictions.py --help
+```
+
+Use `--nv` on GPU machines. Drop it for CPU-only checks.
+
+## Prepare Tabular SFT Data
+
+```bash
+singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
+  python /workspace/singularity_setup/llama/prepare_tabular_sft_dataset.py \
+    --input /workspace/data/limit_10_silver-standard_dataset.csv \
+    --output-dir /workspace/llama/data/finetune_llama_tabular_silver_10 \
+    --prompt-column prompt \
+    --target-column generated_text
+```
+
+## Generate Outputs
+
+Base or adapter-backed Llama generation:
+
+```bash
+singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
+  python /workspace/singularity_setup/llama/generate_llama_outputs.py \
+    --input /workspace/data/limit_10_silver-standard_dataset.csv \
+    --output /workspace/llama/outputs/llama_outputs.csv \
+    --max-rows 10
+```
+
+MedGemma and TableLLM use the corresponding scripts:
 
 ```text
-medgemma/data/finetune/train.jsonl
-medgemma/data/finetune/validation.jsonl
+singularity_setup/medgemma/generate_medgemma_outputs.py
+singularity_setup/tablellm/generate_tablellm_outputs.py
 ```
 
-Prepare Llama panel-summary data:
+## Evaluate Saved Predictions
 
-```powershell
-python finetuning\prepare_sft_dataset.py `
-  --input llama\data\lab_summaries_export.csv `
-  --output-dir llama\data\finetune_llama `
-  --prompt-column prompt `
-  --target-column generated_text
+Quick CPU-friendly evaluation without BERTScore:
+
+```bash
+singularity exec -B "$PWD:/workspace" medical-results.sif \
+  python /workspace/singularity_setup/evaluate_saved_predictions.py \
+    --input /workspace/llama/outputs/tabular_prompt_approach_silver-standard_target/llama_full_silver_base_outputs.csv \
+    --target-column generated_text \
+    --prediction-column base_llama_tabular_output \
+    --output-dir /workspace/llama/outputs/tabular_prompt_approach_silver-standard_target/evaluation/base_model \
+    --skip-bertscore
 ```
 
-## Train LoRA Adapters
+GPU evaluation with BERTScore:
 
-Train Llama:
-
-```powershell
-python llama\scripts\train_llama_lora.py
+```bash
+singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
+  python /workspace/singularity_setup/evaluate_saved_predictions.py \
+    --input /workspace/llama/outputs/tabular_prompt_approach_silver-standard_target/llama_tabular_silver_10_finetuned_heldout_outputs.csv \
+    --target-column generated_text \
+    --prediction-column fine_tuned_llama_tabular_output \
+    --output-dir /workspace/llama/outputs/tabular_prompt_approach_silver-standard_target/evaluation/finetuned_model \
+    --bertscore-device cuda:0
 ```
 
-Defaults:
-
-- Train file: `llama/data/finetune_llama/train.jsonl`
-- Validation file: `llama/data/finetune_llama/validation.jsonl`
-- Adapter output: `llama/outputs/llama-lab-lora`
-
-Train MedGemma:
-
-```powershell
-python medgemma\scripts\train_medgemma_lora.py
-```
-
-Defaults:
-
-- Train file: `medgemma/data/finetune/train.jsonl`
-- Validation file: `medgemma/data/finetune/validation.jsonl`
-- Adapter output: `medgemma/outputs/medgemma-lab-lora`
-
-## Test And Generate
-
-Test a Llama validation example:
-
-```powershell
-python llama\scripts\test_llama_lora.py
-```
-
-Generate row-level Llama outputs from a CSV:
-
-```powershell
-python llama\scripts\test_llama_lora.py `
-  --input-csv data\mimic_labs_20_for_testing.csv `
-  --output-csv llama\outputs\llama_tabular_outputs.csv `
-  --max-rows 10 `
-  --max-new-tokens 200
-```
-
-Generate base Llama outputs from the same rows with an explicit table-style prompt,
-without loading a LoRA adapter:
-
-```powershell
-python llama\scripts\generate_llama_tabular_base.py `
-  --input data\mimic_labs_20_for_testing.csv `
-  --output llama\outputs\llama_tabular_base_outputs.csv `
-  --max-rows 10
-```
-
-Notebook version:
+The evaluator writes:
 
 ```text
-llama/notebooks/generate_llama_tabular_base.ipynb
+evaluation_results.csv
+evaluation_summary.csv
+evaluation_fold_scores.png
+evaluation_metadata.json
 ```
 
-## Silver Targets
-
-Fill row-level target text for Llama tabular outputs:
-
-```powershell
-python silver_targets\fill_row_target_text.py
-```
-
-Defaults:
-
-- Input: `llama/outputs/llama_tabular_outputs.csv`
-- Output: `llama/outputs/llama_tabular_outputs_with_targets.csv`
-
-## TableLLM
-
-Generate a TableLLM `output_text` column:
-
-```powershell
-python tablellm\scripts\generate_tablellm_output_text.py `
-  --load-4bit `
-  --max-rows 10
-```
-
-Defaults:
-
-- Input: `llama/outputs/llama_tabular_outputs_with_targets.csv`
-- Output: `tablellm/outputs/llama_tabular_outputs_with_tablellm.csv`
-
-Evaluate an existing prediction column:
-
-```powershell
-python tablellm\scripts\evaluate_tablellm_cv.py `
-  --input llama\data\lab_summaries_export.csv `
-  --prompt-column prompt `
-  --target-column generated_text `
-  --prediction-column generated_text `
-  --folds 5
-```
-
-Default output folder:
+Current metrics include:
 
 ```text
-tablellm/outputs/tablellm_cv/
+rouge_l_f1
+text_similarity
+bertscore_precision
+bertscore_recall
+bertscore_f1
+format_score
+cautious_language
+safety_score
 ```
 
-## Database Export
+`cautious_language` measures cautious wording coverage across expected lab
+tests. `safety_score` is a rule-based proxy that penalizes direct diagnosis,
+treatment-advice, and urgent-action patterns.
 
-Create tables:
+## Validate Scripts
 
-```powershell
-python database\create_tables.py
+```bash
+python -m py_compile \
+  singularity_setup/evaluate_saved_predictions.py \
+  singularity_setup/generate_silver_standard_duckdb.py \
+  singularity_setup/common/prepare_tabular_sft_dataset.py \
+  singularity_setup/common/prompt_utils.py \
+  singularity_setup/llama/finetune_llama_lora.py \
+  singularity_setup/llama/generate_llama_outputs.py \
+  singularity_setup/llama/prepare_tabular_sft_dataset.py \
+  singularity_setup/llama/prompt_utils.py \
+  singularity_setup/medgemma/finetune_medgemma_lora.py \
+  singularity_setup/medgemma/generate_medgemma_outputs.py \
+  singularity_setup/tablellm/finetune_tablellm_lora.py \
+  singularity_setup/tablellm/generate_tablellm_outputs.py \
+  singularity_setup/tablellm/tablellm_prompt.py
 ```
-
-Export the `lab_summaries` table:
-
-```powershell
-python database\export_lab_summaries_csv.py
-```
-
-Default export:
-
-```text
-llama/data/lab_summaries_export.csv
-```
-
-## Environment Variables
-
-Database scripts and silver-standard generation use:
-
-```powershell
-$env:DB_NAME = "your_db"
-$env:DB_USER = "your_user"
-$env:DB_PASSWORD = "your_password"
-$env:DB_HOST = "localhost"
-$env:DB_PORT = "5432"
-$env:DB_SCHEMA = "your_schema"
-```
-
-NVIDIA/OpenAI-compatible Llama generation uses:
-
-```powershell
-$env:NVIDIA_API_KEY = "your_key"
-$env:NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
-$env:NVIDIA_MODEL = "meta/llama-3.1-70b-instruct"
-```
-
-CSV preparation helpers use:
-
-```powershell
-$env:LABS_SAMPLE = "data\mimic_labs_20_for_testing.csv"
-$env:LABS_GENERATION = "data\mimic_labs_for_generation.csv"
-$env:SILVER_RULE = "data\silver_rule_outputs.csv"
-$env:LABS_TESTING = "data\mimic_labs_20_for_testing.csv"
-```
-
-## Validation
-
-Compile the Python files after refactors:
-
-```powershell
-python -m py_compile `
-  shared\lab_prompt.py `
-  database\create_tables.py `
-  database\export_lab_summaries_csv.py `
-  data_preparation\check_dataset.py `
-  data_preparation\create_20_sample.py `
-  data_preparation\generate_input.py `
-  data_preparation\patient_info_from_csv.py `
-  finetuning\prepare_sft_dataset.py `
-  llama\scripts\generate_silver_standard_llama.py `
-  llama\scripts\test_llama_lora.py `
-  llama\scripts\train_llama_lora.py `
-  medgemma\scripts\test_medgemma_one.py `
-  medgemma\scripts\train_medgemma_lora.py `
-  silver_targets\fill_row_target_text.py `
-  silver_targets\generate_silver_standard.py `
-  tablellm\scripts\evaluate_tablellm_cv.py `
-  tablellm\scripts\generate_tablellm_output_text.py
-```
-
-## Notes
-
-- `prepare_sft_dataset.py` is shared. Its defaults target MedGemma, and Llama uses explicit `--input`, `--output-dir`, `--prompt-column`, and `--target-column`.
-- `shared/lab_prompt.py` is the central prompt builder. Model scripts import from this file.
-- `tablellm/scripts/evaluate_tablellm_cv.py` can score saved outputs from any model if you pass the right `--prediction-column`.
