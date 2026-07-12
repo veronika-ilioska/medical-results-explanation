@@ -2,10 +2,11 @@
 
     # python singularity_setup/common/prepare_tabular_sft_dataset.py \
     #   --input data/full_silver-standard_dataset.csv \
-    #   --output-dir results/common/sft_data --examples 80
+    #   --output-dir results/common/sft_data
 
-The resulting train.jsonl and validation.jsonl work with both the Llama and
-MedGemma fine-tuning scripts. Use heldout_rows.csv for both models' final runs.
+Without --examples, 80% of usable rows are selected for train/validation and
+20% remain held out. Pass --examples only for a fixed-size run or smoke test.
+The resulting JSONL files work with all model-specific fine-tuning scripts.
 """
 
 import argparse
@@ -27,12 +28,20 @@ def parse_args():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--prompt-column", default="prompt")
     parser.add_argument("--target-column", default="generated_text")
-    parser.add_argument("--examples", type=int, default=80)
+    parser.add_argument(
+        "--examples",
+        type=int,
+        default=None,
+        help="Fixed train/validation pool size. Default: 80%% of usable rows.",
+    )
+    parser.add_argument("--selected-ratio", type=float, default=0.80)
     parser.add_argument("--validation-ratio", type=float, default=0.10)
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
-    if args.examples < 10:
+    if args.examples is not None and args.examples < 10:
         parser.error("--examples must be at least 10")
+    if not 0 < args.selected_ratio < 1:
+        parser.error("--selected-ratio must be between 0 and 1")
     if not 0 < args.validation_ratio < 1:
         parser.error("--validation-ratio must be between 0 and 1")
     return args
@@ -63,10 +72,15 @@ def main():
     if missing:
         raise ValueError(f"Missing required columns: {sorted(missing)}")
     data = data[valid(data[args.prompt_column]) & valid(data[args.target_column])].copy()
-    if args.examples >= len(data):
-        raise ValueError(f"--examples must be below the {len(data)} usable rows")
+    examples = args.examples
+    if examples is None:
+        examples = max(10, int(len(data) * args.selected_ratio))
+    if examples >= len(data):
+        raise ValueError(
+            f"Selected pool size ({examples}) must be below the {len(data)} usable rows"
+        )
 
-    selected = data.sample(n=args.examples, random_state=args.seed)
+    selected = data.sample(n=examples, random_state=args.seed)
     heldout = data.drop(index=selected.index).sort_values("source_row_index")
     shuffled = selected.sample(frac=1, random_state=args.seed).reset_index(drop=True)
     val_size = max(1, round(len(shuffled) * args.validation_ratio))
@@ -79,6 +93,8 @@ def main():
     heldout.to_csv(args.output_dir / "heldout_rows.csv", index=False)
     metadata = {
         "input": str(args.input), "seed": args.seed,
+        "selection_mode": "fixed_examples" if args.examples is not None else "ratio",
+        "selected_ratio": args.selected_ratio,
         "selected_examples": len(selected), "train_examples": len(train),
         "validation_examples": len(validation), "heldout_examples": len(heldout),
         "selected_source_row_indices": sorted(selected.source_row_index.astype(int).tolist()),

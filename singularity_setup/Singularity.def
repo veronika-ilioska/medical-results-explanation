@@ -1,0 +1,66 @@
+Bootstrap: docker
+From: pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
+
+%labels
+    Author medical-results-explanation
+    Description Reproducible Llama, MedGemma, TableLLM, and evaluation environment
+    Python 3.11
+    CUDA 12.4
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        git \
+        build-essential
+    rm -rf /var/lib/apt/lists/*
+
+    python -m pip install --no-cache-dir --upgrade pip setuptools wheel
+    python -m pip install --no-cache-dir \
+        transformers==4.56.2 \
+        accelerate==1.13.0 \
+        bitsandbytes==0.46.1 \
+        datasets==4.1.1 \
+        peft==0.17.1 \
+        trl==0.23.1 \
+        huggingface-hub==0.36.2 \
+        sentencepiece==0.2.1 \
+        protobuf==6.32.1 \
+        pandas==2.3.2 \
+        numpy==2.1.2 \
+        pyarrow==21.0.0 \
+        duckdb==1.4.1 \
+        matplotlib==3.10.6 \
+        bert-score==0.3.13 \
+        python-dotenv==1.1.1 \
+        tenacity==9.1.2
+
+%environment
+    export PYTHONUNBUFFERED=1
+    export PYTHONDONTWRITEBYTECODE=1
+    export TOKENIZERS_PARALLELISM=false
+    export HF_HOME=/cache/huggingface
+    export TRANSFORMERS_CACHE=/cache/huggingface/transformers
+    export TMPDIR=/scratch/tmp
+
+%runscript
+    exec python "$@"
+
+%test
+    python -c "import torch, transformers, accelerate, datasets, peft, trl"
+    python -c "import pandas, numpy, duckdb, bert_score"
+    python -c "from transformers import AutoModelForCausalLM, AutoModelForImageTextToText, AutoProcessor"
+
+%help
+    Build from the repository root:
+      sudo singularity build \
+            medical-results.sif \
+            singularity_setup/Singularity.def
+
+    Run a project script:
+      singularity exec --nv -B $PWD:/workspace medical-results.sif \
+        python /workspace/singularity_setup/common/prepare_tabular_sft_dataset.py --help
+
+    Project code, datasets, model caches, and outputs are intentionally not
+    embedded in the image. Bind them at runtime.
