@@ -248,6 +248,14 @@ def select_panels(
     """
     log.info("Selecting eligible patient panels from the MIMIC-III CSV files")
     result = con.execute(query, params).fetchdf()
+    result.columns = [str(column).lower() for column in result.columns]
+    required_columns = {"subject_id", "hadm_id", "charttime"}
+    missing_columns = required_columns - set(result.columns)
+    if missing_columns:
+        raise RuntimeError(
+            "DuckDB query did not return the expected panel columns: "
+            f"{sorted(missing_columns)}. Returned columns: {list(result.columns)}"
+        )
     panel_count = result[["subject_id", "hadm_id", "charttime"]].drop_duplicates().shape[0]
     log.info("Selected %s test rows across %s panels", len(result), panel_count)
     return result
