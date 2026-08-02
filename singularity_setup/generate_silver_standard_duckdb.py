@@ -112,6 +112,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--max-new-tokens", type=int, default=2048)
     parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=1,
+        help=(
+            "Number of panel prompts to generate in one model.generate call. "
+            "Increase slowly based on available GPU memory."
+        ),
+    )
+    parser.add_argument(
         "--temp-directory",
         type=Path,
         default=None,
@@ -138,6 +147,8 @@ def parse_args() -> argparse.Namespace:
         parser.error("--limit must be greater than zero")
     if args.max_new_tokens <= 0:
         parser.error("--max-new-tokens must be greater than zero")
+    if args.batch_size <= 0:
+        parser.error("--batch-size must be greater than zero")
 
     for name in ("labevents", "labitems", "patients"):
         path = getattr(args, name)
@@ -329,6 +340,9 @@ def load_model(args: argparse.Namespace):
         token=token,
         local_files_only=args.local_files_only,
     )
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "left"
 
     model_kwargs: dict[str, object] = {
         "token": token,
@@ -356,7 +370,7 @@ def load_model(args: argparse.Namespace):
     return tokenizer, model
 
 
-def call_llm(tokenizer, model, prompt: str, max_new_tokens: int) -> str:
+def format_chat_prompt(tokenizer, prompt: str) -> str:
     messages = [
         {
             "role": "system",
@@ -367,22 +381,37 @@ def call_llm(tokenizer, model, prompt: str, max_new_tokens: int) -> str:
         },
         {"role": "user", "content": prompt},
     ]
-    input_ids = tokenizer.apply_chat_template(
+    return tokenizer.apply_chat_template(
         messages,
         add_generation_prompt=True,
+        tokenize=False,
+    )
+
+
+def call_llm_batch(tokenizer, model, prompts: list[str], max_new_tokens: int) -> list[str]:
+    texts = [format_chat_prompt(tokenizer, prompt) for prompt in prompts]
+    inputs = tokenizer(
+        texts,
         return_tensors="pt",
+        padding=True,
+        truncation=False,
     ).to(model.device)
 
     with torch.inference_mode():
         output_ids = model.generate(
-            input_ids,
+            **inputs,
             max_new_tokens=max_new_tokens,
             do_sample=False,
             pad_token_id=tokenizer.eos_token_id,
             eos_token_id=tokenizer.eos_token_id,
         )
-    generated_ids = output_ids[0, input_ids.shape[-1] :]
-    return tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
+    prompt_length = inputs["input_ids"].shape[-1]
+    generated_ids = output_ids[:, prompt_length:]
+    return tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+
+
+def call_llm(tokenizer, model, prompt: str, max_new_tokens: int) -> str:
+    return call_llm_batch(tokenizer, model, [prompt], max_new_tokens)[0].strip()
 
 
 def normalize_key_value(value: object) -> str:
@@ -450,6 +479,11 @@ def iter_panels(df: pd.DataFrame) -> Iterator[tuple[tuple[object, ...], pd.DataF
     )
 
 
+def chunks(items: list[tuple[tuple[object, ...], pd.DataFrame]], size: int):
+    for start in range(0, len(items), size):
+        yield items[start:start + size]
+
+
 def generate(args: argparse.Namespace) -> None:
     con = configure_duckdb(args)
     try:
@@ -483,34 +517,42 @@ def generate(args: argparse.Namespace) -> None:
             writer.writeheader()
             handle.flush()
 
-        for index, (key, panel) in enumerate(pending, start=1):
-            subject_id, hadm_id, charttime = key
+        processed = 0
+        for batch_index, batch in enumerate(chunks(pending, args.batch_size), start=1):
             log.info(
-                "Generating panel %s/%s | subject_id=%s hadm_id=%s charttime=%s",
-                index,
+                "Generating batch %s | %s panels | progress %s/%s",
+                batch_index,
+                len(batch),
+                processed,
                 len(pending),
-                subject_id,
-                hadm_id,
-                charttime,
             )
-            prompt = build_prompt(panel)
-            generated_text = call_llm(
-                tokenizer, model, prompt, args.max_new_tokens
+            prompts = [build_prompt(panel) for _, panel in batch]
+            generated_texts = call_llm_batch(
+                tokenizer,
+                model,
+                prompts,
+                args.max_new_tokens,
             )
-            summary_id += 1
-            writer.writerow(
-                {
-                    "summary_id": summary_id,
-                    "subject_id": normalize_key_value(subject_id),
-                    "hadm_id": normalize_key_value(hadm_id),
-                    "charttime": normalize_key_value(charttime),
-                    "generated_text": generated_text,
-                    "prompt": prompt,
-                    "model_used": args.model_label,
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                }
-            )
+            for (key, _panel), prompt, generated_text in zip(
+                batch, prompts, generated_texts
+            ):
+                subject_id, hadm_id, charttime = key
+                summary_id += 1
+                writer.writerow(
+                    {
+                        "summary_id": summary_id,
+                        "subject_id": normalize_key_value(subject_id),
+                        "hadm_id": normalize_key_value(hadm_id),
+                        "charttime": normalize_key_value(charttime),
+                        "generated_text": generated_text.strip(),
+                        "prompt": prompt,
+                        "model_used": args.model_label,
+                        "created_at": datetime.now(timezone.utc).isoformat(),
+                    }
+                )
+                processed += 1
             handle.flush()
+            log.info("Progress: %s/%s panels generated", processed, len(pending))
 
     log.info("Generation complete: %s", args.output)
 
