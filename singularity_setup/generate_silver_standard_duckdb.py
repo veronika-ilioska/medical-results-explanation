@@ -369,6 +369,14 @@ def load_model(args: argparse.Namespace):
     model.eval()
     return tokenizer, model
 
+def get_eos_token_ids(tokenizer) -> list[int]:
+    stop_ids = {tokenizer.eos_token_id}
+    eot_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
+    if isinstance(eot_id, int) and eot_id != tokenizer.unk_token_id:
+        stop_ids.add(eot_id)
+    return sorted(stop_ids)
+
+
 
 def format_chat_prompt(tokenizer, prompt: str) -> str:
     messages = [
@@ -388,22 +396,17 @@ def format_chat_prompt(tokenizer, prompt: str) -> str:
     )
 
 
-def call_llm_batch(tokenizer, model, prompts: list[str], max_new_tokens: int) -> list[str]:
+def call_llm_batch(tokenizer, model, prompts: list[str], max_new_tokens: int, eos_token_ids: list[int]) -> list[str]:
     texts = [format_chat_prompt(tokenizer, prompt) for prompt in prompts]
-    inputs = tokenizer(
-        texts,
-        return_tensors="pt",
-        padding=True,
-        truncation=False,
-    ).to(model.device)
+    inputs = tokenizer(texts, return_tensors="pt", padding=True, truncation=False).to(model.device)
 
     with torch.inference_mode():
         output_ids = model.generate(
             **inputs,
             max_new_tokens=max_new_tokens,
             do_sample=False,
-            pad_token_id=tokenizer.eos_token_id,
-            eos_token_id=tokenizer.eos_token_id,
+            pad_token_id=tokenizer.pad_token_id,
+            eos_token_id=eos_token_ids
         )
     prompt_length = inputs["input_ids"].shape[-1]
     generated_ids = output_ids[:, prompt_length:]
@@ -508,6 +511,7 @@ def generate(args: argparse.Namespace) -> None:
         return
 
     tokenizer, model = load_model(args)
+    eos_token_ids = get_eos_token_ids(tokenizer) 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     write_header = not args.output.exists() or args.output.stat().st_size == 0
 
@@ -532,6 +536,7 @@ def generate(args: argparse.Namespace) -> None:
                 model,
                 prompts,
                 args.max_new_tokens,
+                eos_token_ids
             )
             for (key, _panel), prompt, generated_text in zip(
                 batch, prompts, generated_texts
