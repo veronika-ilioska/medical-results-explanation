@@ -1,0 +1,56 @@
+Bootstrap: docker
+From: vllm/vllm-openai:v0.8.5.post1
+
+%labels
+    Author medical-results-explanation
+    Description Reproducible vLLM environment for local silver-standard generation
+    vLLM 0.8.5.post1
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        git
+    rm -rf /var/lib/apt/lists/*
+
+    # The base image owns the mutually compatible vLLM, PyTorch, CUDA, and
+    # Transformers versions. Install only the data-processing dependencies here.
+    python -m pip install --no-cache-dir \
+        duckdb==1.4.1 \
+        pandas==2.3.2
+
+%environment
+    export PYTHONUNBUFFERED=1
+    export PYTHONDONTWRITEBYTECODE=1
+    export TOKENIZERS_PARALLELISM=false
+    export HF_HOME=/cache/huggingface
+    export TRANSFORMERS_CACHE=/cache/huggingface/transformers
+    export TMPDIR=/scratch/tmp
+
+%runscript
+    exec python "$@"
+
+%test
+    python -c "import vllm, torch, transformers; print('vLLM', vllm.__version__); print('PyTorch', torch.__version__); print('Transformers', transformers.__version__)"
+    python -c "import pandas, duckdb; print('pandas', pandas.__version__); print('DuckDB', duckdb.__version__)"
+    python -c "from vllm import LLM, SamplingParams"
+
+%help
+    Build from the repository root:
+      sudo singularity build \
+        medical-results-vllm.sif \
+        singularity_setup/Singularity.vllm.def
+
+    Verify the installed runtime:
+      singularity exec --cleanenv --nv medical-results-vllm.sif \
+        python -c "import vllm, torch; print(vllm.__version__, torch.__version__)"
+
+    Run the vLLM silver-standard generator after binding the repository,
+    MIMIC-III files, results, Hugging Face cache, and scratch directories:
+      singularity exec --cleanenv --nv $BINDS $MIMIC_BIND \
+        medical-results-vllm.sif \
+        python /workspace/singularity_setup/generate_silver_standard_vllm.py --help
+
+    Project code, MIMIC-III data, model caches, and generated outputs are not
+    embedded in this image. Bind them at runtime.
