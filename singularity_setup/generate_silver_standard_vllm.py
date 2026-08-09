@@ -130,6 +130,15 @@ def parse_args() -> argparse.Namespace:
         help="Fraction of each GPU's memory vLLM is allowed to reserve for weights + KV cache.",
     )
     parser.add_argument(
+        "--dtype",
+        choices=("auto", "float16", "bfloat16"),
+        default="auto",
+        help=(
+            "Model compute dtype. Use bfloat16 on supported GPUs such as A100/H100, "
+            "or float16 on GPUs without BF16 support. Default: let vLLM infer it."
+        ),
+    )
+    parser.add_argument(
         "--temp-directory",
         type=Path,
         default=None,
@@ -371,15 +380,17 @@ def load_model(args: argparse.Namespace) -> tuple[AutoTokenizer, LLM]:
     )
 
     log.info(
-        "Loading vLLM engine for %s (tensor_parallel_size=%s, quantization=%s)",
+        "Loading vLLM engine for %s "
+        "(tensor_parallel_size=%s, quantization=%s, dtype=%s)",
         args.model,
         args.tensor_parallel_size,
         args.quantization,
+        args.dtype,
     )
     llm = LLM(
         model=args.model,
         tokenizer=args.model,
-        dtype="bfloat16",
+        dtype=args.dtype,
         tensor_parallel_size=args.tensor_parallel_size,
         gpu_memory_utilization=args.gpu_memory_utilization,
         quantization=None if args.quantization == "none" else args.quantization,
