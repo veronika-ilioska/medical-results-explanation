@@ -27,14 +27,27 @@ import argparse
 import csv
 import logging
 import os
+import site
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
+
+os.environ.setdefault("PYTHONNOUSERSITE", "1")
+user_site = site.getusersitepackages()
+if isinstance(user_site, str):
+    user_site = os.path.abspath(user_site)
+    sys.path = [path for path in sys.path if os.path.abspath(path) != user_site]
 
 import duckdb
 import pandas as pd
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
+
+try:
+    from singularity_setup.vllm_tokenizer_compat import patch_all_special_tokens_extended
+except ImportError:
+    from vllm_tokenizer_compat import patch_all_special_tokens_extended
 
 
 DEFAULT_MODEL = "meta-llama/Meta-Llama-3.1-70B-Instruct"
@@ -387,6 +400,7 @@ def load_model(args: argparse.Namespace) -> tuple[AutoTokenizer, LLM]:
         args.quantization,
         args.dtype,
     )
+    patch_all_special_tokens_extended()
     llm = LLM(
         model=args.model,
         tokenizer=args.model,

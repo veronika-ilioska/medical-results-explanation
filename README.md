@@ -15,6 +15,7 @@ singularity_setup/
   Singularity.def
   evaluate_saved_predictions.py
   generate_silver_standard_duckdb.py
+  vllm_tokenizer_compat.py
   common/
     prepare_tabular_sft_dataset.py
     prompt_utils.py
@@ -99,6 +100,47 @@ singularity_setup/medgemma/generate_medgemma_outputs.py
 singularity_setup/tablellm/generate_tablellm_outputs.py
 ```
 
+For vLLM-based generation scripts, call the tokenizer compatibility patch
+before constructing `vllm.LLM`:
+
+```python
+try:
+    from singularity_setup.vllm_tokenizer_compat import patch_all_special_tokens_extended
+except ImportError:
+    from vllm_tokenizer_compat import patch_all_special_tokens_extended
+
+patch_all_special_tokens_extended()
+llm = LLM(...)
+```
+
+This avoids `AttributeError: TokenizersBackend has no attribute
+all_special_tokens_extended` with vLLM/Transformers combinations where vLLM
+still expects the legacy tokenizer property.
+
+## Fine-Tune In Batches
+
+All LoRA finetuning scripts use mini-batches through `--batch-size` and can
+increase the effective optimizer-step batch with `--gradient-accumulation`.
+Use `--eval-batch-size` when validation needs a different batch size.
+
+```bash
+singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
+  python /workspace/singularity_setup/llama/finetune_llama_lora.py \
+    --train-file /workspace/llama/data/finetune_llama_tabular_silver_10/train.jsonl \
+    --validation-file /workspace/llama/data/finetune_llama_tabular_silver_10/validation.jsonl \
+    --output-dir /workspace/llama/outputs/llama-tabular-lora \
+    --epochs 3 \
+    --batch-size 4 \
+    --gradient-accumulation 2 \
+    --eval-batch-size 4
+```
+
+The effective train batch size per optimizer update is:
+
+```text
+--batch-size * --gradient-accumulation
+```
+
 ## Evaluate Saved Predictions
 
 Quick CPU-friendly evaluation without BERTScore:
@@ -157,6 +199,7 @@ treatment-advice, and urgent-action patterns.
 python -m py_compile \
   singularity_setup/evaluate_saved_predictions.py \
   singularity_setup/generate_silver_standard_duckdb.py \
+  singularity_setup/vllm_tokenizer_compat.py \
   singularity_setup/common/prepare_tabular_sft_dataset.py \
   singularity_setup/common/prompt_utils.py \
   singularity_setup/llama/finetune_llama_lora.py \

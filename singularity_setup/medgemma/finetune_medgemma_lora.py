@@ -4,7 +4,8 @@
     #   --train-file results/common/sft_data/train.jsonl \
     #   --validation-file results/common/sft_data/validation.jsonl \
     #   --output-dir results/medgemma/medgemma-tabular-lora \
-    #   --epochs 3 --max-seq-length 2048
+    #   --epochs 3 --max-seq-length 2048 \
+    #   --batch-size 4 --gradient-accumulation 2
 
 Use --resume-from-checkpoint after interruption. Set HF_TOKEN, or provide a
 local model path with --model and --local-files-only. This is text-only SFT of
@@ -31,8 +32,24 @@ def arguments():
     parser.add_argument("--max-seq-length", type=int, default=2048)
     parser.add_argument("--epochs", type=float, default=3)
     parser.add_argument("--learning-rate", type=float, default=2e-4)
-    parser.add_argument("--batch-size", type=int, default=1)
-    parser.add_argument("--gradient-accumulation", type=int, default=8)
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=1,
+        help="Training examples per device in each mini-batch.",
+    )
+    parser.add_argument(
+        "--eval-batch-size",
+        type=int,
+        default=None,
+        help="Validation examples per device in each mini-batch. Defaults to --batch-size.",
+    )
+    parser.add_argument(
+        "--gradient-accumulation",
+        type=int,
+        default=8,
+        help="Mini-batches to accumulate before each optimizer update.",
+    )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--no-4bit", action="store_true")
     parser.add_argument("--local-files-only", action="store_true")
@@ -41,6 +58,13 @@ def arguments():
     for path in (args.train_file, args.validation_file):
         if not path.is_file():
             parser.error(f"Dataset does not exist: {path}")
+    if args.batch_size < 1:
+        parser.error("--batch-size must be at least 1")
+    if args.eval_batch_size is not None and args.eval_batch_size < 1:
+        parser.error("--eval-batch-size must be at least 1")
+    if args.gradient_accumulation < 1:
+        parser.error("--gradient-accumulation must be at least 1")
+    args.eval_batch_size = args.eval_batch_size or args.batch_size
     return args
 
 
@@ -58,6 +82,13 @@ def main():
     set_seed(args.seed)
     token = (os.getenv("HF_TOKEN") or "").strip() or None
     data = load_dataset("json", data_files={"train": str(args.train_file), "validation": str(args.validation_file)})
+    effective_batch_size = args.batch_size * args.gradient_accumulation
+    print(
+        "Batch training: "
+        f"train mini-batch={args.batch_size}, eval mini-batch={args.eval_batch_size}, "
+        f"gradient accumulation={args.gradient_accumulation}, "
+        f"effective train batch={effective_batch_size} examples per optimizer step."
+    )
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     processor = AutoProcessor.from_pretrained(args.model, token=token, local_files_only=args.local_files_only)
     processor.tokenizer.padding_side = "right"
@@ -107,7 +138,7 @@ def main():
         output_dir=str(args.output_dir), num_train_epochs=args.epochs,
         learning_rate=args.learning_rate,
         per_device_train_batch_size=args.batch_size,
-        per_device_eval_batch_size=args.batch_size,
+        per_device_eval_batch_size=args.eval_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation,
         gradient_checkpointing=True,
         gradient_checkpointing_kwargs={"use_reentrant": False},
