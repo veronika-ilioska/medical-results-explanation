@@ -359,22 +359,21 @@ def normalize_key_value(value: object) -> str:
     return str(value)
 
 
-def panel_key(subject_id: object, hadm_id: object, charttime: object, model_used: str) -> tuple[str, str, str, str]:
+def panel_key(subject_id: object, hadm_id: object, charttime: object) -> tuple[str, str, str]:
     return (
         normalize_key_value(subject_id),
         normalize_key_value(hadm_id),
         normalize_key_value(charttime),
-        model_used,
     )
 
 
-def read_existing_output(output_path: Path, model_used: str, no_resume: bool) -> tuple[set[tuple[str, str, str, str]], int]:
+def read_existing_output(output_path: Path, no_resume: bool) -> tuple[set[tuple[str, str, str]], int]:
     if not output_path.exists():
         return set(), 0
     if no_resume:
         raise FileExistsError(f"Output already exists and --no-resume was specified: {output_path}")
 
-    completed: set[tuple[str, str, str, str]] = set()
+    completed: set[tuple[str, str, str]] = set()
     maximum_summary_id = 0
     with output_path.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
@@ -382,21 +381,19 @@ def read_existing_output(output_path: Path, model_used: str, no_resume: bool) ->
         if missing:
             raise ValueError(f"Existing output is missing required columns: {sorted(missing)}")
         for row in reader:
-            row_model = row.get("model_used", "")
-            if row_model == model_used:
+            if (row.get("generated_text") or "").strip():
                 completed.add(
                     panel_key(
                         row.get("subject_id"),
                         row.get("hadm_id"),
                         row.get("charttime"),
-                        row_model,
                     )
                 )
             try:
                 maximum_summary_id = max(maximum_summary_id, int(row["summary_id"]))
             except (TypeError, ValueError):
                 pass
-    log.info("Found %s completed panels in %s", len(completed), output_path)
+    log.info("Found %s completed panels with generated text in %s", len(completed), output_path)
     return completed, maximum_summary_id
 
 
@@ -420,12 +417,13 @@ def generate(args: argparse.Namespace) -> None:
         log.warning("No eligible blood-test panels were found")
         return
 
-    completed, summary_id = read_existing_output(args.output, args.model_label, args.no_resume)
+    completed, summary_id = read_existing_output(args.output, args.no_resume)
     pending = [
         (key, panel)
         for key, panel in iter_panels(panel_rows)
-        if panel_key(*key, args.model_label) not in completed
+        if panel_key(*key) not in completed
     ]
+    log.info("Skipping %s completed panels; %s panels remain", len(completed), len(pending))
     if not pending:
         log.info("All selected panels have already been generated")
         return
