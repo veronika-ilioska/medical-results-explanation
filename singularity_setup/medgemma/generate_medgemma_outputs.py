@@ -62,6 +62,11 @@ def arguments():
     parser.add_argument("--top-p", type=float, default=1.0)
     parser.add_argument("--repetition-penalty", type=float, default=1.0)
     parser.add_argument(
+        "--allow-pad-generation",
+        action="store_true",
+        help="Allow the model to generate pad tokens. By default pad tokens are suppressed.",
+    )
+    parser.add_argument(
         "--debug-generations",
         action="store_true",
         help="Print generated token IDs and raw decoded text for each row.",
@@ -131,8 +136,14 @@ def generate(processor, model, prompt, args):
         "min_new_tokens": args.min_new_tokens,
         "do_sample": args.do_sample,
         "pad_token_id": processor.tokenizer.eos_token_id,
+        "eos_token_id": processor.tokenizer.eos_token_id,
         "repetition_penalty": args.repetition_penalty,
+        "remove_invalid_values": True,
+        "renormalize_logits": True,
     }
+    pad_token_id = processor.tokenizer.pad_token_id
+    if pad_token_id is not None and not args.allow_pad_generation:
+        generate_kwargs["bad_words_ids"] = [[pad_token_id]]
     if args.do_sample:
         generate_kwargs.update({"temperature": args.temperature, "top_p": args.top_p})
     with torch.inference_mode():
@@ -147,6 +158,13 @@ def generate(processor, model, prompt, args):
     decoded = processor.decode(generated_ids, skip_special_tokens=True).strip()
     if args.debug_generations:
         raw_decoded = processor.decode(generated_ids, skip_special_tokens=False)
+        print(
+            "Special token IDs: "
+            f"pad={processor.tokenizer.pad_token_id}, "
+            f"eos={processor.tokenizer.eos_token_id}, "
+            f"bos={processor.tokenizer.bos_token_id}",
+            flush=True,
+        )
         print(f"Generated token count: {generated_ids.shape[-1]}", flush=True)
         print(f"Generated token IDs: {generated_ids[:80].detach().cpu().tolist()}", flush=True)
         print(f"Raw decoded repr: {raw_decoded[:1000]!r}", flush=True)
