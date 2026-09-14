@@ -57,6 +57,15 @@ def arguments():
             "more reliable when the instruction is prepended to the user message."
         ),
     )
+    parser.add_argument("--do-sample", action="store_true")
+    parser.add_argument("--temperature", type=float, default=1.0)
+    parser.add_argument("--top-p", type=float, default=1.0)
+    parser.add_argument("--repetition-penalty", type=float, default=1.0)
+    parser.add_argument(
+        "--debug-generations",
+        action="store_true",
+        help="Print generated token IDs and raw decoded text for each row.",
+    )
     parser.add_argument("--max-rows", type=int)
     parser.add_argument("--local-files-only", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
@@ -111,18 +120,23 @@ def build_messages(prompt, system_mode):
     return [content("user", prompt)]
 
 
-def generate(processor, model, prompt, max_new_tokens, min_new_tokens, system_mode):
-    messages = build_messages(prompt, system_mode)
+def generate(processor, model, prompt, args):
+    messages = build_messages(prompt, args.system_mode)
     inputs = processor.apply_chat_template(
         messages, add_generation_prompt=True, tokenize=True,
         return_dict=True, return_tensors="pt",
     ).to(model.device)
+    generate_kwargs = {
+        "max_new_tokens": args.max_new_tokens,
+        "min_new_tokens": args.min_new_tokens,
+        "do_sample": args.do_sample,
+        "pad_token_id": processor.tokenizer.eos_token_id,
+        "repetition_penalty": args.repetition_penalty,
+    }
+    if args.do_sample:
+        generate_kwargs.update({"temperature": args.temperature, "top_p": args.top_p})
     with torch.inference_mode():
-        output = model.generate(
-            **inputs, max_new_tokens=max_new_tokens, min_new_tokens=min_new_tokens,
-            do_sample=False,
-            pad_token_id=processor.tokenizer.eos_token_id,
-        )
+        output = model.generate(**inputs, **generate_kwargs)
     generated_ids = output[0]
     input_ids = inputs["input_ids"][0]
     if (
@@ -130,7 +144,14 @@ def generate(processor, model, prompt, max_new_tokens, min_new_tokens, system_mo
         and torch.equal(generated_ids[: input_ids.shape[-1]], input_ids)
     ):
         generated_ids = generated_ids[input_ids.shape[-1]:]
-    return processor.decode(generated_ids, skip_special_tokens=True).strip()
+    decoded = processor.decode(generated_ids, skip_special_tokens=True).strip()
+    if args.debug_generations:
+        raw_decoded = processor.decode(generated_ids, skip_special_tokens=False)
+        print(f"Generated token count: {generated_ids.shape[-1]}", flush=True)
+        print(f"Generated token IDs: {generated_ids[:80].detach().cpu().tolist()}", flush=True)
+        print(f"Raw decoded repr: {raw_decoded[:1000]!r}", flush=True)
+        print(f"Clean decoded repr: {decoded[:1000]!r}", flush=True)
+    return decoded
 
 
 def checkpoint(data, path):
@@ -165,10 +186,7 @@ def main():
         prompt = build_tabular_prompt(data.loc[index])
         print(f"Generating {number}/{len(indices)} (row {index})", flush=True)
         data.at[index, args.prompt_output_column] = prompt
-        data.at[index, args.prediction_column] = generate(
-            processor, model, prompt,
-            args.max_new_tokens, args.min_new_tokens, args.system_mode,
-        )
+        data.at[index, args.prediction_column] = generate(processor, model, prompt, args)
         checkpoint(data, args.output)
     print(f"Wrote: {args.output}")
 
