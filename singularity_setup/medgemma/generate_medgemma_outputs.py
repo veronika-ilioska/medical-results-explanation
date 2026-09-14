@@ -117,14 +117,20 @@ def generate(processor, model, prompt, max_new_tokens, min_new_tokens, system_mo
         messages, add_generation_prompt=True, tokenize=True,
         return_dict=True, return_tensors="pt",
     ).to(model.device)
-    input_length = inputs["input_ids"].shape[-1]
     with torch.inference_mode():
         output = model.generate(
             **inputs, max_new_tokens=max_new_tokens, min_new_tokens=min_new_tokens,
             do_sample=False,
             pad_token_id=processor.tokenizer.eos_token_id,
         )
-    return processor.decode(output[0, input_length:], skip_special_tokens=True).strip()
+    generated_ids = output[0]
+    input_ids = inputs["input_ids"][0]
+    if (
+        generated_ids.shape[-1] > input_ids.shape[-1]
+        and torch.equal(generated_ids[: input_ids.shape[-1]], input_ids)
+    ):
+        generated_ids = generated_ids[input_ids.shape[-1]:]
+    return processor.decode(generated_ids, skip_special_tokens=True).strip()
 
 
 def checkpoint(data, path):
