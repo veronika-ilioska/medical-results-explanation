@@ -25,11 +25,27 @@ from pathlib import Path
 import pandas as pd
 import torch
 from peft import PeftModel
-from transformers import AutoModelForImageTextToText, AutoProcessor, BitsAndBytesConfig
+from transformers import (
+    AutoModelForImageTextToText,
+    AutoProcessor,
+    BitsAndBytesConfig,
+    LogitsProcessor,
+    LogitsProcessorList,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 from singularity_setup.common.prompt_utils import SYSTEM_PROMPT, build_tabular_prompt
+
+
+class SuppressTokenIds(LogitsProcessor):
+    def __init__(self, token_ids):
+        self.token_ids = [int(token_id) for token_id in token_ids if token_id is not None]
+
+    def __call__(self, input_ids, scores):
+        if self.token_ids:
+            scores[:, self.token_ids] = -float("inf")
+        return scores
 
 
 def arguments():
@@ -101,6 +117,7 @@ def load(args):
         kwargs["quantization_config"] = BitsAndBytesConfig(
             load_in_4bit=True, bnb_4bit_quant_type="nf4",
             bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=dtype,
+            bnb_4bit_quant_storage=dtype,
         )
     elif args.quantization == "8bit":
         kwargs["quantization_config"] = BitsAndBytesConfig(load_in_8bit=True)
@@ -135,7 +152,7 @@ def generate(processor, model, prompt, args):
         "max_new_tokens": args.max_new_tokens,
         "min_new_tokens": args.min_new_tokens,
         "do_sample": args.do_sample,
-        "pad_token_id": processor.tokenizer.eos_token_id,
+        "pad_token_id": processor.tokenizer.pad_token_id,
         "eos_token_id": processor.tokenizer.eos_token_id,
         "repetition_penalty": args.repetition_penalty,
         "remove_invalid_values": True,
@@ -143,19 +160,35 @@ def generate(processor, model, prompt, args):
     }
     pad_token_id = processor.tokenizer.pad_token_id
     if pad_token_id is not None and not args.allow_pad_generation:
-        generate_kwargs["bad_words_ids"] = [[pad_token_id]]
+        generate_kwargs["suppress_tokens"] = [pad_token_id]
+        generate_kwargs["begin_suppress_tokens"] = [pad_token_id]
+        generate_kwargs["logits_processor"] = LogitsProcessorList([SuppressTokenIds([pad_token_id])])
     if args.do_sample:
         generate_kwargs.update({"temperature": args.temperature, "top_p": args.top_p})
     with torch.inference_mode():
         output = model.generate(**inputs, **generate_kwargs)
     generated_ids = output[0]
     input_ids = inputs["input_ids"][0]
+    full_output_ids = generated_ids
     if (
         generated_ids.shape[-1] > input_ids.shape[-1]
         and torch.equal(generated_ids[: input_ids.shape[-1]], input_ids)
     ):
         generated_ids = generated_ids[input_ids.shape[-1]:]
-    decoded = processor.decode(generated_ids, skip_special_tokens=True).strip()
+    special_ids = {
+        token_id for token_id in (processor.tokenizer.pad_token_id, processor.tokenizer.eos_token_id)
+        if token_id is not None
+    }
+    if special_ids:
+        keep = torch.tensor(
+            [int(token_id) not in special_ids for token_id in generated_ids],
+            dtype=torch.bool,
+            device=generated_ids.device,
+        )
+        generated_ids_for_decode = generated_ids[keep]
+    else:
+        generated_ids_for_decode = generated_ids
+    decoded = processor.decode(generated_ids_for_decode, skip_special_tokens=True).strip()
     if args.debug_generations:
         raw_decoded = processor.decode(generated_ids, skip_special_tokens=False)
         print(
@@ -163,6 +196,12 @@ def generate(processor, model, prompt, args):
             f"pad={processor.tokenizer.pad_token_id}, "
             f"eos={processor.tokenizer.eos_token_id}, "
             f"bos={processor.tokenizer.bos_token_id}",
+            flush=True,
+        )
+        print(
+            "Output shapes: "
+            f"input={tuple(input_ids.shape)}, full_output={tuple(full_output_ids.shape)}, "
+            f"decoded_candidate={tuple(generated_ids.shape)}",
             flush=True,
         )
         print(f"Generated token count: {generated_ids.shape[-1]}", flush=True)
