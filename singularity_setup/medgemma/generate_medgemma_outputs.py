@@ -42,6 +42,21 @@ def arguments():
     parser.add_argument("--prompt-output-column", default="tabular_prompt")
     parser.add_argument("--quantization", choices=("none", "4bit", "8bit"), default="4bit")
     parser.add_argument("--max-new-tokens", type=int, default=2048)
+    parser.add_argument(
+        "--min-new-tokens",
+        type=int,
+        default=0,
+        help="Minimum tokens to generate. Useful if the model immediately emits an end token.",
+    )
+    parser.add_argument(
+        "--system-mode",
+        choices=("separate", "prepend", "none"),
+        default="prepend",
+        help=(
+            "How to pass the system instruction. MedGemma/Gemma templates are often "
+            "more reliable when the instruction is prepended to the user message."
+        ),
+    )
     parser.add_argument("--max-rows", type=int)
     parser.add_argument("--local-files-only", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
@@ -50,6 +65,10 @@ def arguments():
         parser.error(f"Input does not exist: {args.input}")
     if args.adapter and not args.adapter.is_dir():
         parser.error(f"Adapter does not exist: {args.adapter}")
+    if args.min_new_tokens < 0:
+        parser.error("--min-new-tokens cannot be negative")
+    if args.min_new_tokens > args.max_new_tokens:
+        parser.error("--min-new-tokens cannot exceed --max-new-tokens")
     return args
 
 
@@ -84,8 +103,16 @@ def content(role, text):
     return {"role": role, "content": [{"type": "text", "text": text}]}
 
 
-def generate(processor, model, prompt, max_new_tokens):
-    messages = [content("system", SYSTEM_PROMPT), content("user", prompt)]
+def build_messages(prompt, system_mode):
+    if system_mode == "separate":
+        return [content("system", SYSTEM_PROMPT), content("user", prompt)]
+    if system_mode == "prepend":
+        return [content("user", f"{SYSTEM_PROMPT}\n\n{prompt}")]
+    return [content("user", prompt)]
+
+
+def generate(processor, model, prompt, max_new_tokens, min_new_tokens, system_mode):
+    messages = build_messages(prompt, system_mode)
     inputs = processor.apply_chat_template(
         messages, add_generation_prompt=True, tokenize=True,
         return_dict=True, return_tensors="pt",
@@ -93,7 +120,8 @@ def generate(processor, model, prompt, max_new_tokens):
     input_length = inputs["input_ids"].shape[-1]
     with torch.inference_mode():
         output = model.generate(
-            **inputs, max_new_tokens=max_new_tokens, do_sample=False,
+            **inputs, max_new_tokens=max_new_tokens, min_new_tokens=min_new_tokens,
+            do_sample=False,
             pad_token_id=processor.tokenizer.eos_token_id,
         )
     return processor.decode(output[0, input_length:], skip_special_tokens=True).strip()
@@ -131,7 +159,10 @@ def main():
         prompt = build_tabular_prompt(data.loc[index])
         print(f"Generating {number}/{len(indices)} (row {index})", flush=True)
         data.at[index, args.prompt_output_column] = prompt
-        data.at[index, args.prediction_column] = generate(processor, model, prompt, args.max_new_tokens)
+        data.at[index, args.prediction_column] = generate(
+            processor, model, prompt,
+            args.max_new_tokens, args.min_new_tokens, args.system_mode,
+        )
         checkpoint(data, args.output)
     print(f"Wrote: {args.output}")
 
