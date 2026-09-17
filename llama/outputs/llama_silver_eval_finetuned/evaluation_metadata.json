@@ -1,0 +1,15 @@
+{
+  "input": "llama/outputs/llama_silver_finetuned_outputs.csv",
+  "target_column": "generated_text",
+  "prediction_column": "fine_tuned_llama_tabular_output",
+  "output_dir": "llama/outputs/llama_silver_eval_finetuned",
+  "prompt_column": "prompt",
+  "folds": 5,
+  "seed": 42,
+  "max_rows": null,
+  "skip_bertscore": false,
+  "bertscore_model": "roberta-large",
+  "bertscore_device": "cuda:0",
+  "bertscore_rescale": false,
+  "rows_evaluated": 20
+}

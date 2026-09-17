@@ -1,0 +1,15 @@
+{
+  "input": "medgemma/data/outputs/medgemma_silver_base_outputs.csv",
+  "target_column": "generated_text",
+  "prediction_column": "base_medgemma_tabular_output",
+  "output_dir": "medgemma/data/outputs/medgemma_silver_eval_base",
+  "prompt_column": "prompt",
+  "folds": 5,
+  "seed": 42,
+  "max_rows": null,
+  "skip_bertscore": false,
+  "bertscore_model": "roberta-large",
+  "bertscore_device": "cuda:0",
+  "bertscore_rescale": false,
+  "rows_evaluated": 20
+}

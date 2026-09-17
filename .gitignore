@@ -1,7 +1,21 @@
-.venv
+.venv/
 .env
-.idea
-.agents
+.idea/
+.agents/
 __pycache__/
 *.py[cod]
-.sif
+
+# OS/editor/runtime noise
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
+*.log
+
+# Local containers and model training artifacts
+*.sif
+*_lora/
+**/checkpoint-*/
+*.safetensors
+*.pt
+*.pth
+*.bin

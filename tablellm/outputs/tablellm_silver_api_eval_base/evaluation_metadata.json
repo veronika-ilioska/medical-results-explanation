@@ -1,0 +1,15 @@
+{
+  "input": "tablellm/outputs/tablellm_silver_api_base_outputs.csv",
+  "target_column": "generated_text",
+  "prediction_column": "base_tablellm_output",
+  "output_dir": "tablellm/outputs/tablellm_silver_api_eval_base",
+  "prompt_column": "prompt",
+  "folds": 5,
+  "seed": 42,
+  "max_rows": null,
+  "skip_bertscore": false,
+  "bertscore_model": "roberta-large",
+  "bertscore_device": "cuda:0",
+  "bertscore_rescale": false,
+  "rows_evaluated": 9249
+}
