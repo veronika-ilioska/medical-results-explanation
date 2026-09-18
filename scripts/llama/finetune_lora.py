@@ -2,10 +2,10 @@
 
 Example:
 
-    # python singularity_setup/llama/finetune_llama_lora.py \
-    #   --train-file results/llama/sft_data/train.jsonl \
-    #   --validation-file results/llama/sft_data/validation.jsonl \
-    #   --output-dir results/llama/llama-tabular-lora \
+    # python scripts/llama/finetune_lora.py \
+    #   --train-file data/splits/full_silver_standard_api/train.jsonl \
+    #   --validation-file data/splits/full_silver_standard_api/validation.jsonl \
+    #   --output-dir artifacts/adapters/llama \
     #   --model meta-llama/Llama-3.1-8B-Instruct \
     #   --epochs 3 --max-seq-length 2048 \
     #   --batch-size 4 --gradient-accumulation 2

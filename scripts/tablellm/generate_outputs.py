@@ -1,16 +1,16 @@
 """Generate base or LoRA-adapted TableLLM outputs for held-out panels.
 
 Base:
-    # python singularity_setup/tablellm/generate_tablellm_outputs.py \
-    #   --input results/common/sft_data/heldout_rows.csv \
-    #   --output results/tablellm/base_outputs.csv \
+    # python scripts/tablellm/generate_outputs.py \
+    #   --input data/splits/full_silver_standard_api/heldout_rows.csv \
+    #   --output outputs/tablellm/base/predictions.csv \
     #   --prediction-column base_tablellm_output --quantization 4bit
 
 Adapted:
-    # python singularity_setup/tablellm/generate_tablellm_outputs.py \
-    #   --input results/common/sft_data/heldout_rows.csv \
-    #   --output results/tablellm/finetuned_outputs.csv \
-    #   --adapter results/tablellm/tablellm-tabular-lora \
+    # python scripts/tablellm/generate_outputs.py \
+    #   --input data/splits/full_silver_standard_api/heldout_rows.csv \
+    #   --output outputs/tablellm/finetuned/predictions.csv \
+    #   --adapter artifacts/adapters/tablellm \
     #   --prediction-column fine_tuned_tablellm_output --quantization 4bit
 
 Set HF_TOKEN if required. Add --local-files-only for pre-downloaded weights.
@@ -19,6 +19,7 @@ Output is checkpointed after every row and can be resumed.
 
 import argparse
 import os
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -26,7 +27,10 @@ import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
-from tablellm_prompt import build_tablellm_prompt
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.tablellm.tablellm_prompt import build_tablellm_prompt
 
 
 def arguments():

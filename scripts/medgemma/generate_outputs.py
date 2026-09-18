@@ -1,16 +1,16 @@
 """Generate base or LoRA-tuned MedGemma responses for held-out panels.
 
 Base:
-    # python singularity_setup/medgemma/generate_medgemma_outputs.py \
-    #   --input results/common/sft_data/heldout_rows.csv \
-    #   --output results/medgemma/base_outputs.csv \
+    # python scripts/medgemma/generate_outputs.py \
+    #   --input data/splits/full_silver_standard_api/heldout_rows.csv \
+    #   --output outputs/medgemma/base/predictions.csv \
     #   --prediction-column base_medgemma_tabular_output --quantization 4bit
 
 Fine-tuned (use the exact same input rows):
-    # python singularity_setup/medgemma/generate_medgemma_outputs.py \
-    #   --input results/common/sft_data/heldout_rows.csv \
-    #   --output results/medgemma/finetuned_outputs.csv \
-    #   --adapter results/medgemma/medgemma-tabular-lora \
+    # python scripts/medgemma/generate_outputs.py \
+    #   --input data/splits/full_silver_standard_api/heldout_rows.csv \
+    #   --output outputs/medgemma/finetuned/predictions.csv \
+    #   --adapter artifacts/adapters/medgemma \
     #   --prediction-column fine_tuned_medgemma_tabular_output --quantization 4bit
 
 Accept the model terms on Hugging Face and set HF_TOKEN. Existing output rows
@@ -35,7 +35,7 @@ from transformers import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
-from singularity_setup.common.prompt_utils import SYSTEM_PROMPT, build_tabular_prompt
+from scripts.common.prompt_utils import SYSTEM_PROMPT, build_tabular_prompt
 
 
 class SuppressTokenIds(LogitsProcessor):

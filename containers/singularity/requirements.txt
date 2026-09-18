@@ -18,6 +18,7 @@ sentencepiece
 protobuf
 
 # Database and environment configuration
+duckdb
 psycopg2-binary
 python-dotenv
 

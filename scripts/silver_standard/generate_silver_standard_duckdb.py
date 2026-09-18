@@ -6,7 +6,7 @@ CSV file. PostgreSQL and the project-specific summary tables are not required.
 
 Example server invocation (run from the project root):
 
-    # python singularity_setup/generate_silver_standard_duckdb.py \
+    # python scripts/silver_standard/generate_silver_standard_duckdb.py \
     #   --labevents /data/mimic/LABEVENTS.csv.gz \
     #   --labitems /data/mimic/D_LABITEMS.csv.gz \
     #   --patients /data/mimic/PATIENTS.csv.gz \
@@ -19,7 +19,7 @@ Example server invocation (run from the project root):
 For a gated Hugging Face download instead of a pre-downloaded model directory:
 
     # export HF_TOKEN=hf_your_token
-    # python singularity_setup/generate_silver_standard_duckdb.py \
+    # python scripts/silver_standard/generate_silver_standard_duckdb.py \
     #   --labevents /data/mimic/LABEVENTS.csv.gz \
     #   --labitems /data/mimic/D_LABITEMS.csv.gz \
     #   --patients /data/mimic/PATIENTS.csv.gz \
@@ -350,19 +350,18 @@ def load_model(args: argparse.Namespace):
         "device_map": "auto",
         "low_cpu_mem_usage": True,
     }
+    dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     if args.quantization == "4bit":
         model_kwargs["quantization_config"] = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_compute_dtype=dtype,
             bnb_4bit_use_double_quant=True,
         )
     elif args.quantization == "8bit":
         model_kwargs["quantization_config"] = BitsAndBytesConfig(load_in_8bit=True)
     else:
-        model_kwargs["torch_dtype"] = (
-            torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
-        )
+        model_kwargs["torch_dtype"] = dtype
 
     log.info("Loading local model %s (%s)", args.model, args.quantization)
     model = AutoModelForCausalLM.from_pretrained(args.model, **model_kwargs)
@@ -370,7 +369,9 @@ def load_model(args: argparse.Namespace):
     return tokenizer, model
 
 def get_eos_token_ids(tokenizer) -> list[int]:
-    stop_ids = {tokenizer.eos_token_id}
+    stop_ids = {
+        token_id for token_id in (tokenizer.eos_token_id,) if token_id is not None
+    }
     eot_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
     if isinstance(eot_id, int) and eot_id != tokenizer.unk_token_id:
         stop_ids.add(eot_id)
@@ -410,11 +411,20 @@ def call_llm_batch(tokenizer, model, prompts: list[str], max_new_tokens: int, eo
         )
     prompt_length = inputs["input_ids"].shape[-1]
     generated_ids = output_ids[:, prompt_length:]
-    return tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+    return [
+        text.strip()
+        for text in tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+    ]
 
 
 def call_llm(tokenizer, model, prompt: str, max_new_tokens: int) -> str:
-    return call_llm_batch(tokenizer, model, [prompt], max_new_tokens)[0].strip()
+    return call_llm_batch(
+        tokenizer,
+        model,
+        [prompt],
+        max_new_tokens,
+        get_eos_token_ids(tokenizer),
+    )[0]
 
 
 def normalize_key_value(value: object) -> str:
@@ -457,7 +467,7 @@ def read_existing_output(
             )
         for row in reader:
             row_model = row.get("model_used", "")
-            if row_model == model_used:
+            if row_model == model_used and (row.get("generated_text") or "").strip():
                 completed.add(
                     panel_key(
                         row.get("subject_id"),

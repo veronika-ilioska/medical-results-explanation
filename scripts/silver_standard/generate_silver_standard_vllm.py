@@ -1,5 +1,5 @@
 """ 
-    # python generate_silver_standard_vllm.py \
+    # python scripts/silver_standard/generate_silver_standard_vllm.py \
     #   --labevents /data/mimic/LABEVENTS.csv.gz \
     #   --labitems /data/mimic/D_LABITEMS.csv.gz \
     #   --patients /data/mimic/PATIENTS.csv.gz \
@@ -11,7 +11,7 @@
 For a gated Hugging Face download instead of a pre-downloaded model directory:
 
     # export HF_TOKEN=hf_your_token
-    # python generate_silver_standard_vllm.py \
+    # python scripts/silver_standard/generate_silver_standard_vllm.py \
     #   --labevents /data/mimic/LABEVENTS.csv.gz \
     #   --labitems /data/mimic/D_LABITEMS.csv.gz \
     #   --patients /data/mimic/PATIENTS.csv.gz \
@@ -44,10 +44,10 @@ import pandas as pd
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
 
-try:
-    from singularity_setup.vllm_tokenizer_compat import patch_all_special_tokens_extended
-except ImportError:
-    from vllm_tokenizer_compat import patch_all_special_tokens_extended
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.common.vllm_tokenizer_compat import patch_all_special_tokens_extended
 
 
 DEFAULT_MODEL = "meta-llama/Meta-Llama-3.1-70B-Instruct"
@@ -111,7 +111,7 @@ def parse_args() -> argparse.Namespace:
         choices=("none", "awq", "gptq", "bitsandbytes"),
         default="none",
         help=(
-            "vLLM quantization mode. 'none' loads full bf16 weights. "
+            "vLLM quantization mode. 'none' loads unquantized weights. "
             "'awq'/'gptq' require a checkpoint already quantized in that format. "
             "Use 'none' unless you have a specific reason not to."
         ),
@@ -414,7 +414,9 @@ def load_model(args: argparse.Namespace) -> tuple[AutoTokenizer, LLM]:
 
 
 def build_sampling_params(tokenizer, max_new_tokens: int) -> SamplingParams:
-    stop_ids = {tokenizer.eos_token_id}
+    stop_ids = {
+        token_id for token_id in (tokenizer.eos_token_id,) if token_id is not None
+    }
     eot_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
     if isinstance(eot_id, int) and eot_id != tokenizer.unk_token_id:
         stop_ids.add(eot_id)
@@ -466,7 +468,7 @@ def read_existing_output(
             )
         for row in reader:
             row_model = row.get("model_used", "")
-            if row_model == model_used:
+            if row_model == model_used and (row.get("generated_text") or "").strip():
                 completed.add(
                     panel_key(
                         row.get("subject_id"),

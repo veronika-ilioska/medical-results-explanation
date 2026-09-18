@@ -36,3 +36,28 @@ From: nvidia/cuda:12.2.2-cudnn8-runtime-ubuntu22.04
         bitsandbytes==0.45.5 \
         duckdb==1.4.1 \
         pandas==2.3.2
+
+%environment
+    export PYTHONUNBUFFERED=1
+    export PYTHONDONTWRITEBYTECODE=1
+    export PYTHONNOUSERSITE=1
+    export TOKENIZERS_PARALLELISM=false
+    export HF_HOME=/cache/huggingface
+    export TRANSFORMERS_CACHE=/cache/huggingface/transformers
+    export TMPDIR=/scratch/tmp
+
+%runscript
+    exec python3 "$@"
+
+%test
+    python3 -c "import torch, transformers, vllm, duckdb, pandas"
+
+%help
+    Build from the repository root:
+      sudo singularity build \
+        medical-results-vllm.sif \
+        containers/singularity/Singularity.vllm.def
+
+    Run the vLLM generator:
+      singularity exec --nv -B $PWD:/workspace medical-results-vllm.sif \
+        python3 /workspace/scripts/silver_standard/generate_silver_standard_vllm.py --help

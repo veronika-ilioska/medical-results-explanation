@@ -1,8 +1,8 @@
 """Create model-neutral chat JSONL splits and a held-out evaluation CSV.
 
-    # python singularity_setup/common/prepare_tabular_sft_dataset.py \
-    #   --input data/full_silver-standard_dataset.csv \
-    #   --output-dir results/common/sft_data
+    # python scripts/common/prepare_tabular_sft_dataset.py \
+    #   --input data/full_silver-standard_dataset_api.csv \
+    #   --output-dir data/splits/full_silver_standard_api
 
 Without --examples, 80% of usable rows are selected for train/validation and
 20% remain held out. Pass --examples only for a fixed-size run or smoke test.
@@ -19,7 +19,7 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from singularity_setup.common.prompt_utils import SYSTEM_PROMPT, build_tabular_prompt
+from scripts.common.prompt_utils import SYSTEM_PROMPT, build_tabular_prompt
 
 
 def parse_args():
@@ -67,7 +67,11 @@ def write_jsonl(path, rows):
 
 def main():
     args = parse_args()
-    data = pd.read_csv(args.input).reset_index(names="source_row_index")
+    data = pd.read_csv(args.input)
+    if "source_row_index" in data.columns:
+        data = data.reset_index(drop=True)
+    else:
+        data = data.reset_index(names="source_row_index")
     missing = {args.prompt_column, args.target_column} - set(data.columns)
     if missing:
         raise ValueError(f"Missing required columns: {sorted(missing)}")

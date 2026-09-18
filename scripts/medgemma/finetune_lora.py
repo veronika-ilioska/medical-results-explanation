@@ -1,9 +1,9 @@
 """Fine-tune MedGemma 4B on shared tabular chat JSONL using QLoRA.
 
-    # python singularity_setup/medgemma/finetune_medgemma_lora.py \
-    #   --train-file results/common/sft_data/train.jsonl \
-    #   --validation-file results/common/sft_data/validation.jsonl \
-    #   --output-dir results/medgemma/medgemma-tabular-lora \
+    # python scripts/medgemma/finetune_lora.py \
+    #   --train-file data/splits/full_silver_standard_api/train.jsonl \
+    #   --validation-file data/splits/full_silver_standard_api/validation.jsonl \
+    #   --output-dir artifacts/adapters/medgemma \
     #   --epochs 3 --max-seq-length 2048 \
     #   --batch-size 4 --gradient-accumulation 2
 

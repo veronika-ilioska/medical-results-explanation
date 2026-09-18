@@ -1,5 +1,5 @@
-tablellm/outputs/tablellm_silver_api_eval_base/evaluation_results.csv filter=lfs diff=lfs merge=lfs -text
-tablellm/outputs/tablellm_silver_api_base_outputs.csv filter=lfs diff=lfs merge=lfs -text
-llama/data/finetune_llama_tabular_silver_api/train.jsonl filter=lfs diff=lfs merge=lfs -text
-llama/data/finetune_llama_tabular_silver_api/selected_rows.csv filter=lfs diff=lfs merge=lfs -text
+outputs/tablellm/base/evaluation/evaluation_results.csv filter=lfs diff=lfs merge=lfs -text
+outputs/tablellm/base/predictions.csv filter=lfs diff=lfs merge=lfs -text
+data/splits/full_silver_standard_api/train.jsonl filter=lfs diff=lfs merge=lfs -text
+data/splits/full_silver_standard_api/selected_rows.csv filter=lfs diff=lfs merge=lfs -text
 data/full_silver-standard_dataset_api.csv filter=lfs diff=lfs merge=lfs -text

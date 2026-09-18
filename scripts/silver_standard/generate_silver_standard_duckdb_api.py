@@ -6,7 +6,7 @@ generation instead of loading Hugging Face weights locally.
 Example:
 
     export NVIDIA_API_KEY="nvapi-..."
-    python singularity_setup/generate_silver_standard_duckdb_api.py \
+    python scripts/silver_standard/generate_silver_standard_duckdb_api.py \
       --labevents ../mimic/LABEVENTS.csv \
       --labitems ../mimic/D_LABITEMS.csv \
       --patients ../mimic/PATIENTS.csv \
@@ -359,21 +359,31 @@ def normalize_key_value(value: object) -> str:
     return str(value)
 
 
-def panel_key(subject_id: object, hadm_id: object, charttime: object) -> tuple[str, str, str]:
+def panel_key(
+    subject_id: object,
+    hadm_id: object,
+    charttime: object,
+    model_used: str,
+) -> tuple[str, str, str, str]:
     return (
         normalize_key_value(subject_id),
         normalize_key_value(hadm_id),
         normalize_key_value(charttime),
+        model_used,
     )
 
 
-def read_existing_output(output_path: Path, no_resume: bool) -> tuple[set[tuple[str, str, str]], int]:
+def read_existing_output(
+    output_path: Path,
+    model_used: str,
+    no_resume: bool,
+) -> tuple[set[tuple[str, str, str, str]], int]:
     if not output_path.exists():
         return set(), 0
     if no_resume:
         raise FileExistsError(f"Output already exists and --no-resume was specified: {output_path}")
 
-    completed: set[tuple[str, str, str]] = set()
+    completed: set[tuple[str, str, str, str]] = set()
     maximum_summary_id = 0
     with output_path.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
@@ -381,12 +391,14 @@ def read_existing_output(output_path: Path, no_resume: bool) -> tuple[set[tuple[
         if missing:
             raise ValueError(f"Existing output is missing required columns: {sorted(missing)}")
         for row in reader:
-            if (row.get("generated_text") or "").strip():
+            row_model = row.get("model_used", "")
+            if row_model == model_used and (row.get("generated_text") or "").strip():
                 completed.add(
                     panel_key(
                         row.get("subject_id"),
                         row.get("hadm_id"),
                         row.get("charttime"),
+                        row_model,
                     )
                 )
             try:
@@ -417,11 +429,13 @@ def generate(args: argparse.Namespace) -> None:
         log.warning("No eligible blood-test panels were found")
         return
 
-    completed, summary_id = read_existing_output(args.output, args.no_resume)
+    completed, summary_id = read_existing_output(
+        args.output, args.model_label, args.no_resume
+    )
     pending = [
         (key, panel)
         for key, panel in iter_panels(panel_rows)
-        if panel_key(*key) not in completed
+        if panel_key(*key, args.model_label) not in completed
     ]
     log.info("Skipping %s completed panels; %s panels remain", len(completed), len(pending))
     if not pending:

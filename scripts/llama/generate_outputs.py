@@ -2,19 +2,19 @@
 
 Base-model generation:
 
-    # python singularity_setup/llama/generate_llama_outputs.py \
-    #   --input results/llama/sft_data/heldout_rows.csv \
-    #   --output results/llama/base_outputs.csv \
+    # python scripts/llama/generate_outputs.py \
+    #   --input data/splits/full_silver_standard_api/heldout_rows.csv \
+    #   --output outputs/llama/base/predictions.csv \
     #   --model meta-llama/Llama-3.1-8B-Instruct \
     #   --prediction-column base_llama_tabular_output --quantization 4bit
 
 Fine-tuned generation on the exact same held-out rows:
 
-    # python singularity_setup/llama/generate_llama_outputs.py \
-    #   --input results/llama/sft_data/heldout_rows.csv \
-    #   --output results/llama/finetuned_outputs.csv \
+    # python scripts/llama/generate_outputs.py \
+    #   --input data/splits/full_silver_standard_api/heldout_rows.csv \
+    #   --output outputs/llama/finetuned/predictions.csv \
     #   --model meta-llama/Llama-3.1-8B-Instruct \
-    #   --adapter results/llama/llama-tabular-lora \
+    #   --adapter artifacts/adapters/llama \
     #   --prediction-column fine_tuned_llama_tabular_output --quantization 4bit
 
 Set HF_TOKEN for gated Hugging Face downloads. Pass --local-files-only with a
@@ -24,6 +24,7 @@ non-empty predictions are preserved, allowing a stopped job to resume.
 
 import argparse
 import os
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -31,7 +32,10 @@ import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
-from prompt_utils import SYSTEM_PROMPT, build_tabular_prompt
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.common.prompt_utils import SYSTEM_PROMPT, build_tabular_prompt
 
 
 def parse_args():

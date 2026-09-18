@@ -1,214 +1,174 @@
-# NLP Medical Results Explanation: Singularity Setup
+# Medical Results Explanation
 
-This branch keeps the runnable project code in `singularity_setup/`. Older
-duplicate script copies outside that folder have been removed so the
-Singularity workflow is the canonical one.
+This repository builds a silver-standard bloodwork explanation dataset and
+compares Llama, MedGemma, and TableLLM on the same held-out patient panels.
+Run all commands below from the repository root.
 
-The retained `data/`, `llama/`, `medgemma/`, and `tablellm/` folders are kept
-for datasets, prepared JSONL files, notebooks, and saved outputs/evaluation
-artifacts.
-
-## Repository Layout
+## Repository layout
 
 ```text
-singularity_setup/
-  Singularity.def
-  evaluate_saved_predictions.py
-  generate_silver_standard_duckdb.py
-  vllm_tokenizer_compat.py
-  common/
-    prepare_tabular_sft_dataset.py
-    prompt_utils.py
-  llama/
-    finetune_llama_lora.py
-    generate_llama_outputs.py
-    prepare_tabular_sft_dataset.py
-    prompt_utils.py
-  medgemma/
-    finetune_medgemma_lora.py
-    generate_medgemma_outputs.py
-  tablellm/
-    finetune_tablellm_lora.py
-    generate_tablellm_outputs.py
-    tablellm_prompt.py
-
+scripts/
+  common/           Shared prompt and split preparation
+  silver_standard/  Local Transformers, hosted API, and vLLM generation
+  llama/            Llama generation and QLoRA fine-tuning
+  medgemma/         MedGemma generation and QLoRA fine-tuning
+  tablellm/         TableLLM prompting, generation, and QLoRA fine-tuning
+  evaluation/       Shared saved-prediction evaluator
 data/
-  Source and silver-standard CSV files.
-
-llama/
-  Prepared Llama data and saved Llama outputs/evaluations.
-
-medgemma/
-  Prepared MedGemma data, notebooks, and saved outputs.
-
-tablellm/
-  Saved TableLLM outputs/evaluations and notebooks.
-
-requirements*.txt
-  Local/Colab dependency references. The Singularity image pins its own runtime
-  dependencies in `singularity_setup/Singularity.def`.
+  splits/full_silver_standard_api/  Canonical train/validation/held-out split
+outputs/
+  <model>/{base,finetuned}/          Predictions and evaluation artifacts
+containers/singularity/             Singularity definitions and requirements
+artifacts/adapters/                  Local LoRA adapters (gitignored)
 ```
 
-## Build The Singularity Image
+## Environment
 
-From the repository root:
+Set `HF_TOKEN` for gated Hugging Face models. The hosted NVIDIA API generator
+instead requires `NVIDIA_API_KEY`. Secrets are supplied at runtime and are not
+baked into a Singularity image.
 
 ```bash
-sudo singularity build medical-results.sif singularity_setup/Singularity.def
+python -m pip install -r containers/singularity/requirements.txt
 ```
 
-The image installs the Python runtime and model/evaluation dependencies. Project
-data, model adapters, generated outputs, and Hugging Face caches are not baked
-into the image; bind them at runtime.
+For Google Colab, use `requirements-colab.txt` instead.
 
-## Run A Script
+## Singularity
 
 ```bash
-singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
-  python /workspace/singularity_setup/evaluate_saved_predictions.py --help
+sudo singularity build medical-results.sif containers/singularity/Singularity.def
+sudo singularity build medical-results-vllm.sif containers/singularity/Singularity.vllm.def
 ```
 
-Use `--nv` on GPU machines. Drop it for CPU-only checks.
-
-## Prepare Tabular SFT Data
+The images contain dependencies, not this repository or its datasets. Bind the
+repository and writable runtime directories when executing a script:
 
 ```bash
-singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
-  python /workspace/singularity_setup/llama/prepare_tabular_sft_dataset.py \
-    --input /workspace/data/limit_10_silver-standard_dataset.csv \
-    --output-dir /workspace/llama/data/finetune_llama_tabular_silver_10 \
-    --prompt-column prompt \
-    --target-column generated_text
+export PROJECT="$(pwd)"
+export RUN_ROOT="/scratch/$USER/medical-results"
+mkdir -p "$RUN_ROOT/results" "$RUN_ROOT/hf" "$RUN_ROOT/tmp"
+
+export BINDS="-B $PROJECT:/workspace -B $RUN_ROOT/results:/results -B $RUN_ROOT/hf:/cache/huggingface -B $RUN_ROOT/tmp:/scratch/tmp"
+export MIMIC_DIR="/path/to/mimiciii"
+export MIMIC_BIND="-B $MIMIC_DIR:/mimic:ro"
+export SINGULARITYENV_HF_TOKEN="$HF_TOKEN"
 ```
 
-## Generate Outputs
-
-Base or adapter-backed Llama generation:
+Example:
 
 ```bash
-singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
-  python /workspace/singularity_setup/llama/generate_llama_outputs.py \
-    --input /workspace/data/limit_10_silver-standard_dataset.csv \
-    --output /workspace/llama/outputs/llama_outputs.csv \
-    --max-rows 10
+singularity exec --cleanenv --nv $BINDS medical-results.sif \
+  python /workspace/scripts/common/prepare_tabular_sft_dataset.py --help
 ```
 
-MedGemma and TableLLM use the corresponding scripts:
+## Workflow
 
-```text
-singularity_setup/medgemma/generate_medgemma_outputs.py
-singularity_setup/tablellm/generate_tablellm_outputs.py
-```
+### 1. Generate the silver standard
 
-For vLLM-based generation scripts, call the tokenizer compatibility patch
-before constructing `vllm.LLM`:
-
-```python
-try:
-    from singularity_setup.vllm_tokenizer_compat import patch_all_special_tokens_extended
-except ImportError:
-    from vllm_tokenizer_compat import patch_all_special_tokens_extended
-
-patch_all_special_tokens_extended()
-llm = LLM(...)
-```
-
-This avoids `AttributeError: TokenizersBackend has no attribute
-all_special_tokens_extended` with vLLM/Transformers combinations where vLLM
-still expects the legacy tokenizer property.
-
-## Fine-Tune In Batches
-
-All LoRA finetuning scripts use mini-batches through `--batch-size` and can
-increase the effective optimizer-step batch with `--gradient-accumulation`.
-Use `--eval-batch-size` when validation needs a different batch size.
+Use one generator from `scripts/silver_standard/`. A hosted API smoke test is:
 
 ```bash
-singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
-  python /workspace/singularity_setup/llama/finetune_llama_lora.py \
-    --train-file /workspace/llama/data/finetune_llama_tabular_silver_10/train.jsonl \
-    --validation-file /workspace/llama/data/finetune_llama_tabular_silver_10/validation.jsonl \
-    --output-dir /workspace/llama/outputs/llama-tabular-lora \
-    --epochs 3 \
-    --batch-size 4 \
-    --gradient-accumulation 2 \
-    --eval-batch-size 4
+python scripts/silver_standard/generate_silver_standard_duckdb_api.py \
+  --labevents /path/to/LABEVENTS.csv.gz \
+  --labitems /path/to/D_LABITEMS.csv.gz \
+  --patients /path/to/PATIENTS.csv.gz \
+  --output data/full_silver-standard_dataset_api.csv \
+  --limit 20
 ```
 
-The effective train batch size per optimizer update is:
+Omit `--limit` for a full run. The local Transformers and vLLM scripts accept
+the same MIMIC files and output path; see each script's `--help` for GPU options.
 
-```text
---batch-size * --gradient-accumulation
-```
-
-## Evaluate Saved Predictions
-
-Quick CPU-friendly evaluation without BERTScore:
+### 2. Prepare one shared SFT split
 
 ```bash
-singularity exec -B "$PWD:/workspace" medical-results.sif \
-  python /workspace/singularity_setup/evaluate_saved_predictions.py \
-    --input /workspace/llama/outputs/tabular_prompt_approach_silver-standard_target/llama_full_silver_base_outputs.csv \
-    --target-column generated_text \
-    --prediction-column base_llama_tabular_output \
-    --output-dir /workspace/llama/outputs/tabular_prompt_approach_silver-standard_target/evaluation/base_model \
-    --skip-bertscore
+python scripts/common/prepare_tabular_sft_dataset.py \
+  --input data/full_silver-standard_dataset_api.csv \
+  --output-dir data/splits/full_silver_standard_api
 ```
 
-GPU evaluation with BERTScore:
+This produces `train.jsonl`, `validation.jsonl`, and `heldout_rows.csv`. All
+models must use this same held-out CSV for base and fine-tuned generation. Do
+not train on `heldout_rows.csv`.
+
+### 3. Generate base predictions
 
 ```bash
-singularity exec --nv -B "$PWD:/workspace" medical-results.sif \
-  python /workspace/singularity_setup/evaluate_saved_predictions.py \
-    --input /workspace/llama/outputs/tabular_prompt_approach_silver-standard_target/llama_tabular_silver_10_finetuned_heldout_outputs.csv \
-    --target-column generated_text \
-    --prediction-column fine_tuned_llama_tabular_output \
-    --output-dir /workspace/llama/outputs/tabular_prompt_approach_silver-standard_target/evaluation/finetuned_model \
-    --bertscore-device cuda:0
+python scripts/llama/generate_outputs.py \
+  --input data/splits/full_silver_standard_api/heldout_rows.csv \
+  --output outputs/llama/base/predictions.csv \
+  --prediction-column base_llama_tabular_output
+
+python scripts/medgemma/generate_outputs.py \
+  --input data/splits/full_silver_standard_api/heldout_rows.csv \
+  --output outputs/medgemma/base/predictions.csv \
+  --prediction-column base_medgemma_tabular_output
+
+python scripts/tablellm/generate_outputs.py \
+  --input data/splits/full_silver_standard_api/heldout_rows.csv \
+  --output outputs/tablellm/base/predictions.csv \
+  --prediction-column base_tablellm_output
 ```
 
-The evaluator writes:
+Use `--max-rows 5` for a smoke test. Generation defaults to 4-bit loading and
+requires a CUDA GPU.
 
-```text
-evaluation_results.csv
-evaluation_summary.csv
-evaluation_fold_scores.png
-evaluation_metadata.json
-```
+### 4. Fine-tune adapters
 
-Current metrics include:
-
-```text
-rouge_l_f1
-text_similarity
-bertscore_precision
-bertscore_recall
-bertscore_f1
-format_score
-cautious_language
-safety_score
-```
-
-`cautious_language` measures cautious wording coverage across expected lab
-tests. `safety_score` is a rule-based proxy that penalizes direct diagnosis,
-treatment-advice, and urgent-action patterns.
-
-## Validate Scripts
+These scripts train and save LoRA adapters. They do not generate predictions
+or create a data split.
 
 ```bash
-python -m py_compile \
-  singularity_setup/evaluate_saved_predictions.py \
-  singularity_setup/generate_silver_standard_duckdb.py \
-  singularity_setup/vllm_tokenizer_compat.py \
-  singularity_setup/common/prepare_tabular_sft_dataset.py \
-  singularity_setup/common/prompt_utils.py \
-  singularity_setup/llama/finetune_llama_lora.py \
-  singularity_setup/llama/generate_llama_outputs.py \
-  singularity_setup/llama/prepare_tabular_sft_dataset.py \
-  singularity_setup/llama/prompt_utils.py \
-  singularity_setup/medgemma/finetune_medgemma_lora.py \
-  singularity_setup/medgemma/generate_medgemma_outputs.py \
-  singularity_setup/tablellm/finetune_tablellm_lora.py \
-  singularity_setup/tablellm/generate_tablellm_outputs.py \
-  singularity_setup/tablellm/tablellm_prompt.py
+python scripts/llama/finetune_lora.py \
+  --train-file data/splits/full_silver_standard_api/train.jsonl \
+  --validation-file data/splits/full_silver_standard_api/validation.jsonl \
+  --output-dir artifacts/adapters/llama
+
+python scripts/medgemma/finetune_lora.py \
+  --train-file data/splits/full_silver_standard_api/train.jsonl \
+  --validation-file data/splits/full_silver_standard_api/validation.jsonl \
+  --output-dir artifacts/adapters/medgemma
+
+python scripts/tablellm/finetune_lora.py \
+  --train-file data/splits/full_silver_standard_api/train.jsonl \
+  --validation-file data/splits/full_silver_standard_api/validation.jsonl \
+  --output-dir artifacts/adapters/tablellm
+```
+
+### 5. Generate fine-tuned predictions
+
+Run the corresponding command from step 3 with the same held-out input, an
+`--adapter artifacts/adapters/<model>` argument, the output
+`outputs/<model>/finetuned/predictions.csv`, and the fine-tuned prediction
+column documented at the top of that generation script.
+
+### 6. Evaluate saved predictions
+
+```bash
+python scripts/evaluation/evaluate_saved_predictions.py \
+  --input outputs/tablellm/base/predictions.csv \
+  --target-column generated_text \
+  --prediction-column base_tablellm_output \
+  --output-dir outputs/tablellm/base/evaluation \
+  --bertscore-device cuda:0
+```
+
+Change the input, prediction column, and output directory for each model/run.
+Use `--bertscore-device cpu` without a GPU, or `--skip-bertscore` for a quick
+smoke test.
+
+## Existing outputs
+
+The committed TableLLM base results correspond to the large API-generated
+silver-standard split. Some other committed results originated from an older
+small split and should be regenerated before a final cross-model comparison.
+Each evaluation metadata file records the source file and columns used.
+
+## Quick validation
+
+```bash
+python -m compileall -q scripts
+python scripts/common/prepare_tabular_sft_dataset.py --help
+python scripts/evaluation/evaluate_saved_predictions.py --help
 ```

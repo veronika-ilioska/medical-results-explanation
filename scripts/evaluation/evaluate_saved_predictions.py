@@ -2,47 +2,47 @@
 
 Base model:
 
-    # python singularity_setup/evaluate_saved_predictions.py \
-    #   --input results/llama/base_outputs.csv \
+    # python scripts/evaluation/evaluate_saved_predictions.py \
+    #   --input outputs/llama/base/predictions.csv \
     #   --target-column generated_text \
     #   --prediction-column base_llama_tabular_output \
-    #   --output-dir results/llama/evaluation/base --bertscore-device cuda:0
+    #   --output-dir outputs/llama/base/evaluation --bertscore-device cuda:0
 
 Fine-tuned model:
 
-    # python singularity_setup/evaluate_saved_predictions.py \
-    #   --input results/llama/finetuned_outputs.csv \
+    # python scripts/evaluation/evaluate_saved_predictions.py \
+    #   --input outputs/llama/finetuned/predictions.csv \
     #   --target-column generated_text \
     #   --prediction-column fine_tuned_llama_tabular_output \
-    #   --output-dir results/llama/evaluation/finetuned --bertscore-device cuda:0
+    #   --output-dir outputs/llama/finetuned/evaluation --bertscore-device cuda:0
 
 The same evaluator is used for MedGemma by changing the input and prediction:
 
-    # python singularity_setup/evaluate_saved_predictions.py \
-    #   --input results/medgemma/base_outputs.csv \
+    # python scripts/evaluation/evaluate_saved_predictions.py \
+    #   --input outputs/medgemma/base/predictions.csv \
     #   --target-column generated_text \
     #   --prediction-column base_medgemma_tabular_output \
-    #   --output-dir results/medgemma/evaluation/base --bertscore-device cuda:0
+    #   --output-dir outputs/medgemma/base/evaluation --bertscore-device cuda:0
 
-    # python singularity_setup/evaluate_saved_predictions.py \
-    #   --input results/medgemma/finetuned_outputs.csv \
+    # python scripts/evaluation/evaluate_saved_predictions.py \
+    #   --input outputs/medgemma/finetuned/predictions.csv \
     #   --target-column generated_text \
     #   --prediction-column fine_tuned_medgemma_tabular_output \
-    #   --output-dir results/medgemma/evaluation/finetuned --bertscore-device cuda:0
+    #   --output-dir outputs/medgemma/finetuned/evaluation --bertscore-device cuda:0
 
 TableLLM uses it in the same way:
 
-    # python singularity_setup/evaluate_saved_predictions.py \
-    #   --input results/tablellm/base_outputs.csv \
+    # python scripts/evaluation/evaluate_saved_predictions.py \
+    #   --input outputs/tablellm/base/predictions.csv \
     #   --target-column generated_text \
     #   --prediction-column base_tablellm_output \
-    #   --output-dir results/tablellm/evaluation/base --bertscore-device cuda:0
+    #   --output-dir outputs/tablellm/base/evaluation --bertscore-device cuda:0
 
-    # python singularity_setup/evaluate_saved_predictions.py \
-    #   --input results/tablellm/finetuned_outputs.csv \
+    # python scripts/evaluation/evaluate_saved_predictions.py \
+    #   --input outputs/tablellm/finetuned/predictions.csv \
     #   --target-column generated_text \
     #   --prediction-column fine_tuned_tablellm_output \
-    #   --output-dir results/tablellm/evaluation/finetuned --bertscore-device cuda:0
+    #   --output-dir outputs/tablellm/finetuned/evaluation --bertscore-device cuda:0
 
 BERTScore defaults to roberta-large. Use --skip-bertscore for a quick CPU-only
 check, or --bertscore-device cpu when no GPU is available.

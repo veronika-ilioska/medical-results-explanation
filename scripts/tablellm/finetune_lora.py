@@ -1,9 +1,9 @@
 """Optionally adapt TableLLM 8B to the lab-summary output task with QLoRA.
 
-    # python singularity_setup/tablellm/finetune_tablellm_lora.py \
-    #   --train-file results/common/sft_data/train.jsonl \
-    #   --validation-file results/common/sft_data/validation.jsonl \
-    #   --output-dir results/tablellm/tablellm-tabular-lora \
+    # python scripts/tablellm/finetune_lora.py \
+    #   --train-file data/splits/full_silver_standard_api/train.jsonl \
+    #   --validation-file data/splits/full_silver_standard_api/validation.jsonl \
+    #   --output-dir artifacts/adapters/tablellm \
     #   --epochs 3 --max-seq-length 2048 \
     #   --batch-size 4 --gradient-accumulation 2
 
@@ -13,6 +13,7 @@ script. QLoRA is default. Use --resume-from-checkpoint after interruption.
 
 import argparse
 import os
+import sys
 from pathlib import Path
 
 import torch
@@ -21,7 +22,10 @@ from peft import LoraConfig, prepare_model_for_kbit_training
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, set_seed
 from trl import SFTConfig, SFTTrainer
 
-from tablellm_prompt import build_tablellm_prompt
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.tablellm.tablellm_prompt import build_tablellm_prompt
 
 
 def arguments():
