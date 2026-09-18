@@ -1,0 +1,1097 @@
+fold,source_row_index,prediction,reference,rouge_l_f1,text_similarity,prediction_length,reference_length,format_score,cautious_language,safety_score,bertscore_precision,bertscore_recall,bertscore_f1
+3,0,"- Anion Gap: 19.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 13.0 mEq/L - May reflect an imbalance in the body's acid-base system.
+- Calcium, Total: 6.7 mg/dL - May suggest a lower level of calcium in the blood.
+- Chloride: 110.0 mEq/L - Appears within the expected range for fluid balance.
+- CK-MB Index: 12.9 % - May reflect muscle damage or stress.
+- Creatine Kinase (CK): 371.0 IU/L - May suggest muscle damage or stress.
+- Creatine Kinase, MB Isoenzyme: 48.0 ng/mL - May reflect muscle damage or stress.
+- Creatinine: 2.5 mg/dL - May suggest a lower kidney function.
+- Glucose: 293.0 mg/dL - May reflect high blood sugar levels.
+- Magnesium: 2.3 mg/dL - Appears within the expected range for muscle and nerve function.
+- Osmolality, Measured: 312.0 mOsm/kg - May reflect an imbalance in fluid balance.
+- Phosphate: 4.7 mg/dL - May suggest a lower level of phosphate in the blood.
+- Potassium: 4.4 mEq/L - Appears within the expected range for heart function.
+- Sodium: 138.0 mEq/L - Appears within the expected range for fluid balance.
+- Urea Nitrogen: 42.0 mg/dL - May suggest a lower kidney function.
+- Bands: 5.0 % - Appears within the expected range for immune response.
+- Hematocrit: 30.3 % - May suggest a lower amount of red blood cells.
+- Hemoglobin: 9.7 g/dL - May suggest a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.5 no unit - Appears within the expected range for blood clotting.
+- Lymphocytes: 3.0 % - May reflect a lower immune response.
+- MCH: 29.5 pg - Appears within the expected range for red blood cell size.
+- MCHC: 32.1 % - Appears within the expected range for red blood cell hemoglobin.
+- MCV: 92.0 fL - Appears within the expected range for red blood cell size.
+- Monocytes: 5.0 % - Appears within the expected range for immune response.
+- Neutrophils: 87.0 % - May reflect an immune response.
+- Platelet Count: 359.0 K/uL - Appears within the expected range for blood clotting.
+- PT: 14.4 SECONDS - May suggest a lower blood clotting ability.
+- PTT: 36.2 sec - May suggest a lower blood clotting ability.
+- RDW: 15.4 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 3.3 m/uL - May suggest a lower amount of red blood cells.
+- White Blood Cells: 24.4 K/uL - May reflect an immune response.
+
+General Overview: The results show a pattern of possible muscle damage, low oxygen-carrying protein, and abnormal kidney function, which may require further evaluation.","- Anion Gap: 19.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 13.0 mEq/L - May reflect a lower level of acid-neutralizing substance in the blood.
+- Calcium, Total: 6.7 mg/dL - May suggest an abnormal level of calcium in the blood.
+- Chloride: 110.0 mEq/L - Appears within the expected range for fluid balance.
+- CK-MB Index: 12.9 % - Can suggest heart muscle damage or stress.
+- Creatine Kinase (CK): 371.0 IU/L - May reflect muscle damage or stress.
+- Creatine Kinase, MB Isoenzyme: 48.0 ng/mL - Can suggest heart muscle damage or stress.
+- Creatinine: 2.5 mg/dL - May reflect a lower kidney function.
+- Glucose: 293.0 mg/dL - May suggest an abnormal level of sugar in the blood.
+- Magnesium: 2.3 mg/dL - Appears within the expected range for muscle and nerve function.
+- Osmolality, Measured: 312.0 mOsm/kg - May reflect an abnormal level of fluid balance.
+- Phosphate: 4.7 mg/dL - May suggest an abnormal level of phosphate in the blood.
+- Potassium: 4.4 mEq/L - Appears within the expected range for heart function.
+- Sodium: 138.0 mEq/L - Appears within the expected range for fluid balance.
+- Urea Nitrogen: 42.0 mg/dL - May reflect a lower kidney function.
+- Bands: 5.0 % - Appears within the expected range for immune response.
+- Hematocrit: 30.3 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 9.7 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.5 no unit - Appears within the expected range for blood clotting.
+- Lymphocytes: 3.0 % - May reflect an abnormal immune response.
+- MCH: 29.5 pg - Appears within the expected range for red blood cell size.
+- MCHC: 32.1 % - Appears within the expected range for red blood cell size.
+- MCV: 92.0 fL - Appears within the expected range for red blood cell size.
+- Monocytes: 5.0 % - Appears within the expected range for immune response.
+- Neutrophils: 87.0 % - May reflect an abnormal immune response.
+- Platelet Count: 359.0 K/uL - Appears within the expected range for blood clotting.
+- PT: 14.4 SECONDS - May reflect an abnormal blood clotting time.
+- PTT: 36.2 sec - May reflect an abnormal blood clotting time.
+- RDW: 15.4 % - Appears within the expected range for red blood cell size.
+- Red Blood Cells: 3.3 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 24.4 K/uL - May reflect an abnormal immune response.
+
+General Overview: The results show abnormal levels of various substances in the blood, which may reflect issues with kidney function, heart muscle stress, and immune response, as well as an abnormal level of sugar in the blood.",0.8512585812356979,0.7963180571876224,440,464,1.0,1.0,1.0,0.9852304,0.98528373,0.9852571
+5,1,"- Alanine Aminotransferase (ALT): 35.0 IU/L - Liver function appears generally within the expected range.
+- Albumin: 4.5 g/dL - Protein levels in the blood appear generally within the expected range.
+- Alkaline Phosphatase: 793.0 IU/L - May reflect bone or liver issues.
+- Amylase: 129.0 IU/L - May suggest pancreas or salivary gland issues.
+- Anion Gap: 18.0 mEq/L - Electrolyte balance appears generally within the expected range.
+- Asparate Aminotransferase (AST): 52.0 IU/L - May reflect liver or muscle issues.
+- Bicarbonate: 28.0 mEq/L - Electrolyte balance appears generally within the expected range.
+- Bilirubin, Total: 1.8 mg/dL - May reflect liver or bile duct issues.
+- Calcium, Total: 10.4 mg/dL - May reflect bone or parathyroid issues.
+- Chloride: 93.0 mEq/L - Electrolyte balance may be slightly abnormal.
+- Cholesterol Ratio (Total/HDL): 5.4 Ratio - Heart health appears generally within the expected range.
+- Cholesterol, HDL: 57.0 mg/dL - Heart health appears generally within the expected range.
+- Cholesterol, LDL, Calculated: 186.0 mg/dL - Heart health may be a concern.
+- Cholesterol, Total: 305.0 mg/dL - Heart health may be a concern.
+- Creatinine: 1.0 mg/dL - Kidney function appears generally within the expected range.
+- Glucose: 82.0 mg/dL - Blood sugar levels appear generally within the expected range.
+- Phosphate: 4.0 mg/dL - Electrolyte balance appears generally within the expected range.
+- Potassium: 3.2 mEq/L - May reflect heart or muscle issues.
+- Sodium: 136.0 mEq/L - Electrolyte balance appears generally within the expected range.
+- Thyroid Stimulating Hormone: 13.0 uIU/mL - May reflect thyroid issues.
+- Thyroxine (T4), Free: 1.0 ng/dL - Thyroid function appears generally within the expected range.
+- Triglycerides: 308.0 mg/dL - Heart health may be a concern.
+- Urea Nitrogen: 23.0 mg/dL - May reflect kidney issues.
+- Absolute CD3 Count: 615.0 #/uL - Immune system function appears generally within the expected range.
+- Absolute CD4 Count: 91.0 #/uL - Immune system function may be a concern.
+- Absolute CD8 Count: 522.0 #/uL - Immune system function appears generally within the expected range.
+- Absolute Lymphocyte Count: 830.0 #/uL - Immune system function appears generally within the expected range.
+- CD3 Cells, Percent: 74.0 % - Immune system function appears generally within the expected range.
+- CD4 Cells, Percent: 11.0 % - Immune system function may be a concern.
+- CD4/CD8 Ratio: 0.2 Ratio - Immune system function may be a concern.
+- CD8 Cells, Percent: 63.0 % - Immune system function appears generally within the expected range.
+- Hematocrit: 32.3 % - May reflect anemia.
+- Hemoglobin: 10.5 g/dL - May reflect anemia.
+- Lymphocytes, Percent: 10.0 % - Immune system function appears generally within the expected range.
+- MCH: 32.2 pg - May reflect anemia.
+- MCHC: 32.7 % - Red blood cell health appears generally within the expected range.
+- MCV: 99.0 fL - May reflect anemia.
+- Platelet Count: 275.0 K/uL - Blood clotting function appears generally within the expected range.
+- RDW: 18.2 % - May reflect anemia.
+- Red Blood Cells: 3.28 m/uL - May reflect anemia.
+- White Blood Cells: 8.3 K/uL - Immune system function appears generally within the expected range.
+
+General Overview: The results show a pattern of possible issues with liver function, pancreas function, heart health, and immune system function, as well as possible anemia.model","- Alanine Aminotransferase (ALT): 35.0 IU/L - Liver function appears generally within the expected range.
+- Albumin: 4.5 g/dL - Protein levels in the blood appear generally within the expected range.
+- Alkaline Phosphatase: 793.0 IU/L - May reflect bone or liver issues.
+- Amylase: 129.0 IU/L - May suggest pancreas problems.
+- Anion Gap: 18.0 mEq/L - Electrolyte balance appears generally within the expected range.
+- Asparate Aminotransferase (AST): 52.0 IU/L - May reflect liver or muscle issues.
+- Bicarbonate: 28.0 mEq/L - Acid-base balance appears generally within the expected range.
+- Bilirubin, Total: 1.8 mg/dL - May reflect liver or bile duct issues.
+- Calcium, Total: 10.4 mg/dL - May reflect bone or parathyroid issues.
+- Chloride: 93.0 mEq/L - May reflect fluid or electrolyte imbalance.
+- Cholesterol Ratio (Total/HDL): 5.4 Ratio - Cholesterol levels appear generally within the expected range.
+- Cholesterol, HDL: 57.0 mg/dL - Good cholesterol levels appear generally within the expected range.
+- Cholesterol, LDL, Calculated: 186.0 mg/dL - May reflect high levels of bad cholesterol.
+- Cholesterol, Total: 305.0 mg/dL - May reflect high levels of total cholesterol.
+- Creatinine: 1.0 mg/dL - Kidney function appears generally within the expected range.
+- Glucose: 82.0 mg/dL - Blood sugar levels appear generally within the expected range.
+- Phosphate: 4.0 mg/dL - Mineral levels in the blood appear generally within the expected range.
+- Potassium: 3.2 mEq/L - May reflect heart or muscle issues.
+- Sodium: 136.0 mEq/L - Electrolyte balance appears generally within the expected range.
+- Thyroid Stimulating Hormone: 13.0 uIU/mL - May reflect thyroid issues.
+- Thyroxine (T4), Free: 1.0 ng/dL - Thyroid function appears generally within the expected range.
+- Triglycerides: 308.0 mg/dL - May reflect high levels of triglycerides.
+- Urea Nitrogen: 23.0 mg/dL - May reflect kidney or liver issues.
+- Absolute CD3 Count: 615.0 #/uL - Immune system function appears generally within the expected range.
+- Absolute CD4 Count: 91.0 #/uL - May reflect immune system issues.
+- Absolute CD8 Count: 522.0 #/uL - Immune system function appears generally within the expected range.
+- Absolute Lymphocyte Count: 830.0 #/uL - Immune system function appears generally within the expected range.
+- CD3 Cells, Percent: 74.0 % - Immune system function appears generally within the expected range.
+- CD4 Cells, Percent: 11.0 % - Immune system function appears generally within the expected range.
+- CD4/CD8 Ratio: 0.2 Ratio - May reflect immune system imbalance.
+- CD8 Cells, Percent: 63.0 % - Immune system function appears generally within the expected range.
+- Hematocrit: 32.3 % - May reflect anemia or blood loss.
+- Hemoglobin: 10.5 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- Lymphocytes, Percent: 10.0 % - Immune system function appears generally within the expected range.
+- MCH: 32.2 pg - May reflect anemia or red blood cell issues.
+- MCHC: 32.7 % - Red blood cell function appears generally within the expected range.
+- MCV: 99.0 fL - May reflect anemia or red blood cell issues.
+- Platelet Count: 275.0 K/uL - Blood clotting function appears generally within the expected range.
+- RDW: 18.2 % - May reflect anemia or red blood cell issues.
+- Red Blood Cells: 3.28 m/uL - May reflect anemia or blood loss.
+- White Blood Cells: 8.3 K/uL - Immune system function appears generally within the expected range.
+
+General Overview: The results show a combination of normal and abnormal values, suggesting potential issues with liver function, pancreas, thyroid, immune system, and blood cell production, as well as possible electrolyte and mineral imbalances.",0.8568856885688568,0.8431427766826246,554,594,0.9634146341463414,0.7804878048780488,1.0,0.982261,0.98326504,0.98276275
+4,2,"- Alanine Aminotransferase (ALT): 45.0 IU/L - May suggest liver cell damage.
+- Albumin: 4.9 g/dL - May reflect low protein levels in the blood.
+- Alkaline Phosphatase: 81.0 IU/L - Appears to be within the expected range for bone health.
+- Anion Gap: 18.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Asparate Aminotransferase (AST): 24.0 IU/L - Appears to be within the expected range for liver function.
+- Bicarbonate: 23.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Bilirubin, Total: 1.1 mg/dL - Appears to be within the expected range for liver function.
+- Calcium, Total: 9.5 mg/dL - Appears to be within the expected range for bone health.
+- Chloride: 99.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Creatine Kinase (CK): 177.0 IU/L - May suggest muscle damage.
+- Creatinine: 0.9 mg/dL - Appears to be within the expected range for kidney function.
+- Glucose: 327.0 mg/dL - May suggest high blood sugar levels.
+- Lactate Dehydrogenase (LD): 195.0 IU/L - Appears to be within the expected range for tissue health.
+- Magnesium: 1.8 mg/dL - Appears to be within the expected range for muscle and nerve function.
+- Phosphate: 1.1 mg/dL - May suggest low phosphate levels in the blood.
+- Potassium: 4.1 mEq/L - Appears to be within the expected range for heart function.
+- Sodium: 136.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Urea Nitrogen: 11.0 mg/dL - Appears to be within the expected range for kidney function.
+- Hematocrit: 42.6 % - Appears to be within the expected range for red blood cell production.
+- Hemoglobin: 14.8 g/dL - Appears to be within the expected range for oxygen-carrying protein in the blood.
+- INR(PT): 1.2 no unit - Appears to be within the expected range for blood clotting.
+- MCH: 29.2 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 34.8 % - Appears to be within the expected range for red blood cell hemoglobin content.
+- MCV: 84.0 fL - Appears to be within the expected range for red blood cell size.
+- Platelet Count: 227.0 K/uL - Appears to be within the expected range for blood clotting.
+- PT: 13.6 sec - May suggest a problem with blood clotting.
+- PTT: 30.5 sec - Appears to be within the expected range for blood clotting.
+- RDW: 14.0 % - Appears to be within the expected range for red blood cell size variation.
+- Red Blood Cells: 5.08 m/uL - Appears to be within the expected range for red blood cell production.
+- White Blood Cells: 10.4 K/uL - Appears to be within the expected range for immune function.
+
+General Overview: The results show some abnormal values that may suggest issues with liver function, muscle damage, and blood sugar levels, while other values appear to be within the expected range for various bodily functions. চিহ্ন","- Alanine Aminotransferase (ALT): 45.0 IU/L - May suggest liver stress or damage.
+- Albumin: 4.9 g/dL - May reflect lower protein levels in the blood.
+- Alkaline Phosphatase: 81.0 IU/L - Appears within the expected range for bone growth.
+- Anion Gap: 18.0 mEq/L - Appears within the expected range for acid balance.
+- Asparate Aminotransferase (AST): 24.0 IU/L - Appears within the expected range for liver function.
+- Bicarbonate: 23.0 mEq/L - Appears within the expected range for acid balance.
+- Bilirubin, Total: 1.1 mg/dL - Appears within the expected range for liver function.
+- Calcium, Total: 9.5 mg/dL - Appears within the expected range for bone health.
+- Chloride: 99.0 mEq/L - Appears within the expected range for fluid balance.
+- Creatine Kinase (CK): 177.0 IU/L - May suggest muscle stress or damage.
+- Creatinine: 0.9 mg/dL - Appears within the expected range for kidney function.
+- Glucose: 327.0 mg/dL - May suggest high blood sugar levels.
+- Lactate Dehydrogenase (LD): 195.0 IU/L - Appears within the expected range for tissue health.
+- Magnesium: 1.8 mg/dL - Appears within the expected range for muscle function.
+- Phosphate: 1.1 mg/dL - May suggest lower levels of this essential mineral.
+- Potassium: 4.1 mEq/L - Appears within the expected range for heart function.
+- Sodium: 136.0 mEq/L - Appears within the expected range for fluid balance.
+- Urea Nitrogen: 11.0 mg/dL - Appears within the expected range for kidney function.
+- Hematocrit: 42.6 % - Appears within the expected range for red blood cell levels.
+- Hemoglobin: 14.8 g/dL - Appears within the expected range for oxygen-carrying protein.
+- INR(PT): 1.2 no unit - Appears within the expected range for blood clotting.
+- MCH: 29.2 pg - Appears within the expected range for red blood cell health.
+- MCHC: 34.8 % - Appears within the expected range for red blood cell health.
+- MCV: 84.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 227.0 K/uL - Appears within the expected range for blood clotting.
+- PT: 13.6 sec - May suggest blood clotting issues.
+- PTT: 30.5 sec - Appears within the expected range for blood clotting.
+- RDW: 14.0 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 5.08 m/uL - Appears within the expected range for red blood cell levels.
+- White Blood Cells: 10.4 K/uL - Appears within the expected range for immune function.
+
+General Overview: The results show some abnormal values that may suggest liver stress, muscle stress, high blood sugar levels, and blood clotting issues, while other values appear within the expected ranges for various body functions.",0.887459807073955,0.8957952468007313,502,448,1.0,1.0,1.0,0.97461045,0.9739251,0.97426766
+3,3,"- Alanine Aminotransferase (ALT): 166.0 IU/L - May suggest liver damage or inflammation.
+- Alkaline Phosphatase: 93.0 IU/L - Appears to be within the expected range for bone growth and liver function.
+- Anion Gap: 14.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Asparate Aminotransferase (AST): 65.0 IU/L - May suggest liver damage or inflammation.
+- Bicarbonate: 22.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Bilirubin, Total: 0.5 mg/dL - Appears to be within the expected range for liver function.
+- Calcium, Total: 9.2 mg/dL - Appears to be within the expected range for bone health.
+- Chloride: 107.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Creatine Kinase (CK): 120.0 IU/L - Appears to be within the expected range for muscle function.
+- Creatine Kinase, MB Isoenzyme: 3.0 ng/mL - Appears to be within the expected range for heart muscle function.
+- Creatinine: 0.9 mg/dL - Appears to be within the expected range for kidney function.
+- Glucose: 151.0 mg/dL - May suggest high blood sugar levels.
+- Magnesium: 1.9 mg/dL - Appears to be within the expected range for muscle and nerve function.
+- Phosphate: 3.1 mg/dL - Appears to be within the expected range for bone health.
+- Potassium: 3.9 mEq/L - Appears to be within the expected range for heart function.
+- Sodium: 139.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Troponin T: 0.04 ng/mL - May suggest heart muscle damage.
+- Urea Nitrogen: 12.0 mg/dL - Appears to be within the expected range for kidney function.
+- Hematocrit: 40.4 % - Appears to be within the expected range for red blood cell production.
+- Hemoglobin: 14.1 g/dL - Appears to be within the expected range for oxygen-carrying protein.
+- INR(PT): 1.0 no unit - Appears to be within the expected range for blood clotting.
+- MCH: 31.8 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 35.0 % - Appears to be within the expected range for red blood cell hemoglobin.
+- MCV: 91.0 fL - Appears to be within the expected range for red blood cell size.
+- Platelet Count: 203.0 K/uL - Appears to be within the expected range for blood clotting.
+- PT: 12.4 sec - Appears to be within the expected range for blood clotting.
+- PTT: 22.5 sec - Appears to be within the expected range for blood clotting.
+- RDW: 12.8 % - Appears to be within the expected range for red blood cell size variation.
+- Red Blood Cells: 4.44 m/uL - May suggest anemia.
+- White Blood Cells: 9.8 K/uL - Appears to be within the expected range for immune function.
+
+General Overview: The results show some abnormal values that may suggest liver damage, heart muscle damage, and high blood sugar levels, while other values appear to be within the expected range for various bodily functions. চিহ্ন","- Alanine Aminotransferase (ALT): 166.0 IU/L - May suggest liver stress or damage.
+- Alkaline Phosphatase: 93.0 IU/L - Appears generally within the expected range for bone growth.
+- Anion Gap: 14.0 mEq/L - Appears generally within the expected range for acid-base balance.
+- Asparate Aminotransferase (AST): 65.0 IU/L - May suggest liver or muscle stress.
+- Bicarbonate: 22.0 mEq/L - Appears generally within the expected range for acid-base balance.
+- Bilirubin, Total: 0.5 mg/dL - Appears generally within the expected range for liver function.
+- Calcium, Total: 9.2 mg/dL - Appears generally within the expected range for bone health.
+- Chloride: 107.0 mEq/L - Appears generally within the expected range for fluid balance.
+- Creatine Kinase (CK): 120.0 IU/L - Appears generally within the expected range for muscle health.
+- Creatine Kinase, MB Isoenzyme: 3.0 ng/mL - Appears generally within the expected range for heart muscle health.
+- Creatinine: 0.9 mg/dL - Appears generally within the expected range for kidney function.
+- Glucose: 151.0 mg/dL - May suggest high blood sugar levels.
+- Magnesium: 1.9 mg/dL - Appears generally within the expected range for muscle and nerve function.
+- Phosphate: 3.1 mg/dL - Appears generally within the expected range for bone health.
+- Potassium: 3.9 mEq/L - Appears generally within the expected range for heart function.
+- Sodium: 139.0 mEq/L - Appears generally within the expected range for fluid balance.
+- Troponin T: 0.04 ng/mL - May suggest heart muscle stress.
+- Urea Nitrogen: 12.0 mg/dL - Appears generally within the expected range for kidney function.
+- Hematocrit: 40.4 % - Appears generally within the expected range for red blood cell production.
+- Hemoglobin: 14.1 g/dL - Appears generally within the expected range for oxygen-carrying protein.
+- INR(PT): 1.0 no unit - Appears generally within the expected range for blood clotting.
+- MCH: 31.8 pg - Appears generally within the expected range for red blood cell production.
+- MCHC: 35.0 % - Appears generally within the expected range for red blood cell production.
+- MCV: 91.0 fL - Appears generally within the expected range for red blood cell size.
+- Platelet Count: 203.0 K/uL - Appears generally within the expected range for blood clotting.
+- PT: 12.4 sec - Appears generally within the expected range for blood clotting.
+- PTT: 22.5 sec - Appears generally within the expected range for blood clotting.
+- RDW: 12.8 % - Appears generally within the expected range for red blood cell size variation.
+- Red Blood Cells: 4.44 m/uL - May suggest a lower than expected red blood cell count.
+- White Blood Cells: 9.8 K/uL - Appears generally within the expected range for immune response.
+
+General Overview: The results show some abnormal values that may suggest liver stress, high blood sugar levels, heart muscle stress, and a lower than expected red blood cell count, while other values appear generally within the expected range for various body functions.",0.865979381443299,0.8446819513876918,500,485,1.0,1.0,1.0,0.97872543,0.97369075,0.97620165
+4,4,"- Anion Gap: 10.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 24.0 mEq/L - Appears within the expected range for acid-base balance.
+- Calcium, Total: 8.0 mg/dL - May reflect issues with bone health or parathyroid function.
+- Chloride: 107.0 mEq/L - Appears within the expected range for fluid balance.
+- CK-MB Index: 8.8 % - May suggest heart muscle damage or stress.
+- Creatine Kinase (CK): 296.0 IU/L - May reflect muscle damage or inflammation.
+- Creatine Kinase, MB Isoenzyme: 26.0 ng/mL - May suggest heart muscle damage or stress.
+- Creatinine: 1.5 mg/dL - May reflect issues with kidney function.
+- Glucose: 106.0 mg/dL - May suggest issues with blood sugar regulation.
+- Magnesium: 1.9 mg/dL - Appears within the expected range for muscle and nerve function.
+- Phosphate: 2.0 mg/dL - May reflect issues with bone health or parathyroid function.
+- Potassium: 3.1 mEq/L - May reflect issues with heart function or muscle weakness.
+- Sodium: 138.0 mEq/L - Appears within the expected range for fluid balance.
+- Troponin T: 0.42 ng/ml - May suggest heart muscle damage or stress.
+- Urea Nitrogen: 53.0 mg/dL - May reflect issues with kidney function.
+- Hematocrit: 33.3 % - May reflect issues with red blood cell production or oxygen delivery.
+- Hemoglobin: 11.7 g/dL - May reflect issues with red blood cell production or oxygen delivery.
+- MCH: 31.6 pg - Appears within the expected range for red blood cell size.
+- MCHC: 35.3 % - May reflect issues with red blood cell size or hemoglobin levels.
+- MCV: 90.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 256.0 K/uL - Appears within the expected range for blood clotting.
+- RDW: 13.1 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 3.71 m/uL - May reflect issues with red blood cell production or oxygen delivery.
+- White Blood Cells: 13.0 K/uL - May reflect issues with immune response.
+
+General Overview: The results show a pattern of possible issues with heart muscle, kidney function, and red blood cell production, as well as potential imbalances in bone health, muscle function, and blood sugar regulation.","- Anion Gap: 10.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 24.0 mEq/L - Appears within the expected range for acid-base balance.
+- Calcium, Total: 8.0 mg/dL - May reflect a lower amount of calcium in the blood.
+- Chloride: 107.0 mEq/L - Appears within the expected range for fluid balance.
+- CK-MB Index: 8.8 % - Can suggest heart muscle damage.
+- Creatine Kinase (CK): 296.0 IU/L - Can suggest muscle damage or inflammation.
+- Creatine Kinase, MB Isoenzyme: 26.0 ng/mL - Can suggest heart muscle damage.
+- Creatinine: 1.5 mg/dL - May reflect a lower kidney function.
+- Glucose: 106.0 mg/dL - May reflect a higher blood sugar level.
+- Magnesium: 1.9 mg/dL - Appears within the expected range for muscle and nerve function.
+- Phosphate: 2.0 mg/dL - May reflect a lower amount of phosphate in the blood.
+- Potassium: 3.1 mEq/L - May reflect a lower amount of potassium in the blood.
+- Sodium: 138.0 mEq/L - Appears within the expected range for fluid balance.
+- Troponin T: 0.42 ng/ml - Can suggest heart muscle damage.
+- Urea Nitrogen: 53.0 mg/dL - May reflect a lower kidney function.
+- Hematocrit: 33.3 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 11.7 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- MCH: 31.6 pg - Appears within the expected range for red blood cell size.
+- MCHC: 35.3 % - May reflect a lower amount of hemoglobin in red blood cells.
+- MCV: 90.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 256.0 K/uL - Appears within the expected range for blood clotting.
+- RDW: 13.1 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 3.71 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 13.0 K/uL - Can suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show a pattern of possible muscle damage, heart muscle damage, and lower kidney function, along with lower amounts of red blood cells and oxygen-carrying protein in the blood.",0.7572016460905349,0.5980253878702397,373,368,1.0,1.0,1.0,0.9710361,0.97195935,0.9714975
+3,5,"- Bands: 13.0 % - May suggest an infection or inflammation.
+- Eosinophils: 2.0 % - Appears to be within the expected range for allergy or parasite response.
+- Hematocrit: 59.1 % - May reflect a higher amount of red blood cells.
+- Hemoglobin: 19.9 g/dL - May reflect a higher amount of oxygen-carrying protein in the blood.
+- Lymphocytes: 29.0 % - May suggest an immune response, such as infection or inflammation.
+- MCH: 36.5 pg - May reflect a higher amount of hemoglobin in red blood cells.
+- MCHC: 33.7 % - Appears to be within the expected range for red blood cell hemoglobin.
+- MCV: 108.0 fL - May reflect larger than normal red blood cells.
+- Metamyelocytes: 1.0 % - May suggest an abnormal bone marrow response.
+- Monocytes: 15.0 % - Appears to be within the expected range for immune response.
+- Neutrophils: 40.0 % - Appears to be within the expected range for immune response.
+- Nucleated Red Cells: 8.0 % - May suggest an abnormal bone marrow response.
+- Platelet Count: 202.0 K/uL - Appears to be within the expected range for blood clotting.
+- RDW: 16.1 % - May reflect a variation in red blood cell size.
+- Red Blood Cells: 5.46 m/uL - May reflect a higher amount of red blood cells.
+- White Blood Cells: 15.6 K/uL - Appears to be within the expected range for immune response.
+
+General Overview: The results show a pattern of abnormal red blood cell production and immune response, which may reflect an underlying condition affecting the bone marrow or immune system.","- Bands: 13.0 % - May suggest an immature immune response.
+- Eosinophils: 2.0 % - Appears to be within the expected range for allergy response.
+- Hematocrit: 59.1 % - May reflect a higher amount of red blood cells in the blood.
+- Hemoglobin: 19.9 g/dL - May reflect a higher amount of oxygen-carrying protein in the blood.
+- Lymphocytes: 29.0 % - May suggest an immune response, such as infection or inflammation.
+- MCH: 36.5 pg - May reflect a higher amount of hemoglobin in red blood cells.
+- MCHC: 33.7 % - Appears to be within the expected range for red blood cell health.
+- MCV: 108.0 fL - May reflect larger than normal red blood cells.
+- Metamyelocytes: 1.0 % - May suggest an immature immune response.
+- Monocytes: 15.0 % - Appears to be within the expected range for immune response.
+- Neutrophils: 40.0 % - Appears to be within the expected range for infection response.
+- Nucleated Red Cells: 8.0 % - May reflect an abnormal production of red blood cells.
+- Platelet Count: 202.0 K/uL - Appears to be within the expected range for blood clotting.
+- RDW: 16.1 % - May reflect a variation in red blood cell size.
+- Red Blood Cells: 5.46 m/uL - May reflect a higher amount of red blood cells in the blood.
+- White Blood Cells: 15.6 K/uL - Appears to be within the expected range for immune response.
+
+General Overview: The results show a pattern of abnormal red blood cell production and possible immune responses, with some values higher or lower than expected, while other values appear to be within the expected range.",0.8707753479125249,0.847457627118644,267,278,1.0,1.0,1.0,0.9824551,0.98229337,0.98237425
+2,6,"- Calculated Bicarbonate, Whole Blood: 25.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Chloride, Whole Blood: 104.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Free Calcium: 1.1 mmol/L - May suggest issues with bone or parathyroid function.
+- Glucose: 116.0 mg/dL - May reflect issues with blood sugar regulation.
+- Hematocrit, Calculated: 35.0 % - Appears to be within the expected range for red blood cell volume.
+- Hemoglobin: 11.8 g/dL - May suggest a lower amount of oxygen-carrying protein in the blood.
+- Lactate: 1.7 mmol/L - Appears to be within the expected range for energy production.
+- pH: 7.39 units - Appears to be within the expected range for acid-base balance.
+- Potassium, Whole Blood: 4.8 mEq/L - Appears to be within the expected range for heart function.
+- Sodium, Whole Blood: 143.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Creatine Kinase (CK): 88.0 IU/L - Appears to be within the expected range for muscle function.
+- Creatine Kinase, MB Isoenzyme: 4.0 ng/mL - Appears to be within the expected range for heart function.
+- Creatinine: 1.7 mg/dL - May suggest issues with kidney function.
+- Lipase: 78.0 IU/L - May suggest issues with pancreas function.
+- Thyroid Stimulating Hormone: 8.4 uIU/mL - May suggest issues with thyroid function.
+- Troponin T: 0.02 ng/mL - May suggest issues with heart function.
+- Urea Nitrogen: 38.0 mg/dL - May suggest issues with kidney function.
+- Fibrinogen, Functional: 288.0 mg/dL - Appears to be within the expected range for blood clotting.
+- Hematocrit: 35.9 % - May suggest a lower amount of red blood cells.
+- Hemoglobin: 11.9 g/dL - May suggest a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 3.3 no unit - May suggest issues with blood clotting.
+- MCH: 31.0 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 33.2 % - Appears to be within the expected range for red blood cell hemoglobin.
+- MCV: 94.0 fL - Appears to be within the expected range for red blood cell size.
+- Platelet Count: 350.0 K/uL - Appears to be within the expected range for blood clotting.
+- PT: 32.6 sec - May suggest issues with blood clotting.
+- PTT: 30.5 sec - Appears to be within the expected range for blood clotting.
+- RDW: 13.5 % - Appears to be within the expected range for red blood cell size variation.
+- Red Blood Cells: 3.84 m/uL - May suggest a lower amount of red blood cells.
+- White Blood Cells: 7.3 K/uL - Appears to be within the expected range for immune function.
+
+General Overview: The results show a pattern of possible issues with kidney function, pancreas function, heart function, and blood sugar regulation, as well as potential issues with blood clotting and red blood cell production.","- Calculated Bicarbonate, Whole Blood: 25.0 mEq/L - Appears within the expected range for acid-base balance.
+- Chloride, Whole Blood: 104.0 mEq/L - Appears within the expected range for fluid balance.
+- Free Calcium: 1.1 mmol/L - May reflect an imbalance in muscle and nerve function.
+- Glucose: 116.0 mg/dL - May suggest an issue with blood sugar regulation.
+- Hematocrit, Calculated: 35.0 % - Appears within the expected range for red blood cell volume.
+- Hemoglobin: 11.8 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- Lactate: 1.7 mmol/L - Appears within the expected range for energy production.
+- pH: 7.39 units - Appears within the expected range for acid-base balance.
+- Potassium, Whole Blood: 4.8 mEq/L - Appears within the expected range for heart function.
+- Sodium, Whole Blood: 143.0 mEq/L - Appears within the expected range for fluid balance.
+- Creatine Kinase (CK): 88.0 IU/L - Appears within the expected range for muscle health.
+- Creatine Kinase, MB Isoenzyme: 4.0 ng/mL - Appears within the expected range for heart muscle health.
+- Creatinine: 1.7 mg/dL - May reflect a decrease in kidney function.
+- Lipase: 78.0 IU/L - May suggest an issue with pancreas function.
+- Thyroid Stimulating Hormone: 8.4 uIU/mL - May reflect an issue with thyroid function.
+- Troponin T: 0.02 ng/mL - May suggest some heart muscle damage.
+- Urea Nitrogen: 38.0 mg/dL - May reflect a decrease in kidney function.
+- Fibrinogen, Functional: 288.0 mg/dL - Appears within the expected range for blood clotting.
+- Hematocrit: 35.9 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 11.9 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 3.3 no unit - May suggest an issue with blood clotting.
+- MCH: 31.0 pg - Appears within the expected range for red blood cell size.
+- MCHC: 33.2 % - Appears within the expected range for red blood cell hemoglobin.
+- MCV: 94.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 350.0 K/uL - Appears within the expected range for blood clotting.
+- PT: 32.6 sec - May suggest an issue with blood clotting.
+- PTT: 30.5 sec - Appears within the expected range for blood clotting.
+- RDW: 13.5 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 3.84 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 7.3 K/uL - Appears within the expected range for immune function.
+
+General Overview: The results show some abnormalities in kidney function, pancreas function, thyroid function, and blood clotting, as well as a possible issue with heart muscle health and a lower amount of red blood cells and oxygen-carrying protein in the blood.",0.8547189819724286,0.8596300326441785,489,471,1.0,1.0,1.0,0.9797628,0.9775127,0.97863644
+1,7,"- Anion Gap: 14.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Bicarbonate: 20.0 mEq/L - May suggest an imbalance in the body's acid-base system.
+- Chloride: 104.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Creatinine: 0.9 mg/dL - Appears to be within the expected range for kidney function.
+- Glucose: 176.0 mg/dL - May suggest an issue with blood sugar regulation.
+- Potassium: 5.2 mEq/L - May suggest an imbalance in heart and muscle function.
+- Sodium: 133.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Urea Nitrogen: 11.0 mg/dL - Appears to be within the expected range for kidney function.
+- Hematocrit: 36.6 % - May suggest a lower amount of red blood cells.
+- Hemoglobin: 12.9 g/dL - May suggest a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.2 no unit - May suggest an issue with blood clotting.
+- MCH: 30.7 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 35.2 % - May suggest a lower amount of hemoglobin in red blood cells.
+- MCV: 87.0 fL - Appears to be within the expected range for red blood cell size.
+- Platelet Count: 220.0 K/uL - Appears to be within the expected range for blood clotting.
+- PT: 13.2 sec - May suggest an issue with blood clotting.
+- PTT: 26.5 sec - Appears to be within the expected range for blood clotting.
+- RDW: 13.9 % - Appears to be within the expected range for red blood cell size variation.
+- Red Blood Cells: 4.2 m/uL - May suggest a lower amount of red blood cells.
+- White Blood Cells: 12.8 K/uL - May suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show a pattern of possible issues with blood sugar regulation, acid-base balance, and blood clotting, as well as a lower amount of red blood cells and oxygen-carrying protein in the blood.","- Anion Gap: 14.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 20.0 mEq/L - May reflect a lower level of this electrolyte in the blood.
+- Chloride: 104.0 mEq/L - Appears within the expected range for fluid balance.
+- Creatinine: 0.9 mg/dL - Appears within the expected range for kidney function.
+- Glucose: 176.0 mg/dL - May suggest higher blood sugar levels.
+- Potassium: 5.2 mEq/L - May reflect a higher level of this electrolyte in the blood.
+- Sodium: 133.0 mEq/L - Appears within the expected range for fluid balance.
+- Urea Nitrogen: 11.0 mg/dL - Appears within the expected range for kidney function.
+- Hematocrit: 36.6 % - May reflect a lower percentage of red blood cells.
+- Hemoglobin: 12.9 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.2 no unit - May suggest a higher risk of bleeding.
+- MCH: 30.7 pg - Appears within the expected range for red blood cell size.
+- MCHC: 35.2 % - May reflect a lower concentration of hemoglobin in red blood cells.
+- MCV: 87.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 220.0 K/uL - Appears within the expected range for blood clotting.
+- PT: 13.2 sec - May suggest a higher risk of bleeding.
+- PTT: 26.5 sec - Appears within the expected range for blood clotting.
+- RDW: 13.9 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 4.2 m/uL - May reflect a lower number of red blood cells.
+- White Blood Cells: 12.8 K/uL - Can suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show some abnormal values that may reflect issues with blood sugar levels, electrolyte balance, kidney function, and blood cell production, which may suggest an underlying condition affecting multiple body systems.",0.7827426810477658,0.7451936095315461,340,321,1.0,1.0,1.0,0.9702655,0.9663153,0.96828634
+5,8,"- Alanine Aminotransferase (ALT): 18.0 IU/L - Liver function appears generally within the expected range.
+- Alkaline Phosphatase: 91.0 IU/L - Bone growth and liver function appear generally within the expected range.
+- Anion Gap: 24.0 mEq/L - May reflect an imbalance in acid-base levels.
+- Asparate Aminotransferase (AST): 22.0 IU/L - Liver function appears generally within the expected range.
+- Bicarbonate: 19.0 mEq/L - May reflect an imbalance in acid-base levels.
+- Bilirubin, Total: 0.2 mg/dL - Liver function appears generally within the expected range.
+- Calcium, Total: 6.7 mg/dL - May reflect an imbalance in bone growth and muscle function.
+- Chloride: 100.0 mEq/L - Fluid balance and acid-base levels appear generally within the expected range.
+- Creatine Kinase (CK): 23.0 IU/L - May reflect muscle damage or inflammation.
+- Creatinine: 5.3 mg/dL - May reflect kidney function issues.
+- Glucose: 42.0 mg/dL - May reflect issues with blood sugar regulation.
+- Lipase: 12.0 IU/L - Pancreas function appears generally within the expected range.
+- Magnesium: 1.4 mg/dL - May reflect muscle and nerve function issues.
+- Phosphate: 7.1 mg/dL - May reflect bone growth and muscle function issues.
+- Potassium: 3.8 mEq/L - Heart function appears generally within the expected range.
+- Sodium: 139.0 mEq/L - Fluid balance and acid-base levels appear generally within the expected range.
+- Troponin T: 0.03 ng/mL - May reflect heart muscle damage or inflammation.
+- Urea Nitrogen: 60.0 mg/dL - May reflect kidney function issues.
+- Basophils: 0.1 % - Immune response appears generally within the expected range.
+- Eosinophils: 1.1 % - Immune response appears generally within the expected range.
+- Hematocrit: 33.6 % - May reflect issues with red blood cell production.
+- Hemoglobin: 11.0 g/dL - May reflect issues with red blood cell production.
+- INR(PT): 1.4 no unit - May reflect issues with blood clotting.
+- Lymphocytes: 16.9 % - May reflect an immune response.
+- MCH: 34.4 pg - May reflect issues with red blood cell production.
+- MCHC: 32.8 % - Red blood cell health appears generally within the expected range.
+- MCV: 105.0 fL - May reflect issues with red blood cell size.
+- Monocytes: 3.9 % - Immune response appears generally within the expected range.
+- Neutrophils: 78.0 % - May reflect an immune response.
+- Platelet Count: 163.0 K/uL - Blood clotting appears generally within the expected range.
+- PT: 15.4 sec - May reflect issues with blood clotting.
+- PTT: 68.3 sec - May reflect issues with blood clotting.
+- RDW: 18.0 % - May reflect issues with red blood cell size.
+- Red Blood Cells: 3.2 m/uL - May reflect issues with red blood cell production.
+- White Blood Cells: 4.9 K/uL - Immune response appears generally within the expected range.
+
+General Overview: The results show a pattern of possible issues with kidney function, blood sugar regulation, and blood clotting, as well as potential muscle and nerve function problems, and issues with red blood cell production and size.","- Alanine Aminotransferase (ALT): 18.0 IU/L - Liver function appears generally within the expected range.
+- Alkaline Phosphatase: 91.0 IU/L - Bone growth and liver function appear generally within the expected range.
+- Anion Gap: 24.0 mEq/L - May reflect an imbalance in the body's acid-base balance.
+- Asparate Aminotransferase (AST): 22.0 IU/L - Liver function appears generally within the expected range.
+- Bicarbonate: 19.0 mEq/L - May reflect an imbalance in the body's acid-base balance.
+- Bilirubin, Total: 0.2 mg/dL - Liver function and bile production appear generally within the expected range.
+- Calcium, Total: 6.7 mg/dL - May reflect an imbalance in bone health or parathyroid function.
+- Chloride: 100.0 mEq/L - Fluid balance and blood pressure appear generally within the expected range.
+- Creatine Kinase (CK): 23.0 IU/L - May reflect muscle damage or inflammation.
+- Creatinine: 5.3 mg/dL - May reflect kidney function impairment.
+- Glucose: 42.0 mg/dL - May reflect an imbalance in blood sugar regulation.
+- Lipase: 12.0 IU/L - Pancreas function appears generally within the expected range.
+- Magnesium: 1.4 mg/dL - May reflect an imbalance in muscle and nerve function.
+- Phosphate: 7.1 mg/dL - May reflect an imbalance in bone health or kidney function.
+- Potassium: 3.8 mEq/L - Heart function and muscle contractions appear generally within the expected range.
+- Sodium: 139.0 mEq/L - Fluid balance and blood pressure appear generally within the expected range.
+- Troponin T: 0.03 ng/mL - May reflect heart muscle damage.
+- Urea Nitrogen: 60.0 mg/dL - May reflect kidney function impairment.
+- Basophils: 0.1 % - Immune response appears generally within the expected range.
+- Eosinophils: 1.1 % - Immune response appears generally within the expected range.
+- Hematocrit: 33.6 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 11.0 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.4 no unit - Blood clotting appears generally within the expected range, but may be slightly elevated.
+- Lymphocytes: 16.9 % - Immune response appears generally within the expected range.
+- MCH: 34.4 pg - May reflect a lower amount of hemoglobin in red blood cells.
+- MCHC: 32.8 % - Red blood cell health appears generally within the expected range.
+- MCV: 105.0 fL - May reflect a larger size of red blood cells.
+- Monocytes: 3.9 % - Immune response appears generally within the expected range.
+- Neutrophils: 78.0 % - May reflect an immune response, such as infection or inflammation.
+- Platelet Count: 163.0 K/uL - Blood clotting appears generally within the expected range.
+- PT: 15.4 sec - Blood clotting may be impaired.
+- PTT: 68.3 sec - Blood clotting may be impaired.
+- RDW: 18.0 % - May reflect a variation in red blood cell size.
+- Red Blood Cells: 3.2 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 4.9 K/uL - May reflect an impaired immune response.
+
+General Overview: The results show a pattern of possible kidney function impairment, muscle damage, and an imbalance in the body's acid-base balance, as well as a potential issue with blood clotting and immune response.",0.7935871743486973,0.6565083481925758,498,529,0.9857142857142858,0.9142857142857143,1.0,0.97909665,0.97671205,0.97790295
+1,9,"- Bilirubin, Direct: 0.2 mg/dL - Liver function appears generally within the expected range.
+- Bilirubin, Indirect: 6.0 mg/dL - Liver function appears generally within the expected range.
+- Bilirubin, Total: 6.2 mg/dL - Liver function appears generally within the expected range.
+
+General Overview: The results show generally normal liver function, with no signs of significant liver damage or issues.","- Bilirubin, Direct: 0.2 mg/dL - Liver function appears generally within the expected range.
+- Bilirubin, Indirect: 6.0 mg/dL - May reflect normal breakdown of red blood cells.
+- Bilirubin, Total: 6.2 mg/dL - Liver and red blood cell function appear generally within the expected range.
+
+General Overview: The results show that liver function and red blood cell breakdown appear to be within normal limits.",0.64,0.5118012422360249,60,65,1.0,1.0,1.0,0.97225946,0.9534142,0.96274453
+2,10,"- Alanine Aminotransferase (ALT): 76.0 IU/L - May suggest liver cell damage.
+- Alkaline Phosphatase: 78.0 IU/L - Appears to be within the expected range for bone growth.
+- Amylase: 153.0 IU/L - May reflect pancreas inflammation or damage.
+- Anion Gap: 32.0 mEq/L - May suggest an imbalance in acid levels.
+- Asparate Aminotransferase (AST): 329.0 IU/L - May suggest liver or muscle cell damage.
+- Bicarbonate: 11.0 mEq/L - May suggest an imbalance in acid levels.
+- Bilirubin, Total: 1.0 mg/dL - Appears to be within the expected range for liver function.
+- Calcium, Total: 7.6 mg/dL - May suggest bone or parathyroid gland issues.
+- Chloride: 103.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Creatinine: 2.5 mg/dL - May suggest kidney function issues.
+- Glucose: 77.0 mg/dL - Appears to be within the expected range for blood sugar control.
+- Lactate Dehydrogenase (LD): 1504.0 IU/L - May suggest tissue damage or inflammation.
+- Lipase: 133.0 IU/L - May suggest pancreas inflammation or damage.
+- Magnesium: 1.7 mg/dL - Appears to be within the expected range for muscle and nerve function.
+- Phosphate: 5.4 mg/dL - May suggest bone or parathyroid gland issues.
+- Potassium: 4.7 mEq/L - Appears to be within the expected range for heart function.
+- Sodium: 141.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Urea Nitrogen: 47.0 mg/dL - May suggest kidney function issues.
+- Atypical Lymphocytes: 2.0 % - May suggest an immune response, such as infection or inflammation.
+- Bands: 8.0 % - May suggest an immune response, such as infection or inflammation.
+- Hematocrit: 23.9 % - May suggest anemia, a lower amount of red blood cells.
+- Hemoglobin: 7.7 g/dL - May suggest anemia, a lower amount of oxygen-carrying protein.
+- Hypersegmented Neutrophils: 2.0 % - May suggest a vitamin B12 or folate deficiency.
+- INR(PT): 2.7 no unit - Appears to be within the expected range for blood clotting.
+- Lymphocytes: 4.0 % - May suggest an immune response, such as infection or inflammation.
+- MCH: 32.4 pg - May suggest anemia, a lower amount of hemoglobin in red blood cells.
+- MCHC: 32.4 % - Appears to be within the expected range for red blood cell health.
+- MCV: 100.0 fL - May suggest anemia, a lower amount of red blood cells.
+- Monocytes: 2.0 % - Appears to be within the expected range for immune response.
+- Neutrophils: 82.0 % - May suggest an immune response, such as infection or inflammation.
+- Nucleated Red Cells: 22.0 % - May suggest an immune response, such as infection or inflammation.
+- Platelet Count: 133.0 K/uL - May suggest a lower amount of platelets for blood clotting.
+- PT: 19.5 sec - May suggest a problem with blood clotting.
+- PTT: 40.6 sec - May suggest a problem with blood clotting.
+- RDW: 26.2 % - May suggest anemia, a lower amount of red blood cells.
+- Red Blood Cells: 2.39 m/uL - May suggest anemia, a lower amount of red blood cells.
+- White Blood Cells: 7.4 K/uL - Appears to be within the expected range for immune response.
+
+General Overview: The results show a pattern of possible issues with liver function, kidney function, and blood cell production, as well as potential imbalances in acid levels and blood clotting.യ്ക്ക്","- Alanine Aminotransferase (ALT): 76.0 IU/L - May suggest liver stress or damage.
+- Alkaline Phosphatase: 78.0 IU/L - Appears to be within the expected range for bone growth.
+- Amylase: 153.0 IU/L - Can suggest pancreas stress or inflammation.
+- Anion Gap: 32.0 mEq/L - May reflect an imbalance in electrolytes.
+- Asparate Aminotransferase (AST): 329.0 IU/L - May suggest muscle or liver stress.
+- Bicarbonate: 11.0 mEq/L - May reflect an imbalance in acid levels.
+- Bilirubin, Total: 1.0 mg/dL - Appears to be within the expected range for liver function.
+- Calcium, Total: 7.6 mg/dL - May suggest an imbalance in bone health.
+- Chloride: 103.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Creatinine: 2.5 mg/dL - May suggest kidney stress or damage.
+- Glucose: 77.0 mg/dL - Appears to be within the expected range for blood sugar.
+- Lactate Dehydrogenase (LD): 1504.0 IU/L - May suggest tissue stress or damage.
+- Lipase: 133.0 IU/L - Can suggest pancreas stress or inflammation.
+- Magnesium: 1.7 mg/dL - Appears to be within the expected range for muscle function.
+- Phosphate: 5.4 mg/dL - May suggest an imbalance in bone health.
+- Potassium: 4.7 mEq/L - Appears to be within the expected range for heart function.
+- Sodium: 141.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Urea Nitrogen: 47.0 mg/dL - May suggest kidney stress or damage.
+- Atypical Lymphocytes: 2.0 % - May reflect an immune response.
+- Bands: 8.0 % - May reflect an immune response.
+- Hematocrit: 23.9 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 7.7 g/dL - May reflect a lower amount of oxygen-carrying protein.
+- Hypersegmented Neutrophils: 2.0 % - May reflect a delay in blood cell production.
+- INR(PT): 2.7 no unit - Appears to be within the expected range for blood clotting.
+- Lymphocytes: 4.0 % - May reflect an immune response.
+- MCH: 32.4 pg - May reflect a change in red blood cell size.
+- MCHC: 32.4 % - Appears to be within the expected range for red blood cell health.
+- MCV: 100.0 fL - May reflect a change in red blood cell size.
+- Monocytes: 2.0 % - Appears to be within the expected range for immune function.
+- Neutrophils: 82.0 % - May reflect an immune response.
+- Nucleated Red Cells: 22.0 % - May reflect a delay in blood cell production.
+- Platelet Count: 133.0 K/uL - May reflect a change in blood clotting.
+- PT: 19.5 sec - May reflect a change in blood clotting.
+- PTT: 40.6 sec - May reflect a change in blood clotting.
+- RDW: 26.2 % - May reflect a change in red blood cell size.
+- Red Blood Cells: 2.39 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 7.4 K/uL - Appears to be within the expected range for immune function.
+
+General Overview: The results show multiple abnormal values that may suggest stress or damage to various body systems, including the liver, pancreas, kidneys, and blood cells, and may reflect an imbalance in electrolytes and acid levels.",0.7797902764537655,0.6814646791963707,562,533,1.0,1.0,1.0,0.9776739,0.98095226,0.97931033
+4,11,"- % Hemoglobin A1c: 5.2 % - Blood sugar control appears generally within the expected range.
+- Alanine Aminotransferase (ALT): 25.0 IU/L - Liver function appears generally within the expected range.
+- Albumin: 3.6 g/dL - Protein levels in the blood appear generally within the expected range.
+- Alkaline Phosphatase: 69.0 IU/L - Bone growth and liver function appear generally within the expected range.
+- Anion Gap: 15.0 mEq/L - Electrolyte balance appears generally within the expected range.
+- Asparate Aminotransferase (AST): 54.0 IU/L - Liver function may be slightly damaged.
+- Bicarbonate: 18.0 mEq/L - May reflect an imbalance in acid levels in the body.
+- Bilirubin, Total: 0.4 mg/dL - Liver function and red blood cell breakdown appear generally within the expected range.
+- Calcium, Total: 7.1 mg/dL - May reflect an imbalance in bone growth and muscle function.
+- Chloride: 113.0 mEq/L - May reflect an imbalance in fluid balance in the body.
+- Creatinine: 0.5 mg/dL - Kidney function appears generally within the expected range.
+- Ferritin: 58.0 ng/mL - Iron storage appears generally within the expected range.
+- Folate: 12.5 ng/mL - May reflect an imbalance in red blood cell production.
+- Glucose: 121.0 mg/dL - May reflect an imbalance in blood sugar levels.
+- Iron: 34.0 ug/dL - Iron levels in the blood appear generally within the expected range.
+- Iron Binding Capacity, Total: 255.0 ug/dL - May reflect an imbalance in iron transport in the blood.
+- Lactate Dehydrogenase (LD): 255.0 IU/L - May reflect an imbalance in muscle function.
+- Magnesium: 4.2 mg/dL - May reflect an imbalance in muscle and nerve function.
+- Phosphate: 1.3 mg/dL - May reflect an imbalance in bone growth and muscle function.
+- Potassium: 3.2 mEq/L - May reflect an imbalance in heart function.
+- Sodium: 143.0 mEq/L - Electrolyte balance appears generally within the expected range.
+- Transferrin: 196.0 mg/dL - May reflect an imbalance in iron transport in the blood.
+- Urea Nitrogen: 7.0 mg/dL - Kidney function appears generally within the expected range.
+- Vitamin B12: 299.0 pg/mL - May reflect an imbalance in red blood cell production.
+- Basophils: 0.1 % - Immune response appears generally within the expected range.
+- Hematocrit: 32.0 % - May reflect an imbalance in red blood cell production.
+- Hemoglobin: 11.5 g/dL - May reflect an imbalance in red blood cell production.
+- INR(PT): 1.1 no unit - Blood clotting appears generally within the expected range.
+- Lymphocytes: 7.7 % - May reflect an imbalance in immune response.
+- MCH: 31.9 pg - May reflect an imbalance in red blood cell production.
+- MCHC: 35.9 % - May reflect an imbalance in red blood cell production.
+- MCV: 89.0 fL - Red blood cell size appears generally within the expected range.
+- Monocytes: 4.6 % - Immune response appears generally within the expected range.
+- Neutrophils: 87.5 % - May reflect an imbalance in immune response.
+- Platelet Count: 215.0 K/uL - Blood clotting appears generally within the expected range.
+- PT: 13.1 sec - Blood clotting appears generally within the expected range.
+- PTT: 26.1 sec - Blood clotting appears generally within the expected range.
+- RDW: 12.7 % - Red blood cell size variation appears generally within the expected range.
+- Red Blood Cells: 3.6 m/uL - May reflect an imbalance in red blood cell production.
+- White Blood Cells: 15.0 K/uL - May reflect an imbalance in immune response.
+
+General Overview: The results show a pattern of possible imbalances in blood sugar, electrolyte levels, and red blood cell production, which may require further evaluation. கடைসclosePath","- % Hemoglobin A1c: 5.2 % - Appears to be within the expected range for blood sugar control.
+- Alanine Aminotransferase (ALT): 25.0 IU/L - Appears to be within the expected range for liver function.
+- Albumin: 3.6 g/dL - Appears to be within the expected range for liver and kidney function.
+- Alkaline Phosphatase: 69.0 IU/L - Appears to be within the expected range for bone and liver function.
+- Anion Gap: 15.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Asparate Aminotransferase (AST): 54.0 IU/L - May reflect liver or muscle stress.
+- Bicarbonate: 18.0 mEq/L - May suggest an imbalance in acid-base levels.
+- Bilirubin, Total: 0.4 mg/dL - Appears to be within the expected range for liver function.
+- Calcium, Total: 7.1 mg/dL - May reflect an imbalance in bone metabolism.
+- Chloride: 113.0 mEq/L - May suggest an imbalance in fluid balance.
+- Creatinine: 0.5 mg/dL - Appears to be within the expected range for kidney function.
+- Ferritin: 58.0 ng/mL - Appears to be within the expected range for iron storage.
+- Folate: 12.5 ng/mL - Appears to be within the expected range for nutrient levels.
+- Glucose: 121.0 mg/dL - May reflect high blood sugar levels.
+- Iron: 34.0 ug/dL - Appears to be within the expected range for iron levels.
+- Iron Binding Capacity, Total: 255.0 ug/dL - May reflect an imbalance in iron levels.
+- Lactate Dehydrogenase (LD): 255.0 IU/L - May reflect tissue damage or stress.
+- Magnesium: 4.2 mg/dL - May reflect an imbalance in muscle and nerve function.
+- Phosphate: 1.3 mg/dL - May reflect an imbalance in bone metabolism.
+- Potassium: 3.2 mEq/L - May reflect an imbalance in heart function.
+- Sodium: 143.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Transferrin: 196.0 mg/dL - May reflect an imbalance in iron levels.
+- Urea Nitrogen: 7.0 mg/dL - Appears to be within the expected range for kidney function.
+- Vitamin B12: 299.0 pg/mL - Appears to be within the expected range for nutrient levels.
+- Basophils: 0.1 % - Appears to be within the expected range for immune response.
+- Hematocrit: 32.0 % - May reflect low red blood cell levels.
+- Hemoglobin: 11.5 g/dL - May reflect low oxygen-carrying capacity.
+- INR(PT): 1.1 no unit - Appears to be within the expected range for blood clotting.
+- Lymphocytes: 7.7 % - May reflect an imbalance in immune response.
+- MCH: 31.9 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 35.9 % - May reflect an imbalance in red blood cell size.
+- MCV: 89.0 fL - Appears to be within the expected range for red blood cell size.
+- Monocytes: 4.6 % - Appears to be within the expected range for immune response.
+- Neutrophils: 87.5 % - May reflect an imbalance in immune response.
+- Platelet Count: 215.0 K/uL - Appears to be within the expected range for blood clotting.
+- PT: 13.1 sec - Appears to be within the expected range for blood clotting.
+- PTT: 26.1 sec - Appears to be within the expected range for blood clotting.
+- RDW: 12.7 % - Appears to be within the expected range for red blood cell size.
+- Red Blood Cells: 3.6 m/uL - May reflect low red blood cell levels.
+- White Blood Cells: 15.0 K/uL - May reflect an immune response, such as infection or inflammation.
+
+General Overview: The results show a pattern of possible imbalances in various bodily systems, including liver function, acid-base balance, bone metabolism, and immune response, as well as potential issues with blood sugar control and red blood cell levels.",0.6959459459459459,0.5241924107772605,602,620,0.9791666666666666,0.875,1.0,0.96325827,0.9663852,0.96481925
+2,12,"- Anion Gap: 15.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Bicarbonate: 23.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Chloride: 105.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Creatinine: 0.9 mg/dL - Appears to be within the expected range for kidney function.
+- Glucose: 173.0 mg/dL - May suggest higher blood sugar levels.
+- Potassium: 4.9 mEq/L - Appears to be within the expected range for heart function.
+- Sodium: 138.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Urea Nitrogen: 15.0 mg/dL - Appears to be within the expected range for kidney function.
+- Hematocrit: 36.8 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 13.0 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- MCH: 29.7 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 35.4 % - May suggest a higher concentration of hemoglobin in red blood cells.
+- MCV: 84.0 fL - Appears to be within the expected range for red blood cell size.
+- Platelet Count: 291.0 K/uL - Appears to be within the expected range for blood clotting.
+- RDW: 11.7 % - Appears to be within the expected range for red blood cell size variation.
+- Red Blood Cells: 4.39 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 19.9 K/uL - May suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show some abnormal values that may suggest issues with blood sugar levels, red blood cell production, and immune response, while other values appear generally within the expected range for various bodily functions.","- Anion Gap: 15.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 23.0 mEq/L - Appears within the expected range for acid-base balance.
+- Chloride: 105.0 mEq/L - Appears within the expected range for fluid balance.
+- Creatinine: 0.9 mg/dL - Appears within the expected range for kidney function.
+- Glucose: 173.0 mg/dL - May suggest higher blood sugar levels.
+- Potassium: 4.9 mEq/L - Appears within the expected range for heart function.
+- Sodium: 138.0 mEq/L - Appears within the expected range for fluid balance.
+- Urea Nitrogen: 15.0 mg/dL - Appears within the expected range for kidney function.
+- Hematocrit: 36.8 % - May reflect lower red blood cell volume.
+- Hemoglobin: 13.0 g/dL - May reflect lower oxygen-carrying protein in the blood.
+- MCH: 29.7 pg - Appears within the expected range for red blood cell size.
+- MCHC: 35.4 % - May reflect lower red blood cell hemoglobin concentration.
+- MCV: 84.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 291.0 K/uL - Appears within the expected range for blood clotting.
+- RDW: 11.7 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 4.39 m/uL - May reflect lower red blood cell count.
+- White Blood Cells: 19.9 K/uL - Can suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show some abnormal values that may suggest issues with blood sugar levels, red blood cell count, and immune response, while other values appear within the expected range for various body functions.",0.8980322003577819,0.7270501835985312,301,268,1.0,1.0,1.0,0.97761095,0.98425984,0.9809241
+5,13,"- Anion Gap: 18.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Bicarbonate: 38.0 mEq/L - May suggest an imbalance in the body's acid-base system.
+- Chloride: 85.0 mEq/L - May reflect an imbalance in the body's fluid balance.
+- Cholesterol Ratio (Total/HDL): 4.6 Ratio - Appears to be within the expected range for heart health.
+- Cholesterol, HDL: 40.0 mg/dL - Appears to be within the expected range for heart health.
+- Cholesterol, LDL, Calculated: 110.0 mg/dL - Appears to be within the expected range for heart health.
+- Cholesterol, Total: 185.0 mg/dL - Appears to be within the expected range for heart health.
+- Creatinine: 2.6 mg/dL - May suggest a lower kidney function.
+- Ferritin: 179.0 ng/ml - Appears to be within the expected range for iron storage.
+- Glucose: 114.0 mg/dL - May suggest an issue with blood sugar regulation.
+- Iron: 59.0 ug/dL - Appears to be within the expected range for iron levels.
+- Iron Binding Capacity, Total: 360.0 ug/dL - Appears to be within the expected range for iron transport.
+- Magnesium: 2.5 mg/dL - Appears to be within the expected range for muscle and nerve function.
+- Potassium: 3.0 mEq/L - May suggest an imbalance in the body's fluid balance.
+- Sodium: 138.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Transferrin: 277.0 mg/dL - Appears to be within the expected range for iron transport.
+- Triglycerides: 177.0 MG/DL - Appears to be within the expected range for heart health.
+- Urea Nitrogen: 58.0 mg/dL - May suggest a lower kidney function.
+- Hematocrit: 33.5 % - May suggest a lower red blood cell production.
+- Hemoglobin: 11.0 g/dL - May suggest a lower red blood cell production.
+- MCH: 28.9 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 32.9 % - Appears to be within the expected range for red blood cell size.
+- MCV: 88.0 fL - Appears to be within the expected range for red blood cell size.
+- Platelet Count: 279.0 K/uL - Appears to be within the expected range for blood clotting.
+- RDW: 16.2 % - May suggest a variation in red blood cell size.
+- Red Blood Cells: 3.82 m/uL - May suggest a lower red blood cell production.
+- White Blood Cells: 9.5 K/uL - Appears to be within the expected range for immune function.
+
+General Overview: The results show some abnormal values that may suggest issues with kidney function, blood sugar regulation, and red blood cell production, while other values appear generally within the expected range for various bodily functions.","- Anion Gap: 18.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 38.0 mEq/L - May reflect an imbalance in the body's acid-base system.
+- Chloride: 85.0 mEq/L - May suggest an imbalance in the body's fluid balance.
+- Cholesterol Ratio (Total/HDL): 4.6 Ratio - Appears within the expected range for heart health.
+- Cholesterol, HDL: 40.0 mg/dL - Appears within the expected range for heart health.
+- Cholesterol, LDL, Calculated: 110.0 mg/dL - Appears within the expected range for heart health.
+- Cholesterol, Total: 185.0 mg/dL - Appears within the expected range for heart health.
+- Creatinine: 2.6 mg/dL - May reflect a decrease in kidney function.
+- Ferritin: 179.0 ng/ml - Appears within the expected range for iron storage.
+- Glucose: 114.0 mg/dL - May suggest an imbalance in blood sugar levels.
+- Iron: 59.0 ug/dL - Appears within the expected range for iron levels.
+- Iron Binding Capacity, Total: 360.0 ug/dL - Appears within the expected range for iron transport.
+- Magnesium: 2.5 mg/dL - Appears within the expected range for muscle and nerve function.
+- Potassium: 3.0 mEq/L - May reflect an imbalance in heart function.
+- Sodium: 138.0 mEq/L - Appears within the expected range for fluid balance.
+- Transferrin: 277.0 mg/dL - Appears within the expected range for iron transport.
+- Triglycerides: 177.0 MG/DL - Appears within the expected range for heart health.
+- Urea Nitrogen: 58.0 mg/dL - May reflect a decrease in kidney function.
+- Hematocrit: 33.5 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 11.0 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- MCH: 28.9 pg - Appears within the expected range for red blood cell size.
+- MCHC: 32.9 % - Appears within the expected range for red blood cell size.
+- MCV: 88.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 279.0 K/uL - Appears within the expected range for blood clotting.
+- RDW: 16.2 % - May reflect a variation in red blood cell size.
+- Red Blood Cells: 3.82 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 9.5 K/uL - Appears within the expected range for immune function.
+
+General Overview: The results show a pattern of possible kidney function decrease, imbalance in blood sugar and acid-base levels, and a lower amount of red blood cells, which may suggest a need for further evaluation and monitoring.",0.8378063010501751,0.7976503949767065,445,417,1.0,1.0,1.0,0.97837746,0.9778425,0.97810996
+1,14,"- Anion Gap: 13.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 23.0 mEq/L - Appears within the expected range for acid-base balance.
+- Chloride: 115.0 mEq/L - May suggest an imbalance in fluid balance.
+- Potassium: 6.8 mEq/L - May reflect an imbalance in heart and muscle function.
+- Sodium: 144.0 mEq/L - Appears within the expected range for fluid balance.
+- Bands: 8.0 % - Appears within the expected range for infection response.
+- Hematocrit: 40.3 % - Appears within the expected range for red blood cell volume.
+- Hemoglobin: 12.2 g/dL - Appears within the expected range for oxygen-carrying protein.
+- Lymphocytes: 29.0 % - May suggest an immune response, such as infection or inflammation.
+- MCH: 37.3 pg - May reflect a change in red blood cell size and hemoglobin content.
+- MCHC: 30.3 % - May reflect a change in red blood cell hemoglobin content.
+- MCV: 123.0 fL - May suggest a change in red blood cell size.
+- Metamyelocytes: 1.0 % - May suggest an abnormal bone marrow response.
+- Monocytes: 10.0 % - Appears within the expected range for immune response.
+- Neutrophils: 52.0 % - May suggest an abnormal immune response, such as infection or inflammation.
+- Nucleated Red Cells: 39.0 % - Appears within the expected range for immature red blood cells.
+- Platelet Count: 357.0 K/uL - Appears within the expected range for blood clotting.
+- RDW: 16.7 % - May suggest a variation in red blood cell size.
+- Red Blood Cells: 3.28 m/uL - May suggest a change in red blood cell production.
+- White Blood Cells: 42.6 K/uL - May suggest an abnormal immune response, such as infection or inflammation.
+
+General Overview: The results show a pattern of possible immune system and blood cell production changes, with some values suggesting an abnormal response, while others appear within the expected range for various bodily functions.","- Anion Gap: 13.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 23.0 mEq/L - Appears within the expected range for acid-base balance.
+- Chloride: 115.0 mEq/L - May reflect an imbalance in fluid balance.
+- Potassium: 6.8 mEq/L - May suggest an issue with heart or muscle function.
+- Sodium: 144.0 mEq/L - Appears within the expected range for fluid balance.
+- Bands: 8.0 % - Appears within the expected range for immune response.
+- Hematocrit: 40.3 % - Appears within the expected range for red blood cell production.
+- Hemoglobin: 12.2 g/dL - Appears within the expected range for oxygen-carrying protein.
+- Lymphocytes: 29.0 % - May reflect an immune response or infection.
+- MCH: 37.3 pg - May suggest a problem with red blood cell production.
+- MCHC: 30.3 % - May reflect a problem with red blood cell production.
+- MCV: 123.0 fL - May suggest a problem with red blood cell size.
+- Metamyelocytes: 1.0 % - May reflect an issue with bone marrow production.
+- Monocytes: 10.0 % - Appears within the expected range for immune response.
+- Neutrophils: 52.0 % - May reflect an immune response or infection.
+- Nucleated Red Cells: 39.0 % - Appears within the expected range for red blood cell production.
+- Platelet Count: 357.0 K/uL - Appears within the expected range for blood clotting.
+- RDW: 16.7 % - May reflect a problem with red blood cell size variation.
+- Red Blood Cells: 3.28 m/uL - May suggest a problem with red blood cell production.
+- White Blood Cells: 42.6 K/uL - May reflect an immune response or infection.
+
+General Overview: The results show some abnormalities in electrolyte balance, red blood cell production, and immune response, which may suggest an underlying issue that needs further evaluation.",0.7898305084745763,0.6504827586206896,322,302,1.0,1.0,1.0,0.9718055,0.9756291,0.9737135
+1,15,"- Alanine Aminotransferase (ALT): 68.0 IU/L - May suggest liver cell damage.
+- Albumin: 3.4 g/dL - Appears to be within the expected range for liver function.
+- Alkaline Phosphatase: 59.0 IU/L - Appears to be within the expected range for bone growth.
+- Anion Gap: 14.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Asparate Aminotransferase (AST): 47.0 IU/L - May suggest liver cell damage.
+- Bicarbonate: 25.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Bilirubin, Total: 0.8 mg/dL - Appears to be within the expected range for liver function.
+- Calcium, Total: 7.8 mg/dL - May suggest bone or parathyroid issues.
+- Chloride: 106.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Creatinine: 0.6 mg/dL - Appears to be within the expected range for kidney function.
+- Glucose: 108.0 mg/dL - May suggest issues with blood sugar regulation.
+- Magnesium: 2.0 mg/dL - Appears to be within the expected range for muscle and nerve function.
+- Phosphate: 1.9 mg/dL - May suggest issues with bone growth or kidney function.
+- Potassium: 2.7 mEq/L - May suggest issues with heart function or muscle weakness.
+- Sodium: 142.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Urea Nitrogen: 5.0 mg/dL - May suggest issues with kidney function.
+- Basophils: 0.9 % - Appears to be within the expected range for immune response.
+- Eosinophils: 0.3 % - Appears to be within the expected range for immune response.
+- Hematocrit: 36.5 % - May suggest issues with red blood cell production.
+- Hemoglobin: 12.9 g/dL - May suggest issues with red blood cell production.
+- Lymphocytes: 10.0 % - May suggest issues with immune response.
+- MCH: 35.6 pg - May suggest issues with red blood cell production.
+- MCHC: 35.5 % - May suggest issues with red blood cell production.
+- MCV: 100.0 fL - May suggest issues with red blood cell production.
+- Monocytes: 6.4 % - Appears to be within the expected range for immune response.
+- Neutrophils: 82.3 % - May suggest issues with immune response.
+- Platelet Count: 138.0 K/uL - May suggest issues with blood clotting.
+- RDW: 14.1 % - Appears to be within the expected range for red blood cell size.
+- Red Blood Cells: 3.63 m/uL - May suggest issues with red blood cell production.
+- White Blood Cells: 5.8 K/uL - Appears to be within the expected range for immune response.
+
+General Overview: The results show a pattern of possible issues with liver function, blood sugar regulation, kidney function, and red blood cell production, as well as potential issues with bone growth, heart function, and immune response.","- Alanine Aminotransferase (ALT): 68.0 IU/L - May suggest liver stress or damage.
+- Albumin: 3.4 g/dL - Appears generally within the expected range for liver function.
+- Alkaline Phosphatase: 59.0 IU/L - Appears generally within the expected range for bone and liver function.
+- Anion Gap: 14.0 mEq/L - Appears generally within the expected range for acid-base balance.
+- Asparate Aminotransferase (AST): 47.0 IU/L - May suggest liver stress or damage.
+- Bicarbonate: 25.0 mEq/L - Appears generally within the expected range for acid-base balance.
+- Bilirubin, Total: 0.8 mg/dL - Appears generally within the expected range for liver function.
+- Calcium, Total: 7.8 mg/dL - May reflect an imbalance in bone metabolism.
+- Chloride: 106.0 mEq/L - Appears generally within the expected range for fluid balance.
+- Creatinine: 0.6 mg/dL - Appears generally within the expected range for kidney function.
+- Glucose: 108.0 mg/dL - May suggest an imbalance in blood sugar regulation.
+- Magnesium: 2.0 mg/dL - Appears generally within the expected range for muscle and nerve function.
+- Phosphate: 1.9 mg/dL - May reflect an imbalance in bone metabolism.
+- Potassium: 2.7 mEq/L - May suggest an imbalance in heart function or muscle contractions.
+- Sodium: 142.0 mEq/L - Appears generally within the expected range for fluid balance.
+- Urea Nitrogen: 5.0 mg/dL - May reflect an imbalance in kidney function or dehydration.
+- Basophils: 0.9 % - Appears generally within the expected range for immune response.
+- Eosinophils: 0.3 % - Appears generally within the expected range for immune response.
+- Hematocrit: 36.5 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 12.9 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- Lymphocytes: 10.0 % - May suggest an immune response, such as infection or inflammation.
+- MCH: 35.6 pg - May reflect a lower amount of hemoglobin in red blood cells.
+- MCHC: 35.5 % - May reflect a lower amount of hemoglobin in red blood cells.
+- MCV: 100.0 fL - May reflect a larger size of red blood cells.
+- Monocytes: 6.4 % - Appears generally within the expected range for immune response.
+- Neutrophils: 82.3 % - May suggest an immune response, such as infection or inflammation.
+- Platelet Count: 138.0 K/uL - May reflect a lower amount of blood clotting cells.
+- RDW: 14.1 % - Appears generally within the expected range for red blood cell size variation.
+- Red Blood Cells: 3.63 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 5.8 K/uL - Appears generally within the expected range for immune response.
+
+General Overview: The results show a pattern of possible liver stress, imbalance in blood sugar regulation, and potential issues with red blood cell production and function, as well as possible imbalances in electrolytes and kidney function.",0.7524972253052162,0.6093321134492223,457,475,1.0,1.0,1.0,0.9747244,0.97087693,0.97279686
+3,16,"- Anion Gap: 13.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Bicarbonate: 23.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Calcium, Total: 8.4 mg/dL - Appears to be within the expected range for bone health.
+- Chloride: 109.0 mEq/L - May suggest an imbalance in fluid balance.
+- CK-MB Index: 2.2 % - Appears to be within the expected range for heart muscle function.
+- Creatine Kinase (CK): 765.0 IU/L - May reflect muscle damage or inflammation.
+- Creatine Kinase, MB Isoenzyme: 17.0 ng/mL - May reflect heart muscle damage or inflammation.
+- Creatinine: 0.8 mg/dL - Appears to be within the expected range for kidney function.
+- Glucose: 170.0 mg/dL - May suggest an issue with blood sugar regulation.
+- Magnesium: 1.3 mg/dL - May suggest an imbalance in muscle and nerve function.
+- Phosphate: 3.8 mg/dL - Appears to be within the expected range for bone health.
+- Potassium: 3.7 mEq/L - Appears to be within the expected range for heart function.
+- Sodium: 141.0 mEq/L - Appears to be within the expected range for fluid balance.
+- Urea Nitrogen: 13.0 mg/dL - Appears to be within the expected range for kidney function.
+- Fibrinogen, Functional: 158.0 mg/dL - Appears to be within the expected range for blood clotting.
+- Hematocrit: 37.3 % - May suggest a lower amount of red blood cells.
+- Hemoglobin: 12.9 g/dL - May suggest a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.1 no unit - Appears to be within the expected range for blood clotting.
+- MCH: 31.0 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 34.6 % - Appears to be within the expected range for red blood cell hemoglobin.
+- MCV: 90.0 fL - Appears to be within the expected range for red blood cell size.
+- Platelet Count: 263.0 K/uL - Appears to be within the expected range for blood clotting.
+- PT: 12.7 sec - Appears to be within the expected range for blood clotting.
+- PTT: 21.5 sec - May suggest an issue with blood clotting.
+- RDW: 13.5 % - Appears to be within the expected range for red blood cell size variation.
+- Red Blood Cells: 4.16 m/uL - May suggest a lower amount of red blood cells.
+- White Blood Cells: 14.7 K/uL - May suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show some abnormal values that may suggest issues with blood sugar regulation, muscle and nerve function, and blood clotting, as well as a lower amount of red blood cells and oxygen-carrying protein in the blood, and an immune response. চিহ্ন","- Anion Gap: 13.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 23.0 mEq/L - Appears within the expected range for acid-base balance.
+- Calcium, Total: 8.4 mg/dL - Appears within the expected range for bone health.
+- Chloride: 109.0 mEq/L - May suggest an imbalance in fluid balance.
+- CK-MB Index: 2.2 % - Appears within the expected range for heart muscle function.
+- Creatine Kinase (CK): 765.0 IU/L - May reflect muscle damage or stress.
+- Creatine Kinase, MB Isoenzyme: 17.0 ng/mL - May reflect heart muscle damage or stress.
+- Creatinine: 0.8 mg/dL - Appears within the expected range for kidney function.
+- Glucose: 170.0 mg/dL - May suggest high blood sugar levels.
+- Magnesium: 1.3 mg/dL - May reflect a lower amount of this essential mineral.
+- Phosphate: 3.8 mg/dL - Appears within the expected range for bone health.
+- Potassium: 3.7 mEq/L - Appears within the expected range for heart function.
+- Sodium: 141.0 mEq/L - Appears within the expected range for fluid balance.
+- Urea Nitrogen: 13.0 mg/dL - Appears within the expected range for kidney function.
+- Fibrinogen, Functional: 158.0 mg/dL - Appears within the expected range for blood clotting.
+- Hematocrit: 37.3 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 12.9 g/dL - May reflect a lower amount of oxygen-carrying protein.
+- INR(PT): 1.1 no unit - Appears within the expected range for blood clotting.
+- MCH: 31.0 pg - Appears within the expected range for red blood cell health.
+- MCHC: 34.6 % - Appears within the expected range for red blood cell health.
+- MCV: 90.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 263.0 K/uL - Appears within the expected range for blood clotting.
+- PT: 12.7 sec - Appears within the expected range for blood clotting.
+- PTT: 21.5 sec - May reflect a problem with blood clotting.
+- RDW: 13.5 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 4.16 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 14.7 K/uL - Can suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show a pattern of possible muscle damage, high blood sugar levels, and an imbalance in fluid and electrolyte levels, as well as a potential problem with blood clotting and a lower amount of red blood cells.",0.851808634772462,0.79026369168357,458,415,1.0,1.0,1.0,0.9762186,0.9785266,0.9773713
+5,17,"- Bicarbonate: 26.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Calcium, Total: 8.0 mg/dL - May suggest issues with bone health or parathyroid function.
+- Creatinine: 1.0 mg/dL - Appears to be within the expected range for kidney function.
+- Glucose: 121.0 mg/dL - May reflect issues with blood sugar regulation.
+- Magnesium: 2.0 mg/dL - Appears to be within the expected range for muscle and nerve function.
+- Phosphate: 2.6 mg/dL - May suggest issues with bone health or kidney function.
+- Urea Nitrogen: 30.0 mg/dL - May reflect issues with kidney function.
+- Hematocrit: 25.4 % - May suggest issues with red blood cell production or oxygen delivery.
+- Hemoglobin: 8.7 g/dL - May reflect issues with red blood cell production or oxygen delivery.
+- INR(PT): 1.2 no unit - Appears to be within the expected range for blood clotting.
+- MCH: 27.0 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 34.3 % - Appears to be within the expected range for red blood cell hemoglobin.
+- MCV: 79.0 fL - May suggest issues with red blood cell size.
+- Platelet Count: 152.0 K/uL - Appears to be within the expected range for blood clotting.
+- PT: 13.6 sec - May suggest issues with blood clotting.
+- PTT: 24.4 sec - Appears to be within the expected range for blood clotting.
+- RDW: 15.8 % - May suggest issues with red blood cell size variation.
+- Red Blood Cells: 3.22 m/uL - May reflect issues with red blood cell production or oxygen delivery.
+- White Blood Cells: 9.7 K/uL - Appears to be within the expected range for immune function.
+
+General Overview: The results show a pattern of possible issues with blood sugar regulation, kidney function, and red blood cell production, which may require further evaluation.","- Bicarbonate: 26.0 mEq/L - Appears to be within the expected range for acid-base balance.
+- Calcium, Total: 8.0 mg/dL - May reflect an issue with bone health or muscle function.
+- Creatinine: 1.0 mg/dL - Appears to be within the expected range for kidney function.
+- Glucose: 121.0 mg/dL - May suggest an issue with blood sugar regulation.
+- Magnesium: 2.0 mg/dL - Appears to be within the expected range for muscle and nerve function.
+- Phosphate: 2.6 mg/dL - May reflect an issue with bone health or kidney function.
+- Urea Nitrogen: 30.0 mg/dL - May suggest an issue with kidney function or waste removal.
+- Hematocrit: 25.4 % - May reflect a lower amount of red blood cells in the blood.
+- Hemoglobin: 8.7 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.2 no unit - Appears to be within the expected range for blood clotting.
+- MCH: 27.0 pg - Appears to be within the expected range for red blood cell size.
+- MCHC: 34.3 % - Appears to be within the expected range for red blood cell hemoglobin.
+- MCV: 79.0 fL - May reflect smaller than normal red blood cells.
+- Platelet Count: 152.0 K/uL - Appears to be within the expected range for blood clotting.
+- PT: 13.6 sec - May suggest an issue with blood clotting.
+- PTT: 24.4 sec - Appears to be within the expected range for blood clotting.
+- RDW: 15.8 % - May reflect a variation in red blood cell size.
+- Red Blood Cells: 3.22 m/uL - May reflect a lower amount of red blood cells in the blood.
+- White Blood Cells: 9.7 K/uL - Appears to be within the expected range for immune response.
+
+General Overview: The results show a pattern of possible issues with blood sugar regulation, kidney function, and blood cell production, as well as potential problems with bone health and muscle function.",0.8167202572347267,0.758659532526049,312,327,1.0,1.0,1.0,0.97998625,0.97425544,0.9771124
+4,18,"- Anion Gap: 13.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 19.0 mEq/L - May suggest an imbalance in the body's acid-base system.
+- Calcium, Total: 7.2 mg/dL - May reflect a lower level of calcium in the blood.
+- Chloride: 114.0 mEq/L - May suggest an imbalance in the body's fluid balance.
+- Creatine Kinase (CK): 1474.0 IU/L - May suggest muscle damage or inflammation.
+- Creatine Kinase, MB Isoenzyme: 6.0 ng/mL - Appears within the expected range for heart muscle function.
+- Creatinine: 0.7 mg/dL - Appears within the expected range for kidney function.
+- Glucose: 108.0 mg/dL - May suggest higher blood sugar levels.
+- Magnesium: 1.9 mg/dL - Appears within the expected range for muscle and nerve function.
+- Phosphate: 1.7 mg/dL - May suggest a lower level of phosphate in the blood.
+- Potassium: 3.8 mEq/L - Appears within the expected range for heart function.
+- Sodium: 142.0 mEq/L - Appears within the expected range for fluid balance.
+- Troponin I: 0.7 ng/ml - May suggest heart muscle damage or inflammation.
+- Urea Nitrogen: 19.0 mg/dL - Appears within the expected range for kidney function.
+- Hematocrit: 28.3 % - May suggest a lower amount of red blood cells.
+- Hemoglobin: 9.6 g/dL - May suggest a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.4 no unit - Appears within the expected range for blood clotting.
+- MCH: 32.5 pg - May suggest a lower amount of hemoglobin in red blood cells.
+- MCHC: 33.9 % - Appears within the expected range for red blood cell hemoglobin.
+- MCV: 96.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 139.0 K/uL - May suggest a higher risk of blood clotting.
+- PT: 14.3 SECONDS - May suggest a higher risk of blood clotting.
+- PTT: 38.0 sec - May suggest a higher risk of blood clotting.
+- RDW: 13.3 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 2.95 m/uL - May suggest a lower amount of red blood cells.
+- White Blood Cells: 10.0 K/uL - Appears within the expected range for immune function.
+
+General Overview: The results show a pattern of possible issues with blood sugar, heart muscle, and blood clotting, as well as lower levels of red blood cells and hemoglobin.","- Anion Gap: 13.0 mEq/L - Appears within the expected range for acid-base balance.
+- Bicarbonate: 19.0 mEq/L - May reflect an imbalance in acid-base levels.
+- Calcium, Total: 7.2 mg/dL - May suggest a lower level of calcium in the blood.
+- Chloride: 114.0 mEq/L - May reflect an imbalance in fluid balance.
+- Creatine Kinase (CK): 1474.0 IU/L - Can suggest muscle damage or inflammation.
+- Creatine Kinase, MB Isoenzyme: 6.0 ng/mL - Appears within the expected range for heart muscle function.
+- Creatinine: 0.7 mg/dL - Appears within the expected range for kidney function.
+- Glucose: 108.0 mg/dL - May suggest higher blood sugar levels.
+- Magnesium: 1.9 mg/dL - Appears within the expected range for muscle and nerve function.
+- Phosphate: 1.7 mg/dL - May reflect an imbalance in bone metabolism.
+- Potassium: 3.8 mEq/L - Appears within the expected range for heart function.
+- Sodium: 142.0 mEq/L - Appears within the expected range for fluid balance.
+- Troponin I: 0.7 ng/ml - May suggest heart muscle damage.
+- Urea Nitrogen: 19.0 mg/dL - Appears within the expected range for kidney function.
+- Hematocrit: 28.3 % - May reflect a lower amount of red blood cells.
+- Hemoglobin: 9.6 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.4 no unit - Appears within the expected range for blood clotting.
+- MCH: 32.5 pg - May reflect a lower amount of hemoglobin in red blood cells.
+- MCHC: 33.9 % - Appears within the expected range for hemoglobin concentration.
+- MCV: 96.0 fL - Appears within the expected range for red blood cell size.
+- Platelet Count: 139.0 K/uL - May reflect a lower amount of platelets for blood clotting.
+- PT: 14.3 SECONDS - May suggest a longer time for blood to clot.
+- PTT: 38.0 sec - May suggest a longer time for blood to clot.
+- RDW: 13.3 % - Appears within the expected range for red blood cell size variation.
+- Red Blood Cells: 2.95 m/uL - May reflect a lower amount of red blood cells.
+- White Blood Cells: 10.0 K/uL - Appears within the expected range for immune response.
+
+General Overview: The results show a pattern of possible muscle damage, heart muscle damage, and anemia, with some electrolyte imbalances and abnormal blood clotting times, while other kidney and liver functions appear within the expected range.",0.8658227848101266,0.8052805280528053,401,401,1.0,1.0,1.0,0.9847679,0.9824394,0.9836023
+2,19,"- Bands: 1.0 % - Appears to be within the expected range for immature white blood cells.
+- Eosinophils: 1.0 % - Appears to be within the expected range for allergy and parasite response.
+- Hematocrit: 50.5 % - Appears to be within the expected range for red blood cell volume.
+- Hemoglobin: 17.0 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- Lymphocytes: 54.0 % - Appears to be within the expected range for immune response.
+- MCH: 36.2 pg - May suggest a higher amount of hemoglobin in red blood cells.
+- MCHC: 33.7 % - Appears to be within the expected range for hemoglobin concentration.
+- MCV: 108.0 fL - May suggest larger than normal red blood cells.
+- Monocytes: 5.0 % - Appears to be within the expected range for immune response.
+- Neutrophils: 39.0 % - Appears to be within the expected range for infection and inflammation response.
+- Nucleated Red Cells: 38.0 % - Appears to be within the expected range for immature red blood cells.
+- Platelet Count: 249.0 K/uL - Appears to be within the expected range for blood clotting.
+- RDW: 17.2 % - May suggest a variation in red blood cell size.
+- Red Blood Cells: 4.7 m/uL - Appears to be within the expected range for red blood cell count.
+- White Blood Cells: 6.0 K/uL - Appears to be within the expected range for immune response.
+
+General Overview: The results show some variations in red blood cell size and hemoglobin levels, which may reflect changes in oxygen-carrying capacity or immune response.","- Bands: 1.0 % - Immature white blood cells appear within the expected range.
+- Eosinophils: 1.0 % - Allergy or parasite response appears generally within the expected range.
+- Hematocrit: 50.5 % - Red blood cell volume appears within the expected range.
+- Hemoglobin: 17.0 g/dL - May reflect a higher amount of oxygen-carrying protein in the blood.
+- Lymphocytes: 54.0 % - Immune response appears generally within the expected range.
+- MCH: 36.2 pg - May reflect a higher amount of hemoglobin in red blood cells.
+- MCHC: 33.7 % - Average hemoglobin in red blood cells appears within the expected range.
+- MCV: 108.0 fL - May reflect larger than normal red blood cells.
+- Monocytes: 5.0 % - Immune response appears generally within the expected range.
+- Neutrophils: 39.0 % - Immune response appears generally within the expected range.
+- Nucleated Red Cells: 38.0 % - Immature red blood cells appear within the expected range.
+- Platelet Count: 249.0 K/uL - Blood clotting appears generally within the expected range.
+- RDW: 17.2 % - May reflect variation in red blood cell size.
+- Red Blood Cells: 4.7 m/uL - Red blood cell count appears within the expected range.
+- White Blood Cells: 6.0 K/uL - Immune response appears generally within the expected range.
+
+General Overview: The results show some variations in red blood cell size and hemoglobin levels, but most other blood cell counts appear within the expected ranges.",0.6962025316455697,0.6593481989708405,268,243,1.0,1.0,1.0,0.96070635,0.9643526,0.962526
