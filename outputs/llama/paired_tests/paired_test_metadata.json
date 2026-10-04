@@ -1,0 +1,75 @@
+{
+  "models": [
+    "llama"
+  ],
+  "metrics": [
+    "rouge_l_f1",
+    "bertscore_f1"
+  ],
+  "alpha": 0.05,
+  "alternative": "two-sided",
+  "difference": "finetuned - base",
+  "confidence_level": 0.95,
+  "confidence_intervals": "pointwise, unadjusted",
+  "correction": "Holm across all requested model/metric tests",
+  "family_size": 2,
+  "pair_keys": [
+    "subject_id",
+    "hadm_id",
+    "charttime"
+  ],
+  "allow_partial_pairs": false,
+  "runs": {
+    "llama": {
+      "base": {
+        "predictions": "outputs\\llama\\base\\predictions.csv",
+        "evaluation": "outputs\\llama\\base\\evaluation\\evaluation_results.csv",
+        "prediction_rows": 20,
+        "rows_selected_for_evaluation": 20,
+        "blank_rows_excluded_by_evaluator": 0,
+        "evaluated_rows": 20,
+        "evaluation_metadata": {
+          "input": "llama/outputs/llama_silver_base_outputs.csv",
+          "target_column": "generated_text",
+          "prediction_column": "base_llama_tabular_output",
+          "output_dir": "llama/outputs/llama_silver_eval_base",
+          "prompt_column": "prompt",
+          "folds": 5,
+          "seed": 42,
+          "max_rows": null,
+          "skip_bertscore": false,
+          "bertscore_model": "roberta-large",
+          "bertscore_device": "cuda:0",
+          "bertscore_rescale": false,
+          "rows_evaluated": 20
+        }
+      },
+      "finetuned": {
+        "predictions": "outputs\\llama\\finetuned\\predictions.csv",
+        "evaluation": "outputs\\llama\\finetuned\\evaluation\\evaluation_results.csv",
+        "prediction_rows": 20,
+        "rows_selected_for_evaluation": 20,
+        "blank_rows_excluded_by_evaluator": 0,
+        "evaluated_rows": 20,
+        "evaluation_metadata": {
+          "input": "llama/outputs/llama_silver_finetuned_outputs.csv",
+          "target_column": "generated_text",
+          "prediction_column": "fine_tuned_llama_tabular_output",
+          "output_dir": "llama/outputs/llama_silver_eval_finetuned",
+          "prompt_column": "prompt",
+          "folds": 5,
+          "seed": 42,
+          "max_rows": null,
+          "skip_bertscore": false,
+          "bertscore_model": "roberta-large",
+          "bertscore_device": "cuda:0",
+          "bertscore_rescale": false,
+          "rows_evaluated": 20
+        }
+      },
+      "matched_panels": 20,
+      "base_only": 0,
+      "finetuned_only": 0
+    }
+  }
+}

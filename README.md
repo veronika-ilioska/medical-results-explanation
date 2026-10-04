@@ -172,3 +172,30 @@ python -m compileall -q scripts
 python scripts/common/prepare_tabular_sft_dataset.py --help
 python scripts/evaluation/evaluate_saved_predictions.py --help
 ```
+
+## Paired base versus fine-tuned comparisons
+
+After evaluating all runs on the same held-out panels, compare their per-panel
+ROUGE-L and BERTScore F1 scores (requires SciPy from the shared requirements):
+
+```bash
+python scripts/evaluation/paired_t_tests.py \
+  --outputs-root outputs --output-dir outputs/paired_tests
+```
+
+Use `--models llama` for one model or `--metrics rouge_l_f1` if BERTScore was
+skipped. The script reads each run's `predictions.csv`, `evaluation_results.csv`,
+and `evaluation_metadata.json`. It verifies the saved predictions/references,
+pairs panels by patient, admission, and timestamp, and requires matching evaluated
+panel sets. Old TableLLM artifacts must be regenerated on the shared held-out set.
+`--allow-partial-pairs` explicitly permits intersection-only comparisons, provided
+at least two panels match; exclusions are recorded.
+
+The outputs are `paired_test_summary.csv` (means, differences, two-sided paired
+t-tests, pointwise 95% confidence intervals, and Holm-adjusted p-values),
+`paired_scores.csv` (individual pairs), and `paired_test_metadata.json` (settings
+and input/exclusion counts). Holm correction covers all requested model/metric
+tests in one invocation. Constant differences produce an explicit undefined-test
+status. These tests assess mean metric differences, not clinical correctness;
+they assume independent patient panels and suitable paired-difference behavior.
+The evaluator's blank-response exclusions remain exclusions and are reported.

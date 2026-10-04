@@ -1,6 +1,7 @@
 # Core data processing
 pandas
 numpy
+scipy
 numexpr
 matplotlib
 bert-score
