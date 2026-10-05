@@ -1,0 +1,27 @@
+{
+  "source_dir": "data/splits/full_silver_standard_api",
+  "seed": 42,
+  "counts": {
+    "train": 2400,
+    "validation": 300,
+    "test": 300
+  },
+  "total": 3000,
+  "unique_patients": 3000,
+  "duplicate_prompts_excluded": 152,
+  "method": "Proportional stratified sampling within each original split; largest-remainder allocation; pandas random_state seed.",
+  "strata": [
+    "sex from prompt",
+    "panel size: 1-10, 11-20, 21+",
+    "abnormal fraction: zero, (0, 0.5], (0.5, 1]"
+  ],
+  "original_split_membership_preserved": true,
+  "source_sha256": {
+    "train.jsonl": "c3772a58d79418f730871cacddd26d6e792442a67038c58f096f8392cf6acaec",
+    "validation.jsonl": "591fb7902862bf6d3b27b36d3e916313b0c5a26a3cb92b2888f9cc025be593c4",
+    "selected_rows.csv": "5f34f525d9ecc803980adccf135ac04bf539b511fcc038f43029713fa7af4531",
+    "heldout_rows.csv": "281c19dc26da8155ec9286a2121a2ff0e92dae732ff3f5004685811586e09562",
+    "split_metadata.json": "122ca3f1efc0179e75d6cd16745de02403d76422bc06500b568453b4d6cd9f3e"
+  },
+  "pandas_version": "3.0.3"
+}
