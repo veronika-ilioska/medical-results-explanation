@@ -114,6 +114,16 @@ python scripts/tablellm/generate_outputs.py \
 Use `--max-rows 5` for a smoke test. Generation defaults to 4-bit loading and
 requires a CUDA GPU.
 
+All three generation scripts accept `--batch-size N` (default: `1`) for both
+base and LoRA-adapted models. For example, append `--batch-size 4` to any command
+above to generate up to four responses together in each model call. Inputs are
+left-padded with attention masks, and predictions retain their original CSV row
+order. Progress is saved after each completed batch; restarting skips existing
+non-empty predictions, including when you change the batch size. If interrupted,
+only the unfinished batch needs to be regenerated. Larger batches need more GPU
+memory, especially with long prompts or responses; lower the batch size if you
+run out of memory.
+
 ### 4. Fine-tune adapters
 
 These scripts train and save LoRA adapters. They do not generate predictions

@@ -15,6 +15,7 @@ Fine-tuned (use the exact same input rows):
 
 Accept the model terms on Hugging Face and set HF_TOKEN. Existing output rows
 are checkpointed and resumed. Add --local-files-only for a downloaded model.
+Use --batch-size 4 to generate four rows together; progress is saved per batch.
 """
 
 import argparse
@@ -59,6 +60,10 @@ def arguments():
     parser.add_argument("--quantization", choices=("none", "4bit", "8bit"), default="4bit")
     parser.add_argument("--max-new-tokens", type=int, default=2048)
     parser.add_argument(
+        "--batch-size", type=int, default=1,
+        help="Rows generated together (default: 1). Larger batches use more GPU memory.",
+    )
+    parser.add_argument(
         "--min-new-tokens",
         type=int,
         default=0,
@@ -91,6 +96,8 @@ def arguments():
     parser.add_argument("--local-files-only", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()
+    if args.batch_size < 1:
+        parser.error("--batch-size must be at least 1")
     if not args.input.is_file():
         parser.error(f"Input does not exist: {args.input}")
     if args.adapter and not args.adapter.is_dir():
@@ -108,6 +115,7 @@ def load(args):
     token = (os.getenv("HF_TOKEN") or "").strip() or None
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     processor = AutoProcessor.from_pretrained(args.model, token=token, local_files_only=args.local_files_only)
+    processor.tokenizer.padding_side = "left"
     kwargs = {
         "token": token, "local_files_only": args.local_files_only,
         "device_map": "auto", "low_cpu_mem_usage": True,
@@ -142,11 +150,14 @@ def build_messages(prompt, system_mode):
     return [content("user", prompt)]
 
 
-def generate(processor, model, prompt, args):
-    messages = build_messages(prompt, args.system_mode)
+def generate_batch(processor, model, prompts, args):
+    """Generate one response per prompt, preserving MedGemma decoding options."""
+    if not prompts:
+        return []
+    messages = [build_messages(prompt, args.system_mode) for prompt in prompts]
     inputs = processor.apply_chat_template(
         messages, add_generation_prompt=True, tokenize=True,
-        return_dict=True, return_tensors="pt",
+        padding=True, return_attention_mask=True, return_dict=True, return_tensors="pt",
     ).to(model.device)
     generate_kwargs = {
         "max_new_tokens": args.max_new_tokens,
@@ -167,8 +178,20 @@ def generate(processor, model, prompt, args):
         generate_kwargs.update({"temperature": args.temperature, "top_p": args.top_p})
     with torch.inference_mode():
         output = model.generate(**inputs, **generate_kwargs)
-    generated_ids = output[0]
-    input_ids = inputs["input_ids"][0]
+    predictions = []
+    for index, generated_ids in enumerate(output):
+        if args.debug_generations:
+            print(f"Batch item {index + 1}/{len(prompts)}", flush=True)
+        predictions.append(decode_response(processor, generated_ids, inputs["input_ids"][index], args))
+    return predictions
+
+
+def generate(processor, model, prompt, args):
+    return generate_batch(processor, model, [prompt], args)[0]
+
+
+def decode_response(processor, generated_ids, input_ids, args):
+    """Remove the padded input prefix and decode a single generated response."""
     full_output_ids = generated_ids
     if (
         generated_ids.shape[-1] > input_ids.shape[-1]
@@ -233,17 +256,25 @@ def main():
         data[args.prediction_column] = ""
     if args.prompt_output_column not in data or args.overwrite:
         data[args.prompt_output_column] = ""
+    data[args.prediction_column] = data[args.prediction_column].astype(object)
+    data[args.prompt_output_column] = data[args.prompt_output_column].astype(object)
     pending = data[args.prediction_column].isna() | data[args.prediction_column].astype(str).str.strip().eq("")
     if not pending.any():
         print("No pending rows")
         return
     processor, model = load(args)
     indices = data.index[pending].tolist()
-    for number, index in enumerate(indices, start=1):
-        prompt = build_tabular_prompt(data.loc[index])
-        print(f"Generating {number}/{len(indices)} (row {index})", flush=True)
-        data.at[index, args.prompt_output_column] = prompt
-        data.at[index, args.prediction_column] = generate(processor, model, prompt, args)
+    for start in range(0, len(indices), args.batch_size):
+        batch_indices = indices[start:start + args.batch_size]
+        prompts = [build_tabular_prompt(data.loc[index]) for index in batch_indices]
+        print(
+            f"Generating {start + 1}-{start + len(batch_indices)}/{len(indices)} "
+            f"(rows {batch_indices})", flush=True,
+        )
+        predictions = generate_batch(processor, model, prompts, args)
+        for index, prompt, prediction in zip(batch_indices, prompts, predictions):
+            data.at[index, args.prompt_output_column] = prompt
+            data.at[index, args.prediction_column] = prediction
         checkpoint(data, args.output)
     print(f"Wrote: {args.output}")
 

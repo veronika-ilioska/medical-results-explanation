@@ -14,7 +14,8 @@ Adapted:
     #   --prediction-column fine_tuned_tablellm_output --quantization 4bit
 
 Set HF_TOKEN if required. Add --local-files-only for pre-downloaded weights.
-Output is checkpointed after every row and can be resumed.
+Use --batch-size 4 to generate four rows together (default: 1).
+Output is checkpointed after every batch and can be resumed.
 """
 
 import argparse
@@ -43,10 +44,16 @@ def arguments():
     parser.add_argument("--prompt-output-column", default="tablellm_prompt")
     parser.add_argument("--quantization", choices=("none", "4bit", "8bit"), default="4bit")
     parser.add_argument("--max-new-tokens", type=int, default=2048)
+    parser.add_argument(
+        "--batch-size", type=int, default=1,
+        help="Rows generated together (default: 1). Larger batches use more GPU memory.",
+    )
     parser.add_argument("--max-rows", type=int)
     parser.add_argument("--local-files-only", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()
+    if args.batch_size < 1:
+        parser.error("--batch-size must be at least 1")
     if not args.input.is_file():
         parser.error(f"Input does not exist: {args.input}")
     if args.adapter and not args.adapter.is_dir():
@@ -62,6 +69,7 @@ def load(args):
     tokenizer = AutoTokenizer.from_pretrained(args.model, token=token, local_files_only=args.local_files_only)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "left"
     kwargs = {"token": token, "local_files_only": args.local_files_only, "device_map": "auto", "low_cpu_mem_usage": True}
     if args.quantization == "4bit":
         kwargs["quantization_config"] = BitsAndBytesConfig(
@@ -79,14 +87,25 @@ def load(args):
     return tokenizer, model
 
 
-def generate(tokenizer, model, prompt, max_new_tokens):
-    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+def generate_batch(tokenizer, model, prompts, max_new_tokens):
+    """Generate one response per prompt in a single batched model call."""
+    if not prompts:
+        return []
+    inputs = tokenizer(
+        prompts, padding=True, return_attention_mask=True, return_tensors="pt",
+    ).to(model.device)
     with torch.inference_mode():
         output = model.generate(
             **inputs, max_new_tokens=max_new_tokens, do_sample=False,
-            pad_token_id=tokenizer.eos_token_id, eos_token_id=tokenizer.eos_token_id,
+            pad_token_id=tokenizer.pad_token_id, eos_token_id=tokenizer.eos_token_id,
         )
-    return tokenizer.decode(output[0, inputs["input_ids"].shape[-1]:], skip_special_tokens=True).strip()
+    # The generated suffix starts after the padded width, even for shorter prompts.
+    generated_ids = output[:, inputs["input_ids"].shape[-1]:]
+    return [text.strip() for text in tokenizer.batch_decode(generated_ids, skip_special_tokens=True)]
+
+
+def generate(tokenizer, model, prompt, max_new_tokens):
+    return generate_batch(tokenizer, model, [prompt], max_new_tokens)[0]
 
 
 def checkpoint(data, path):
@@ -111,17 +130,25 @@ def main():
         data[args.prediction_column] = ""
     if args.prompt_output_column not in data or args.overwrite:
         data[args.prompt_output_column] = ""
+    data[args.prediction_column] = data[args.prediction_column].astype(object)
+    data[args.prompt_output_column] = data[args.prompt_output_column].astype(object)
     pending = data[args.prediction_column].isna() | data[args.prediction_column].astype(str).str.strip().eq("")
     if not pending.any():
         print("No pending rows")
         return
     tokenizer, model = load(args)
     indices = data.index[pending].tolist()
-    for number, index in enumerate(indices, start=1):
-        prompt = build_tablellm_prompt(data.at[index, "prompt"])
-        print(f"Generating {number}/{len(indices)} (row {index})", flush=True)
-        data.at[index, args.prompt_output_column] = prompt
-        data.at[index, args.prediction_column] = generate(tokenizer, model, prompt, args.max_new_tokens)
+    for start in range(0, len(indices), args.batch_size):
+        batch_indices = indices[start:start + args.batch_size]
+        prompts = [build_tablellm_prompt(data.at[index, "prompt"]) for index in batch_indices]
+        print(
+            f"Generating {start + 1}-{start + len(batch_indices)}/{len(indices)} "
+            f"(rows {batch_indices})", flush=True,
+        )
+        predictions = generate_batch(tokenizer, model, prompts, args.max_new_tokens)
+        for index, prompt, prediction in zip(batch_indices, prompts, predictions):
+            data.at[index, args.prompt_output_column] = prompt
+            data.at[index, args.prediction_column] = prediction
         checkpoint(data, args.output)
     print(f"Wrote: {args.output}")
 
