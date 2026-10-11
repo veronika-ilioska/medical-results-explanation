@@ -57,6 +57,8 @@ def arguments():
     parser.add_argument("--prediction-column", required=True)
     parser.add_argument("--prompt-output-column", default="tabular_prompt")
     parser.add_argument("--quantization", choices=("none", "4bit", "8bit"), default="4bit")
+    parser.add_argument("--dtype", choices=("auto", "float32", "float16", "bfloat16"), default="auto",
+                        help="Model/compute precision. Use --quantization none --dtype float32 for FP32 diagnostics.")
     parser.add_argument("--max-new-tokens", type=int, default=2048)
     parser.add_argument(
         "--min-new-tokens",
@@ -107,11 +109,14 @@ def load(args):
         raise RuntimeError("MedGemma generation requires a CUDA GPU")
     token = (os.getenv("HF_TOKEN") or "").strip() or None
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    if args.dtype != "auto":
+        dtype = getattr(torch, args.dtype)
     processor = AutoProcessor.from_pretrained(args.model, token=token, local_files_only=args.local_files_only)
     kwargs = {
         "token": token, "local_files_only": args.local_files_only,
         "device_map": "auto", "low_cpu_mem_usage": True,
         "attn_implementation": "eager",
+        "torch_dtype": dtype,
     }
     if args.quantization == "4bit":
         kwargs["quantization_config"] = BitsAndBytesConfig(
