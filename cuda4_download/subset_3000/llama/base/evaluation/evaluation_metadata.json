@@ -1,0 +1,15 @@
+{
+  "input": "outputs/subset_3000/llama/base/predictions.csv",
+  "target_column": "generated_text",
+  "prediction_column": "base_llama_tabular_output",
+  "output_dir": "outputs/subset_3000/llama/base/evaluation",
+  "prompt_column": "prompt",
+  "folds": 5,
+  "seed": 42,
+  "max_rows": null,
+  "skip_bertscore": false,
+  "bertscore_model": "roberta-large",
+  "bertscore_device": "cuda:0",
+  "bertscore_rescale": false,
+  "rows_evaluated": 300
+}

@@ -1,0 +1,75 @@
+{
+  "models": [
+    "tablellm"
+  ],
+  "metrics": [
+    "rouge_l_f1",
+    "bertscore_f1"
+  ],
+  "alpha": 0.05,
+  "alternative": "two-sided",
+  "difference": "finetuned - base",
+  "confidence_level": 0.95,
+  "confidence_intervals": "pointwise, unadjusted",
+  "correction": "Holm across all requested model/metric tests",
+  "family_size": 2,
+  "pair_keys": [
+    "subject_id",
+    "hadm_id",
+    "charttime"
+  ],
+  "allow_partial_pairs": false,
+  "runs": {
+    "tablellm": {
+      "base": {
+        "predictions": "outputs/subset_3000/tablellm/base/predictions.csv",
+        "evaluation": "outputs/subset_3000/tablellm/base/evaluation/evaluation_results.csv",
+        "prediction_rows": 300,
+        "rows_selected_for_evaluation": 300,
+        "blank_rows_excluded_by_evaluator": 0,
+        "evaluated_rows": 300,
+        "evaluation_metadata": {
+          "input": "outputs/subset_3000/tablellm/base/predictions.csv",
+          "target_column": "generated_text",
+          "prediction_column": "base_tablellm_output",
+          "output_dir": "outputs/subset_3000/tablellm/base/evaluation",
+          "prompt_column": "prompt",
+          "folds": 5,
+          "seed": 42,
+          "max_rows": null,
+          "skip_bertscore": false,
+          "bertscore_model": "roberta-large",
+          "bertscore_device": "cuda:0",
+          "bertscore_rescale": false,
+          "rows_evaluated": 300
+        }
+      },
+      "finetuned": {
+        "predictions": "outputs/subset_3000/tablellm/finetuned/predictions.csv",
+        "evaluation": "outputs/subset_3000/tablellm/finetuned/evaluation/evaluation_results.csv",
+        "prediction_rows": 300,
+        "rows_selected_for_evaluation": 300,
+        "blank_rows_excluded_by_evaluator": 0,
+        "evaluated_rows": 300,
+        "evaluation_metadata": {
+          "input": "outputs/subset_3000/tablellm/finetuned/predictions.csv",
+          "target_column": "generated_text",
+          "prediction_column": "fine_tuned_tablellm_output",
+          "output_dir": "outputs/subset_3000/tablellm/finetuned/evaluation",
+          "prompt_column": "prompt",
+          "folds": 5,
+          "seed": 42,
+          "max_rows": null,
+          "skip_bertscore": false,
+          "bertscore_model": "roberta-large",
+          "bertscore_device": "cuda:0",
+          "bertscore_rescale": false,
+          "rows_evaluated": 300
+        }
+      },
+      "matched_panels": 300,
+      "base_only": 0,
+      "finetuned_only": 0
+    }
+  }
+}

@@ -1,0 +1,484 @@
+source_row_index,summary_id,subject_id,hadm_id,charttime,generated_text,prompt,model_used,created_at,split,selection_sex,test_count,abnormal_count,abnormal_fraction,panel_size_band,abnormal_band,selection_stratum,base_medgemma_tabular_output,tabular_prompt
+18309,18310,19569,,2182-08-25 07:00:00,"- Alanine Aminotransferase (ALT): 39.0 IU/L - Appears generally within the expected range for liver function.
+- Albumin: 2.9 g/dL - May reflect a lower amount of protein in the blood.
+- Alkaline Phosphatase: 128.0 IU/L - May suggest an issue with bone or liver function.
+- Anion Gap: 14.0 mEq/L - Appears generally within the expected range for electrolyte balance.
+- Asparate Aminotransferase (AST): 34.0 IU/L - Appears generally within the expected range for liver function.
+- Bicarbonate: 23.0 mEq/L - Appears generally within the expected range for acid-base balance.
+- Bilirubin, Total: 0.7 mg/dL - Appears generally within the expected range for liver function.
+- Calcium, Total: 7.6 mg/dL - May suggest an issue with bone or muscle function.
+- Chloride: 99.0 mEq/L - Appears generally within the expected range for electrolyte balance.
+- Cortisol: 27.1 ug/dL - May suggest an issue with adrenal gland function.
+- Creatine Kinase (CK): 60.0 IU/L - Appears generally within the expected range for muscle function.
+- Creatine Kinase, MB Isoenzyme: 1.0 ng/mL - Appears generally within the expected range for heart muscle function.
+- Creatinine: 1.2 mg/dL - Appears generally within the expected range for kidney function.
+- Glucose: 123.0 mg/dL - May suggest an issue with blood sugar regulation.
+- Lactate Dehydrogenase (LD): 345.0 IU/L - May suggest an issue with muscle or liver function.
+- Magnesium: 1.6 mg/dL - Appears generally within the expected range for muscle and nerve function.
+- Phosphate: 2.1 mg/dL - May suggest an issue with bone or kidney function.
+- Potassium: 4.0 mEq/L - Appears generally within the expected range for muscle and nerve function.
+- Sodium: 132.0 mEq/L - May suggest an issue with fluid balance.
+- Urea Nitrogen: 18.0 mg/dL - Appears generally within the expected range for kidney function.
+- Uric Acid: 4.4 mg/dL - Appears generally within the expected range for kidney function.
+- Eosinophils: 0.1 % - Appears generally within the expected range for immune response.
+- Hematocrit: 28.5 % - May suggest a lower amount of red blood cells.
+- Hemoglobin: 10.0 g/dL - May suggest a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.6 - May suggest an issue with blood clotting.
+- Lymphocytes: 2.7 % - May suggest an issue with immune response.
+- MCH: 29.6 pg - Appears generally within the expected range for red blood cell size.
+- MCHC: 35.2 % - May suggest an issue with red blood cell size.
+- MCV: 84.0 fL - Appears generally within the expected range for red blood cell size.
+- Monocytes: 1.6 % - May suggest an issue with immune response.
+- Neutrophils: 95.5 % - May suggest an issue with immune response.
+- PT: 17.0 sec - May suggest an issue with blood clotting.
+- PTT: 37.1 sec - May suggest an issue with blood clotting.
+- Platelet Count: 608.0 K/uL - May suggest an issue with blood clotting.
+- RDW: 16.3 % - May suggest an issue with red blood cell size.
+- Red Blood Cells: 3.39 m/uL - May suggest a lower amount of red blood cells.
+- White Blood Cells: 11.5 K/uL - May suggest an issue with immune response.
+
+General Overview: The results show a mix of normal and abnormal values, suggesting potential issues with various body systems, including the liver, kidneys, immune system, and blood clotting.","You are writing patient-friendly explanations of laboratory test results.
+
+Patient information:
+- Sex: Male
+
+Task:
+For each blood test result, write exactly one very short sentence explaining what this result may suggest in the body.
+
+Return the answer in exactly this format:
+
+- Test Name: value unit - one short explanation.
+- Test Name: value unit - one short explanation.
+
+General Overview: one short paragraph summarizing the overall pattern.
+
+Strict rules:
+- Use one bullet line per test.
+- Keep the tests in the same order as the input.
+- Each bullet must follow exactly this pattern:
+  - Test Name: value unit - Explanation.
+- Include the test name, value, and unit exactly as given.
+- Write only one sentence after the dash.
+- Keep each explanation under 18 words.
+- Use simple language for a non-medical reader.
+- Use cautious wording such as ""may suggest"", ""can suggest"", ""may reflect"", or ""appears"".
+- If the result is normal, say what body function appears generally within the expected range.
+- If the result is abnormal, explain the possible body system involved.
+- Do not diagnose diseases.
+- Do not recommend treatment.
+- Do not say the body ""is"" damaged, failing, or diseased.
+- End with exactly one paragraph starting with:
+  General Overview:
+- Do not add any other headers, numbering, markdown tables, or extra text.
+
+Example output style:
+- Hemoglobin: 10.5 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- White Blood Cells: 12.0 K/uL - Can suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show ...
+
+BLOOD TEST RESULTS:
+
+- Alanine Aminotransferase (ALT): 39.0 IU/L [normal]
+- Albumin: 2.9 g/dL [abnormal]
+- Alkaline Phosphatase: 128.0 IU/L [abnormal]
+- Anion Gap: 14.0 mEq/L [normal]
+- Asparate Aminotransferase (AST): 34.0 IU/L [normal]
+- Bicarbonate: 23.0 mEq/L [normal]
+- Bilirubin, Total: 0.7 mg/dL [normal]
+- Calcium, Total: 7.6 mg/dL [abnormal]
+- Chloride: 99.0 mEq/L [normal]
+- Cortisol: 27.1 ug/dL [abnormal]
+- Creatine Kinase (CK): 60.0 IU/L [normal]
+- Creatine Kinase, MB Isoenzyme: 1.0 ng/mL [normal]
+- Creatinine: 1.2 mg/dL [normal]
+- Glucose: 123.0 mg/dL [abnormal]
+- Lactate Dehydrogenase (LD): 345.0 IU/L [abnormal]
+- Magnesium: 1.6 mg/dL [normal]
+- Phosphate: 2.1 mg/dL [abnormal]
+- Potassium: 4.0 mEq/L [normal]
+- Sodium: 132.0 mEq/L [abnormal]
+- Urea Nitrogen: 18.0 mg/dL [normal]
+- Uric Acid: 4.4 mg/dL [normal]
+- Eosinophils: 0.1 % [normal]
+- Hematocrit: 28.5 % [abnormal]
+- Hemoglobin: 10.0 g/dL [abnormal]
+- INR(PT): 1.6 no unit [abnormal]
+- Lymphocytes: 2.7 % [abnormal]
+- MCH: 29.6 pg [normal]
+- MCHC: 35.2 % [abnormal]
+- MCV: 84.0 fL [normal]
+- Monocytes: 1.6 % [abnormal]
+- Neutrophils: 95.5 % [abnormal]
+- PT: 17.0 sec [abnormal]
+- PTT: 37.1 sec [abnormal]
+- Platelet Count: 608.0 K/uL [abnormal]
+- RDW: 16.3 % [abnormal]
+- Red Blood Cells: 3.39 m/uL [abnormal]
+- White Blood Cells: 11.5 K/uL [abnormal]",meta/llama-3.2-11b-vision-instruct,2026-08-28T09:19:17.361712+00:00,test,Male,37,21,0.5675675675675675,21+,over_half,Male|21+|over_half,,"You are writing patient-friendly explanations of blood laboratory results.
+
+Patient information:
+- Sex: Male
+
+Blood test table:
+
+| test_name | measured_value | flag |
+|---|---|---|
+| Alanine Aminotransferase (ALT) | 39.0 IU/L | normal |
+| Albumin | 2.9 g/dL | abnormal |
+| Alkaline Phosphatase | 128.0 IU/L | abnormal |
+| Anion Gap | 14.0 mEq/L | normal |
+| Asparate Aminotransferase (AST) | 34.0 IU/L | normal |
+| Bicarbonate | 23.0 mEq/L | normal |
+| Bilirubin, Total | 0.7 mg/dL | normal |
+| Calcium, Total | 7.6 mg/dL | abnormal |
+| Chloride | 99.0 mEq/L | normal |
+| Cortisol | 27.1 ug/dL | abnormal |
+| Creatine Kinase (CK) | 60.0 IU/L | normal |
+| Creatine Kinase, MB Isoenzyme | 1.0 ng/mL | normal |
+| Creatinine | 1.2 mg/dL | normal |
+| Glucose | 123.0 mg/dL | abnormal |
+| Lactate Dehydrogenase (LD) | 345.0 IU/L | abnormal |
+| Magnesium | 1.6 mg/dL | normal |
+| Phosphate | 2.1 mg/dL | abnormal |
+| Potassium | 4.0 mEq/L | normal |
+| Sodium | 132.0 mEq/L | abnormal |
+| Urea Nitrogen | 18.0 mg/dL | normal |
+| Uric Acid | 4.4 mg/dL | normal |
+| Eosinophils | 0.1 % | normal |
+| Hematocrit | 28.5 % | abnormal |
+| Hemoglobin | 10.0 g/dL | abnormal |
+| INR(PT) | 1.6 no unit | abnormal |
+| Lymphocytes | 2.7 % | abnormal |
+| MCH | 29.6 pg | normal |
+| MCHC | 35.2 % | abnormal |
+| MCV | 84.0 fL | normal |
+| Monocytes | 1.6 % | abnormal |
+| Neutrophils | 95.5 % | abnormal |
+| PT | 17.0 sec | abnormal |
+| PTT | 37.1 sec | abnormal |
+| Platelet Count | 608.0 K/uL | abnormal |
+| RDW | 16.3 % | abnormal |
+| Red Blood Cells | 3.39 m/uL | abnormal |
+| White Blood Cells | 11.5 K/uL | abnormal |
+
+Task:
+For each blood test result, write exactly one very short sentence explaining what this result may suggest in the body.
+
+Return the answer in exactly this format:
+
+- Test Name: value unit - one short explanation.
+- Test Name: value unit - one short explanation.
+
+General Overview: one short paragraph summarizing the overall pattern.
+
+Strict rules:
+- Use one bullet line per test.
+- Keep the tests in the same order as the table.
+- Include the test name, value, and unit exactly as given.
+- Write only one sentence after the dash.
+- Keep each explanation under 18 words.
+- Use simple language for a non-medical reader.
+- Use cautious wording such as ""may suggest"", ""can suggest"", ""may reflect"", or ""appears"".
+- If the result is normal, say what body function appears generally within the expected range.
+- If the result is abnormal, explain the possible body system involved.
+- Do not diagnose diseases.
+- Do not recommend treatment.
+- Do not say the body ""is"" damaged, failing, or diseased.
+- End with exactly one paragraph starting with:
+  General Overview:
+- Do not add any other headers, numbering, markdown tables, or extra text."
+17478,17479,18665,,2151-03-06 05:05:00,"- Anion Gap: 14.0 mEq/L - Appears generally within the expected range.
+- Bicarbonate: 23.0 mEq/L - May reflect a normal acid-base balance in the blood.
+- Calcium, Total: 9.3 mg/dL - Appears generally within the expected range.
+- Chloride: 100.0 mEq/L - May reflect a normal fluid balance in the body.
+- Creatine Kinase (CK): 21.0 IU/L - May suggest muscle damage or stress.
+- Creatinine: 0.9 mg/dL - Appears generally within the expected range.
+- Glucose: 157.0 mg/dL - May suggest high blood sugar levels.
+- Magnesium: 1.9 mg/dL - Appears generally within the expected range.
+- Phosphate: 2.1 mg/dL - May suggest a possible imbalance in mineral levels.
+- Potassium: 3.6 mEq/L - Appears generally within the expected range.
+- Sodium: 133.0 mEq/L - May reflect a normal fluid balance in the body.
+- Urea Nitrogen: 12.0 mg/dL - Appears generally within the expected range.
+- Basophils: 0.2 % - Appears generally within the expected range.
+- Eosinophils: 0.5 % - Appears generally within the expected range.
+- Hematocrit: 32.2 % - May suggest a lower amount of red blood cells in the blood.
+- Hemoglobin: 11.4 g/dL - May suggest a lower amount of oxygen-carrying protein in the blood.
+- INR(PT): 1.1 - Appears generally within the expected range.
+- Lymphocytes: 8.9 % - May suggest a possible immune response.
+- MCH: 31.5 pg - Appears generally within the expected range.
+- MCHC: 35.3 % - May suggest a possible imbalance in red blood cell production.
+- MCV: 89.0 fL - Appears generally within the expected range.
+- Monocytes: 3.8 % - Appears generally within the expected range.
+- Neutrophils: 86.5 % - May suggest an increased immune response.
+- PT: 13.0 sec - Appears generally within the expected range.
+- PTT: 24.8 sec - Appears generally within the expected range.
+- Platelet Count: 233.0 K/uL - Appears generally within the expected range.
+- RDW: 13.9 % - Appears generally within the expected range.
+- Red Blood Cells: 3.6 m/uL - May suggest a lower amount of red blood cells in the blood.
+- White Blood Cells: 11.9 K/uL - May suggest an increased immune response.
+
+General Overview: The results show a mix of normal and abnormal values, indicating possible issues with blood sugar levels, muscle damage, and immune response.","You are writing patient-friendly explanations of laboratory test results.
+
+Patient information:
+- Sex: Male
+
+Task:
+For each blood test result, write exactly one very short sentence explaining what this result may suggest in the body.
+
+Return the answer in exactly this format:
+
+- Test Name: value unit - one short explanation.
+- Test Name: value unit - one short explanation.
+
+General Overview: one short paragraph summarizing the overall pattern.
+
+Strict rules:
+- Use one bullet line per test.
+- Keep the tests in the same order as the input.
+- Each bullet must follow exactly this pattern:
+  - Test Name: value unit - Explanation.
+- Include the test name, value, and unit exactly as given.
+- Write only one sentence after the dash.
+- Keep each explanation under 18 words.
+- Use simple language for a non-medical reader.
+- Use cautious wording such as ""may suggest"", ""can suggest"", ""may reflect"", or ""appears"".
+- If the result is normal, say what body function appears generally within the expected range.
+- If the result is abnormal, explain the possible body system involved.
+- Do not diagnose diseases.
+- Do not recommend treatment.
+- Do not say the body ""is"" damaged, failing, or diseased.
+- End with exactly one paragraph starting with:
+  General Overview:
+- Do not add any other headers, numbering, markdown tables, or extra text.
+
+Example output style:
+- Hemoglobin: 10.5 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- White Blood Cells: 12.0 K/uL - Can suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show ...
+
+BLOOD TEST RESULTS:
+
+- Anion Gap: 14.0 mEq/L [normal]
+- Bicarbonate: 23.0 mEq/L [normal]
+- Calcium, Total: 9.3 mg/dL [normal]
+- Chloride: 100.0 mEq/L [normal]
+- Creatine Kinase (CK): 21.0 IU/L [abnormal]
+- Creatinine: 0.9 mg/dL [normal]
+- Glucose: 157.0 mg/dL [abnormal]
+- Magnesium: 1.9 mg/dL [normal]
+- Phosphate: 2.1 mg/dL [abnormal]
+- Potassium: 3.6 mEq/L [normal]
+- Sodium: 133.0 mEq/L [normal]
+- Urea Nitrogen: 12.0 mg/dL [normal]
+- Basophils: 0.2 % [normal]
+- Eosinophils: 0.5 % [normal]
+- Hematocrit: 32.2 % [abnormal]
+- Hemoglobin: 11.4 g/dL [abnormal]
+- INR(PT): 1.1 no unit [normal]
+- Lymphocytes: 8.9 % [abnormal]
+- MCH: 31.5 pg [normal]
+- MCHC: 35.3 % [abnormal]
+- MCV: 89.0 fL [normal]
+- Monocytes: 3.8 % [normal]
+- Neutrophils: 86.5 % [abnormal]
+- PT: 13.0 sec [normal]
+- PTT: 24.8 sec [normal]
+- Platelet Count: 233.0 K/uL [normal]
+- RDW: 13.9 % [normal]
+- Red Blood Cells: 3.6 m/uL [abnormal]
+- White Blood Cells: 11.9 K/uL [abnormal]",meta/llama-3.2-11b-vision-instruct,2026-08-28T08:06:07.939791+00:00,test,Male,29,10,0.3448275862068966,21+,up_to_half,Male|21+|up_to_half,,"You are writing patient-friendly explanations of blood laboratory results.
+
+Patient information:
+- Sex: Male
+
+Blood test table:
+
+| test_name | measured_value | flag |
+|---|---|---|
+| Anion Gap | 14.0 mEq/L | normal |
+| Bicarbonate | 23.0 mEq/L | normal |
+| Calcium, Total | 9.3 mg/dL | normal |
+| Chloride | 100.0 mEq/L | normal |
+| Creatine Kinase (CK) | 21.0 IU/L | abnormal |
+| Creatinine | 0.9 mg/dL | normal |
+| Glucose | 157.0 mg/dL | abnormal |
+| Magnesium | 1.9 mg/dL | normal |
+| Phosphate | 2.1 mg/dL | abnormal |
+| Potassium | 3.6 mEq/L | normal |
+| Sodium | 133.0 mEq/L | normal |
+| Urea Nitrogen | 12.0 mg/dL | normal |
+| Basophils | 0.2 % | normal |
+| Eosinophils | 0.5 % | normal |
+| Hematocrit | 32.2 % | abnormal |
+| Hemoglobin | 11.4 g/dL | abnormal |
+| INR(PT) | 1.1 no unit | normal |
+| Lymphocytes | 8.9 % | abnormal |
+| MCH | 31.5 pg | normal |
+| MCHC | 35.3 % | abnormal |
+| MCV | 89.0 fL | normal |
+| Monocytes | 3.8 % | normal |
+| Neutrophils | 86.5 % | abnormal |
+| PT | 13.0 sec | normal |
+| PTT | 24.8 sec | normal |
+| Platelet Count | 233.0 K/uL | normal |
+| RDW | 13.9 % | normal |
+| Red Blood Cells | 3.6 m/uL | abnormal |
+| White Blood Cells | 11.9 K/uL | abnormal |
+
+Task:
+For each blood test result, write exactly one very short sentence explaining what this result may suggest in the body.
+
+Return the answer in exactly this format:
+
+- Test Name: value unit - one short explanation.
+- Test Name: value unit - one short explanation.
+
+General Overview: one short paragraph summarizing the overall pattern.
+
+Strict rules:
+- Use one bullet line per test.
+- Keep the tests in the same order as the table.
+- Include the test name, value, and unit exactly as given.
+- Write only one sentence after the dash.
+- Keep each explanation under 18 words.
+- Use simple language for a non-medical reader.
+- Use cautious wording such as ""may suggest"", ""can suggest"", ""may reflect"", or ""appears"".
+- If the result is normal, say what body function appears generally within the expected range.
+- If the result is abnormal, explain the possible body system involved.
+- Do not diagnose diseases.
+- Do not recommend treatment.
+- Do not say the body ""is"" damaged, failing, or diseased.
+- End with exactly one paragraph starting with:
+  General Overview:
+- Do not add any other headers, numbering, markdown tables, or extra text."
+294,295,316,110748.0,2134-11-03 17:00:00,"- Atypical Lymphocytes: 1.0 % [abnormal] - May reflect an abnormal immune cell response.
+- Bands: 20.0 % [abnormal] - Can suggest a severe infection or inflammation.
+- Eosinophils: 5.0 % [abnormal] - May indicate an allergic reaction or parasitic infection.
+- Hematocrit: 47.8 % [normal] - Appears generally within the expected range for red blood cell concentration.
+- Hemoglobin: 16.4 g/dL [abnormal] - May suggest a higher amount of oxygen-carrying protein in the blood.
+- Lymphocytes: 26.0 % [abnormal] - Can suggest an immune response, such as infection or inflammation.
+- MCH: 36.0 pg [abnormal] - May reflect an abnormal size of red blood cells.
+- MCHC: 34.4 % [normal] - Appears generally within the expected range for red blood cell hemoglobin concentration.
+- MCV: 105.0 fL [abnormal] - May indicate an abnormal size of red blood cells.
+- Monocytes: 8.0 % [normal] - Appears generally within the expected range for immune cell count.
+- Myelocytes: 1.0 % [abnormal] - May suggest an abnormal bone marrow response.
+- Neutrophils: 39.0 % [normal] - Appears generally within the expected range for immune cell count.
+- Nucleated Red Cells: 5.0 % [abnormal] - May reflect an abnormal bone marrow response.
+- Platelet Count: 352.0 K/uL [normal] - Appears generally within the expected range for blood clotting.
+- RDW: 17.2 % [abnormal] - May indicate an abnormal variation in red blood cell size.
+- Red Blood Cells: 4.56 m/uL [normal] - Appears generally within the expected range for red blood cell count.
+- White Blood Cells: 25.1 K/uL [abnormal] - Can suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show a mix of abnormal and normal values, indicating possible immune system and bone marrow responses.","You are writing patient-friendly explanations of laboratory test results.
+
+Patient information:
+- Sex: Male
+
+Task:
+For each blood test result, write exactly one very short sentence explaining what this result may suggest in the body.
+
+Return the answer in exactly this format:
+
+- Test Name: value unit - one short explanation.
+- Test Name: value unit - one short explanation.
+
+General Overview: one short paragraph summarizing the overall pattern.
+
+Strict rules:
+- Use one bullet line per test.
+- Keep the tests in the same order as the input.
+- Each bullet must follow exactly this pattern:
+  - Test Name: value unit - Explanation.
+- Include the test name, value, and unit exactly as given.
+- Write only one sentence after the dash.
+- Keep each explanation under 18 words.
+- Use simple language for a non-medical reader.
+- Use cautious wording such as ""may suggest"", ""can suggest"", ""may reflect"", or ""appears"".
+- If the result is normal, say what body function appears generally within the expected range.
+- If the result is abnormal, explain the possible body system involved.
+- Do not diagnose diseases.
+- Do not recommend treatment.
+- Do not say the body ""is"" damaged, failing, or diseased.
+- End with exactly one paragraph starting with:
+  General Overview:
+- Do not add any other headers, numbering, markdown tables, or extra text.
+
+Example output style:
+- Hemoglobin: 10.5 g/dL - May reflect a lower amount of oxygen-carrying protein in the blood.
+- White Blood Cells: 12.0 K/uL - Can suggest an immune response, such as infection or inflammation.
+
+General Overview: The results show ...
+
+BLOOD TEST RESULTS:
+
+- Atypical Lymphocytes: 1.0 % [abnormal]
+- Bands: 20.0 % [abnormal]
+- Eosinophils: 5.0 % [abnormal]
+- Hematocrit: 47.8 % [normal]
+- Hemoglobin: 16.4 g/dL [abnormal]
+- Lymphocytes: 26.0 % [abnormal]
+- MCH: 36.0 pg [abnormal]
+- MCHC: 34.4 % [normal]
+- MCV: 105.0 fL [abnormal]
+- Monocytes: 8.0 % [normal]
+- Myelocytes: 1.0 % [abnormal]
+- Neutrophils: 39.0 % [normal]
+- Nucleated Red Cells: 5.0 % [abnormal]
+- Platelet Count: 352.0 K/uL [normal]
+- RDW: 17.2 % [abnormal]
+- Red Blood Cells: 4.56 m/uL [normal]
+- White Blood Cells: 25.1 K/uL [abnormal]",meta/llama-3.2-11b-vision-instruct,2026-08-26T21:06:26.054399+00:00,test,Male,17,11,0.6470588235294118,11-20,over_half,Male|11-20|over_half,,"You are writing patient-friendly explanations of blood laboratory results.
+
+Patient information:
+- Sex: Male
+
+Blood test table:
+
+| test_name | measured_value | flag |
+|---|---|---|
+| Atypical Lymphocytes | 1.0 % | abnormal |
+| Bands | 20.0 % | abnormal |
+| Eosinophils | 5.0 % | abnormal |
+| Hematocrit | 47.8 % | normal |
+| Hemoglobin | 16.4 g/dL | abnormal |
+| Lymphocytes | 26.0 % | abnormal |
+| MCH | 36.0 pg | abnormal |
+| MCHC | 34.4 % | normal |
+| MCV | 105.0 fL | abnormal |
+| Monocytes | 8.0 % | normal |
+| Myelocytes | 1.0 % | abnormal |
+| Neutrophils | 39.0 % | normal |
+| Nucleated Red Cells | 5.0 % | abnormal |
+| Platelet Count | 352.0 K/uL | normal |
+| RDW | 17.2 % | abnormal |
+| Red Blood Cells | 4.56 m/uL | normal |
+| White Blood Cells | 25.1 K/uL | abnormal |
+
+Task:
+For each blood test result, write exactly one very short sentence explaining what this result may suggest in the body.
+
+Return the answer in exactly this format:
+
+- Test Name: value unit - one short explanation.
+- Test Name: value unit - one short explanation.
+
+General Overview: one short paragraph summarizing the overall pattern.
+
+Strict rules:
+- Use one bullet line per test.
+- Keep the tests in the same order as the table.
+- Include the test name, value, and unit exactly as given.
+- Write only one sentence after the dash.
+- Keep each explanation under 18 words.
+- Use simple language for a non-medical reader.
+- Use cautious wording such as ""may suggest"", ""can suggest"", ""may reflect"", or ""appears"".
+- If the result is normal, say what body function appears generally within the expected range.
+- If the result is abnormal, explain the possible body system involved.
+- Do not diagnose diseases.
+- Do not recommend treatment.
+- Do not say the body ""is"" damaged, failing, or diseased.
+- End with exactly one paragraph starting with:
+  General Overview:
+- Do not add any other headers, numbering, markdown tables, or extra text."

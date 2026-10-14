@@ -20,6 +20,7 @@ Fine-tuned generation on the exact same held-out rows:
 Set HF_TOKEN for gated Hugging Face downloads. Pass --local-files-only with a
 local model directory when the compute node has no internet access. Existing
 non-empty predictions are preserved, allowing a stopped job to resume.
+Use --batch-size 4 to generate four rows together; progress is saved per batch.
 """
 
 import argparse
@@ -48,10 +49,16 @@ def parse_args():
     parser.add_argument("--prompt-output-column", default="tabular_prompt")
     parser.add_argument("--quantization", choices=("none", "4bit", "8bit"), default="4bit")
     parser.add_argument("--max-new-tokens", type=int, default=2048)
+    parser.add_argument(
+        "--batch-size", type=int, default=1,
+        help="Rows generated together (default: 1). Larger batches use more GPU memory.",
+    )
     parser.add_argument("--max-rows", type=int)
     parser.add_argument("--local-files-only", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()
+    if args.batch_size < 1:
+        parser.error("--batch-size must be at least 1")
     if not args.input.is_file():
         parser.error(f"Input does not exist: {args.input}")
     if args.adapter and not args.adapter.is_dir():
@@ -68,6 +75,7 @@ def load_model(args):
     )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "left"
 
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     kwargs = {
@@ -95,23 +103,36 @@ def load_model(args):
     return tokenizer, model
 
 
-def generate(tokenizer, model, prompt, max_new_tokens):
+def generate_batch(tokenizer, model, prompts, max_new_tokens):
+    """Generate one response per prompt in a single batched model call."""
+    if not prompts:
+        return []
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": prompt},
+        [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ]
+        for prompt in prompts
     ]
-    input_ids = tokenizer.apply_chat_template(
-        messages, add_generation_prompt=True, return_tensors="pt"
+    inputs = tokenizer.apply_chat_template(
+        messages, add_generation_prompt=True, tokenize=True, padding=True,
+        return_dict=True, return_tensors="pt", return_attention_mask=True,
     ).to(model.device)
     with torch.inference_mode():
         output = model.generate(
-            input_ids,
+            **inputs,
             max_new_tokens=max_new_tokens,
             do_sample=False,
-            pad_token_id=tokenizer.eos_token_id,
+            pad_token_id=tokenizer.pad_token_id,
             eos_token_id=tokenizer.eos_token_id,
         )
-    return tokenizer.decode(output[0, input_ids.shape[-1] :], skip_special_tokens=True).strip()
+    # The generated suffix starts after the padded width, even for shorter prompts.
+    generated_ids = output[:, inputs["input_ids"].shape[-1]:]
+    return [text.strip() for text in tokenizer.batch_decode(generated_ids, skip_special_tokens=True)]
+
+
+def generate(tokenizer, model, prompt, max_new_tokens):
+    return generate_batch(tokenizer, model, [prompt], max_new_tokens)[0]
 
 
 def save_checkpoint(df, output):
@@ -136,6 +157,8 @@ def main():
         df[args.prediction_column] = ""
     if args.prompt_output_column not in df.columns or args.overwrite:
         df[args.prompt_output_column] = ""
+    df[args.prediction_column] = df[args.prediction_column].astype(object)
+    df[args.prompt_output_column] = df[args.prompt_output_column].astype(object)
 
     pending = df[args.prediction_column].isna() | df[args.prediction_column].astype(str).str.strip().eq("")
     if not pending.any():
@@ -143,13 +166,17 @@ def main():
         return
     tokenizer, model = load_model(args)
     indices = df.index[pending].tolist()
-    for number, index in enumerate(indices, start=1):
-        prompt = build_tabular_prompt(df.loc[index])
-        print(f"Generating {number}/{len(indices)} (row {index})", flush=True)
-        df.at[index, args.prompt_output_column] = prompt
-        df.at[index, args.prediction_column] = generate(
-            tokenizer, model, prompt, args.max_new_tokens
+    for start in range(0, len(indices), args.batch_size):
+        batch_indices = indices[start:start + args.batch_size]
+        prompts = [build_tabular_prompt(df.loc[index]) for index in batch_indices]
+        print(
+            f"Generating {start + 1}-{start + len(batch_indices)}/{len(indices)} "
+            f"(rows {batch_indices})", flush=True,
         )
+        predictions = generate_batch(tokenizer, model, prompts, args.max_new_tokens)
+        for index, prompt, prediction in zip(batch_indices, prompts, predictions):
+            df.at[index, args.prompt_output_column] = prompt
+            df.at[index, args.prediction_column] = prediction
         save_checkpoint(df, args.output)
     print(f"Wrote: {args.output}")
 

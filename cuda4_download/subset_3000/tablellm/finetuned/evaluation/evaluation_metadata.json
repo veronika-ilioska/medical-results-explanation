@@ -1,0 +1,15 @@
+{
+  "input": "outputs/subset_3000/tablellm/finetuned/predictions.csv",
+  "target_column": "generated_text",
+  "prediction_column": "fine_tuned_tablellm_output",
+  "output_dir": "outputs/subset_3000/tablellm/finetuned/evaluation",
+  "prompt_column": "prompt",
+  "folds": 5,
+  "seed": 42,
+  "max_rows": null,
+  "skip_bertscore": false,
+  "bertscore_model": "roberta-large",
+  "bertscore_device": "cuda:0",
+  "bertscore_rescale": false,
+  "rows_evaluated": 300
+}
